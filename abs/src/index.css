@@ -1,1 +1,26 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&family=JetBrains+Mono:wght@450;600&display=swap');
 @import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-display: "Space Grotesk", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+
+  --color-primary: #4F0C28;
+  --color-secondary: #C5D2F8;
+  --color-accent-navy: #111344;
+  --color-bg-linen: #EFE9E7;
+  --color-accent-purple: #52154E;
+}
+
+@layer base {
+  body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+.font-display {
+  font-family: var(--font-display);
+}
+
