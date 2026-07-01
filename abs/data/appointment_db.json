@@ -1,31 +1,17 @@
 {
   "appointments": [
     {
-      "id": "apt-pzn5m1ogdx",
-      "customerName": "resya",
-      "customerEmail": "resyalizatul@gmail.com",
-      "customerPhone": "12344",
-      "date": "2026-06-16",
-      "timeSlot": "09:00 AM",
+      "id": "apt-lv32wbsby8",
+      "customerName": "ssssssssssssss",
+      "customerEmail": "re@example.com",
+      "customerPhone": "2345",
+      "date": "2026-06-19",
+      "timeSlot": "01:30 PM",
       "serviceId": "s1",
-      "staffId": "st-6ep003tr9",
-      "status": "confirmed",
-      "notes": "no bleach",
-      "createdAt": "2026-06-11T14:30:17.971Z",
-      "reminderSent": false
-    },
-    {
-      "id": "apt-s56z28wtin",
-      "customerName": "resya",
-      "customerEmail": "idontknow10152@gmail.com",
-      "customerPhone": "123",
-      "date": "2026-06-30",
-      "timeSlot": "09:30 AM",
-      "serviceId": "s1",
-      "staffId": "st-6ep003tr9",
+      "staffId": "st-1",
       "status": "confirmed",
       "notes": "",
-      "createdAt": "2026-06-11T14:31:05.089Z",
+      "createdAt": "2026-06-16T12:01:51.392Z",
       "reminderSent": false
     }
   ],
@@ -42,7 +28,7 @@
       "id": "s2",
       "name": "Premium Beard Grooming",
       "durationMinutes": 30,
-      "price": 30,
+      "price": 50,
       "description": "Hot towel prep, detailed straight-razor lineup, trimming, and organic beard oil treatment.",
       "isActive": true
     },
@@ -67,77 +53,70 @@
     {
       "dayOfWeek": 0,
       "isWorkingDay": false,
-      "startTime": "09:00:00",
-      "endTime": "18:00:00"
+      "startTime": "09:00",
+      "endTime": "17:00"
     },
     {
       "dayOfWeek": 1,
-      "isWorkingDay": true,
-      "startTime": "09:00:00",
-      "endTime": "18:00:00",
-      "breakTimeStart": "12:00:00",
-      "breakTimeEnd": "13:00:00"
+      "isWorkingDay": false,
+      "startTime": "09:00",
+      "endTime": "18:00",
+      "breakTimeStart": "12:00",
+      "breakTimeEnd": "13:00"
     },
     {
       "dayOfWeek": 2,
       "isWorkingDay": true,
-      "startTime": "09:00:00",
-      "endTime": "18:00:00",
-      "breakTimeStart": "12:00:00",
-      "breakTimeEnd": "13:00:00"
+      "startTime": "09:00",
+      "endTime": "18:00",
+      "breakTimeStart": "12:00",
+      "breakTimeEnd": "13:00"
     },
     {
       "dayOfWeek": 3,
       "isWorkingDay": true,
-      "startTime": "09:00:00",
-      "endTime": "18:00:00",
-      "breakTimeStart": "12:00:00",
-      "breakTimeEnd": "13:00:00"
+      "startTime": "09:00",
+      "endTime": "18:00",
+      "breakTimeStart": "12:00",
+      "breakTimeEnd": "13:00"
     },
     {
       "dayOfWeek": 4,
       "isWorkingDay": true,
-      "startTime": "09:00:00",
-      "endTime": "18:00:00",
-      "breakTimeStart": "12:00:00",
-      "breakTimeEnd": "13:00:00"
+      "startTime": "09:00",
+      "endTime": "18:00",
+      "breakTimeStart": "12:00",
+      "breakTimeEnd": "13:00"
     },
     {
       "dayOfWeek": 5,
       "isWorkingDay": true,
-      "startTime": "09:00:00",
-      "endTime": "18:00:00",
-      "breakTimeStart": "12:00:00",
-      "breakTimeEnd": "13:00:00"
+      "startTime": "09:00",
+      "endTime": "18:00",
+      "breakTimeStart": "12:00",
+      "breakTimeEnd": "13:00"
     },
     {
       "dayOfWeek": 6,
       "isWorkingDay": false,
-      "startTime": "09:00:00",
-      "endTime": "18:00:00"
+      "startTime": "09:00",
+      "endTime": "16:00"
     }
   ],
   "customBlocks": [
     {
       "id": "block-1",
-      "date": "2026-06-01T16:00:00.000Z",
-      "startTime": "09:00:00",
-      "endTime": "12:00:00",
+      "date": "2026-06-21",
+      "startTime": "09:00",
+      "endTime": "12:00",
       "reason": "Staff training session"
     },
     {
-      "id": "blk-m60gwxm3d",
-      "date": "2026-06-12",
-      "startTime": "00:00",
-      "endTime": "24:00",
-      "reason": "wfh"
-    },
-    {
-      "id": "blk-ckoq48yjw",
+      "id": "blk-czx2bqbyf",
       "date": "2026-06-17",
       "startTime": "00:00",
       "endTime": "24:00",
-      "reason": "wfh"
+      "reason": "mc"
     }
   ],
   "emailTemplates": [
@@ -146,14 +125,14 @@
       "name": "Standard Booking Confirmation",
       "type": "confirmation",
       "subject": "Reservation Confirmed: {service_name} with {business_name}",
-      "body": "Hello {customer_name},\n\nYour appointment is confirmed!\n\n✨ Service: {service_name}\n📅 Date: {appointment_date}\n🕒 Time: {appointment_time}\n\n✂️ Staff Notes: {notes}\n\nWe look forward to giving you an exceptional experience. If you need to make corrections, reply to this email or call us directly!\n\nBest regards,\nThe Team at {business_name}"
+      "body": "Hello {customer_name},\n\nYour appointment is confirmed!\n\nService: {service_name}\nDate: {appointment_date}\nTime: {appointment_time}\n\nStaff Notes: {notes}\n\nWe look forward to giving you an exceptional experience. If you need to make corrections, reply to this email or call us directly!\n\nBest regards,\nThe Team at {business_name}"
     },
     {
       "id": "tpl-rem",
       "name": "Day-Before Appointment Reminder",
       "type": "reminder",
       "subject": "Reminder: Your upcoming reservation at {business_name} tomorrow",
-      "body": "Hi {customer_name},\n\nWe are looking forward to seeing you tomorrow for your appointment!\n\n🔹 Business: {business_name}\n🔹 Service: {service_name}\n📅 Date: {appointment_date}\n🕒 Time: {appointment_time}\n\nLocation: 404 Design District, Suite 300\n\nIf you must reschedule, please give us a courtesy heads-up.\n\nWarmly,\n{business_name}"
+      "body": "Hi {customer_name},\n\nWe are looking forward to seeing you tomorrow for your appointment!\n\nBusiness: {business_name}\nService: {service_name}\nDate: {appointment_date}\nTime: {appointment_time}\n\nLocation: 404 Design District, Suite 300\n\nIf you must reschedule, please give us a courtesy heads-up.\n\nWarmly,\n{business_name}"
     },
     {
       "id": "tpl-can",
@@ -165,144 +144,58 @@
   ],
   "emailLogs": [
     {
-      "id": "log-uh9ha008s",
-      "appointmentId": "apt-s56z28wtin",
-      "customerEmail": "idontknow10152@gmail.com",
-      "subject": "Reservation Confirmed: Deluxe Haircut & Styling with Glamour Cut & Glow Salons",
-      "body": "Hello resya,\n\nYour appointment is confirmed!\n\n✨ Service: Deluxe Haircut & Styling\n📅 Date: 2026-06-30\n🕒 Time: 09:30 AM\n\n✂️ Staff Notes: (None)\n\nWe look forward to giving you an exceptional experience. If you need to make corrections, reply to this email or call us directly!\n\nBest regards,\nThe Team at Glamour Cut & Glow Salons\n\n[Gateway Delivery Success: Gmail SMTP (MessageId: <f3346e2f-60e3-8811-f28e-bba83c7ae8c5@gmail.com>)]",
-      "sentAt": "2026-06-11T14:31:08.800Z",
+      "id": "log-bce5smg63",
+      "appointmentId": "apt-lv32wbsby8",
+      "customerEmail": "re@example.com",
+      "subject": "Reservation Confirmed: Deluxe Haircut & Styling with My business Name",
+      "body": "Hello ssssssssssssss,\n\nYour appointment is confirmed!\n\nService: Deluxe Haircut & Styling\nDate: 2026-06-19\nTime: 01:30 PM\n\nStaff Notes: (None)\n\nWe look forward to giving you an exceptional experience. If you need to make corrections, reply to this email or call us directly!\n\nBest regards,\nThe Team at My business Name\n\n[Gateway Delivery Success: Gmail SMTP (MessageId: <0a8b1e3f-f286-632f-0030-3dff05600d15@gmail.com>)]",
+      "sentAt": "2026-06-16T12:01:55.149Z",
       "status": "sent"
     },
     {
-      "id": "log-k6svnb901",
-      "appointmentId": "apt-pzn5m1ogdx",
-      "customerEmail": "resyalizatul@gmail.com",
-      "subject": "Reservation Confirmed: Deluxe Haircut & Styling with Glamour Cut & Glow Salons",
-      "body": "Hello resya,\n\nYour appointment is confirmed!\n\n✨ Service: Deluxe Haircut & Styling\n📅 Date: 2026-06-16\n🕒 Time: 09:00 AM\n\n✂️ Staff Notes: no bleach\n\nWe look forward to giving you an exceptional experience. If you need to make corrections, reply to this email or call us directly!\n\nBest regards,\nThe Team at Glamour Cut & Glow Salons\n\n[Gateway Delivery Success: Gmail SMTP (MessageId: <cbab9c8c-d075-446e-9244-2926410aabf6@gmail.com>)]",
-      "sentAt": "2026-06-11T14:30:21.439Z",
-      "status": "sent"
-    },
-    {
-      "id": "log-5ku8nloxr",
-      "appointmentId": "apt-33g3ujkejn",
-      "customerEmail": "cv@xavier.com",
-      "subject": "Reservation Confirmed: Deluxe Haircut & Styling with Glamour Cut & Glow Salons",
-      "body": "Hello sdfg12345,\n\nYour appointment is confirmed!\n\n✨ Service: Deluxe Haircut & Styling\n📅 Date: 2026-06-12\n🕒 Time: 09:00 AM\n\n✂️ Staff Notes: (None)\n\nWe look forward to giving you an exceptional experience. If you need to make corrections, reply to this email or call us directly!\n\nBest regards,\nThe Team at Glamour Cut & Glow Salons\n\n[Gateway Delivery Success: Gmail SMTP (MessageId: <9f9cce9d-27f4-f879-ad60-59a56f3b0dcc@gmail.com>)]",
-      "sentAt": "2026-06-11T14:16:37.623Z",
-      "status": "sent"
-    },
-    {
-      "id": "log-6o9i57gtn",
-      "appointmentId": "apt-8fqpsm79ap",
-      "customerEmail": "resyalizatul@gmail.com",
-      "subject": "Reminder: Your upcoming reservation at Glamour Cut & Glow Salons tomorrow",
-      "body": "Hi Resya,\n\nWe are looking forward to seeing you tomorrow for your appointment!\n\n🔹 Business: Glamour Cut & Glow Salons\n🔹 Service: The Royal Service (Combo)\n📅 Date: Thu Jun 11 2026 00:00:00 GMT+0800 (Singapore Standard Time)\n🕒 Time: 09:00 AM\n\nLocation: 404 Design District, Suite 300\n\nIf you must reschedule, please give us a courtesy heads-up.\n\nWarmly,\nGlamour Cut & Glow Salons\n\n[Gateway Delivery Success: Gmail SMTP (MessageId: <a7f4d355-dd05-8de8-ddf5-0f1d0f1959f3@gmail.com>)]",
-      "sentAt": "2026-06-11T14:11:05.626Z",
-      "status": "sent"
-    },
-    {
-      "id": "log-d1x5t8rjg",
-      "appointmentId": "apt-zog6bc5425",
-      "customerEmail": "cfdfd@gmail.com",
-      "subject": "Reservation Confirmed: Deluxe Haircut & Styling with Glamour Cut & Glow Salons",
-      "body": "Hello dds,\n\nYour appointment is confirmed!\n\n✨ Service: Deluxe Haircut & Styling\n📅 Date: 2026-06-10\n🕒 Time: 11:00 AM\n\n✂️ Staff Notes: qwertyu\n\nWe look forward to giving you an exceptional experience. If you need to make corrections, reply to this email or call us directly!\n\nBest regards,\nThe Team at Glamour Cut & Glow Salons",
-      "sentAt": "2026-06-11T12:43:49.123Z",
-      "status": "sent-real"
-    },
-    {
-      "id": "log-ffwqh0wje",
-      "appointmentId": "apt-8fqpsm79ap",
-      "customerEmail": "resyalizatul@gmail.com",
-      "subject": "Reservation Confirmed: The Royal Service (Combo) with Glamour Cut & Glow Salons",
-      "body": "Hello Resya,\n\nYour appointment is confirmed!\n\n✨ Service: The Royal Service (Combo)\n📅 Date: 2026-06-12\n🕒 Time: 09:00 AM\n\n✂️ Staff Notes: no bleaching\n\nWe look forward to giving you an exceptional experience. If you need to make corrections, reply to this email or call us directly!\n\nBest regards,\nThe Team at Glamour Cut & Glow Salons",
-      "sentAt": "2026-06-11T11:09:13.320Z",
-      "status": "sent-real"
-    },
-    {
-      "id": "log-15oif6hzo",
-      "appointmentId": "apt-jnbpusxzwh",
-      "customerEmail": "resyalizatul@gmail.com",
-      "subject": "Reservation Confirmed: Deluxe Haircut & Styling with Glamour Cut & Glow Salons",
-      "body": "Hello resya,\n\nYour appointment is confirmed!\n\n✨ Service: Deluxe Haircut & Styling\n📅 Date: 2026-06-11\n🕒 Time: 09:00 AM\n\n✂️ Staff Notes: no bleach\n\nWe look forward to giving you an exceptional experience. If you need to make corrections, reply to this email or call us directly!\n\nBest regards,\nThe Team at Glamour Cut & Glow Salons",
-      "sentAt": "2026-06-11T09:36:55.693Z",
-      "status": "sent-real"
-    },
-    {
-      "id": "log-racf6az2u",
-      "appointmentId": "apt-kq9skn6wou",
-      "customerEmail": "resyalizatul@gmail.com",
-      "subject": "Reservation Confirmed: Deluxe Haircut & Styling with Glamour Cut & Glow Salons",
-      "body": "Hello dsfsf,\n\nYour appointment is confirmed!\n\n✨ Service: Deluxe Haircut & Styling\n📅 Date: 2026-06-13\n🕒 Time: 10:00 AM\n\n✂️ Staff Notes: wwew\n\nWe look forward to giving you an exceptional experience. If you need to make corrections, reply to this email or call us directly!\n\nBest regards,\nThe Team at Glamour Cut & Glow Salons",
-      "sentAt": "2026-06-11T09:07:38.279Z",
-      "status": "sent-real"
-    },
-    {
-      "id": "log-rcdv5e5ef",
-      "appointmentId": "apt-sa57oce2kc",
-      "customerEmail": "resyalizatul@gmail.com",
-      "subject": "Reminder: Your upcoming reservation at Glamour Cut & Glow Salons tomorrow",
-      "body": "Hi xdad,\n\nWe are looking forward to seeing you tomorrow for your appointment!\n\n🔹 Business: Glamour Cut & Glow Salons\n🔹 Service: The Royal Service (Combo)\n📅 Date: Wed Jun 24 2026 00:00:00 GMT+0800 (Singapore Standard Time)\n🕒 Time: 02:30 PM\n\nLocation: 404 Design District, Suite 300\n\nIf you must reschedule, please give us a courtesy heads-up.\n\nWarmly,\nGlamour Cut & Glow Salons",
-      "sentAt": "2026-06-11T04:18:52.392Z",
-      "status": "sent"
-    },
-    {
-      "id": "log-6yyvxfd8w",
-      "appointmentId": "apt-sa57oce2kc",
-      "customerEmail": "resyalizatul@gmail.com",
-      "subject": "Reservation Confirmed: The Royal Service (Combo) with Glamour Cut & Glow Salons",
-      "body": "Hello xdad,\n\nYour appointment is confirmed!\n\n✨ Service: The Royal Service (Combo)\n📅 Date: 2026-06-24\n🕒 Time: 02:30 PM\n\n✂️ Staff Notes: (None)\n\nWe look forward to giving you an exceptional experience. If you need to make corrections, reply to this email or call us directly!\n\nBest regards,\nThe Team at Glamour Cut & Glow Salons",
-      "sentAt": "2026-06-11T04:18:08.426Z",
-      "status": "sent"
-    },
-    {
-      "id": "log-mbxa02xxc",
-      "appointmentId": "apt-guunlxplg1",
-      "customerEmail": "ssf@gmail.com",
-      "subject": "Reservation Confirmed: Deluxe Haircut & Styling with Glamour Cut & Glow Salons",
-      "body": "Hello sasas,\n\nYour appointment is confirmed!\n\n✨ Service: Deluxe Haircut & Styling\n📅 Date: 2026-06-21\n🕒 Time: 11:30 AM\n\n✂️ Staff Notes: (None)\n\nWe look forward to giving you an exceptional experience. If you need to make corrections, reply to this email or call us directly!\n\nBest regards,\nThe Team at Glamour Cut & Glow Salons",
-      "sentAt": "2026-06-11T04:17:02.830Z",
-      "status": "sent"
-    },
-    {
-      "id": "log-ih7tv4zkr",
-      "appointmentId": "apt-8nmhla7axz",
-      "customerEmail": "bhasb@gmail.com",
-      "subject": "Reservation Confirmed: Deluxe Haircut & Styling with Glamour Cut & Glow Salons",
-      "body": "Hello ww,\n\nYour appointment is confirmed!\n\n✨ Service: Deluxe Haircut & Styling\n📅 Date: 2026-06-21\n🕒 Time: 11:30 AM\n\n✂️ Staff Notes: (None)\n\nWe look forward to giving you an exceptional experience. If you need to make corrections, reply to this email or call us directly!\n\nBest regards,\nThe Team at Glamour Cut & Glow Salons",
-      "sentAt": "2026-06-11T04:13:14.374Z",
-      "status": "sent"
-    },
-    {
-      "id": "log-rju3vz91y",
-      "appointmentId": "apt-lkyqzd6ygt",
-      "customerEmail": "charles@gmail.com",
-      "subject": "Reservation Confirmed: Deluxe Haircut & Styling with Glamour Cut & Glow Salons",
-      "body": "Hello charles,\n\nYour appointment is confirmed!\n\n✨ Service: Deluxe Haircut & Styling\n📅 Date: 2026-06-14\n🕒 Time: 11:30 AM\n\n✂️ Staff Notes: (None)\n\nWe look forward to giving you an exceptional experience. If you need to make corrections, reply to this email or call us directly!\n\nBest regards,\nThe Team at Glamour Cut & Glow Salons",
-      "sentAt": "2026-06-11T04:11:32.313Z",
+      "id": "log-8x10r1x5p",
+      "appointmentId": "apt-k9ayh9xbh7",
+      "customerEmail": "r@example.com",
+      "subject": "Reservation Confirmed: Deluxe Haircut & Styling with My business Name",
+      "body": "Hello sdf,\n\nYour appointment is confirmed!\n\nService: Deluxe Haircut & Styling\nDate: 2026-06-18\nTime: 11:00 AM\n\nStaff Notes: no bleach\n\nWe look forward to giving you an exceptional experience. If you need to make corrections, reply to this email or call us directly!\n\nBest regards,\nThe Team at My business Name\n\n[Gateway Delivery Success: Gmail SMTP (MessageId: <37ac3fbf-ae2d-6a11-308d-c8e0040e6680@gmail.com>)]",
+      "sentAt": "2026-06-16T11:53:09.610Z",
       "status": "sent"
     }
   ],
   "staff": [
     {
-      "id": "st-3",
-      "name": "Jordan Lee",
-      "role": "Stylist Professional",
-      "email": "jordan@glamourcut.com",
-      "active": true
-    },
-    {
-      "id": "st-6ep003tr9",
-      "name": "Rubi",
-      "role": "Senior Hairstylist",
-      "email": "rubi@gmail.com",
+      "id": "st-u1",
+      "name": "Admin Owner",
+      "role": "Salon Owner & Specialist",
+      "email": "name@example.com",
       "active": true
     }
   ],
   "settings": {
-    "businessName": "Resya Hair Salon",
+    "businessName": "My business Name",
     "currency": "RM",
-    "address": "14 Blvd St",
-    "contactEmail": "contact@rhssalon.com",
-    "contactPhone": "6012-622 8111"
-  }
+    "address": "404 Design District, Suite 300",
+    "contactEmail": "name@example.com",
+    "contactPhone": "555-0100"
+  },
+  "users": [
+    {
+      "id": "u-1",
+      "email": "name@example.com",
+      "passwordHash": "a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3",
+      "name": "Admin Owner",
+      "role": "owner",
+      "phone": "555-0100",
+      "createdAt": "2026-06-15T00:00:00.000Z"
+    },
+    {
+      "id": "u-1781590623162",
+      "name": "resya",
+      "email": "resya@example.com",
+      "passwordHash": "a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3",
+      "role": "staff",
+      "phone": "123456789",
+      "createdAt": "2026-06-16T06:17:03.162Z"
+    }
+  ]
 }

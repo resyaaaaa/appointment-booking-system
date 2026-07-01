@@ -172,7 +172,7 @@ export default function AdminServices({
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-slate-705 mb-1.5">Price</label>
+                  <label className="block text-xs font-semibold text-slate-705 mb-1.5">Price (USD)</label>
                   <div className="relative">
                     <DollarSign className="absolute left-3 top-3 w-4 h-4 text-slate-400" />
                     <input

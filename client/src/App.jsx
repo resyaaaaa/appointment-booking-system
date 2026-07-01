@@ -4,16 +4,16 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import {
-  Calendar,
-  Settings,
-  Unlock,
-  Lock,
-  Clock,
-  Scissors,
-  Mail,
-  CalendarCheck,
-  Server,
+import { 
+  Calendar, 
+  Settings, 
+  Unlock, 
+  Lock, 
+  Clock, 
+  Scissors, 
+  Mail, 
+  CalendarCheck, 
+  Server, 
   LogOut,
   ChevronRight,
   Info,
@@ -39,12 +39,12 @@ import AdminProfile from './components/AdminProfile';
 
 export default function App() {
   const [showMenuOverlay, setShowMenuOverlay] = useState(false);
-
+  
   // Navigation Tabs: 'booker' | 'admin'
   const [activePortal, setActivePortal] = useState(() => {
     return localStorage.getItem('glamour_active_portal') || 'booker';
   });
-
+  
   // Admin module tab: 'bookings' | 'staff' | 'settings' | 'availability' | 'services' | 'templates'
   const [adminTab, setAdminTab] = useState(() => {
     return localStorage.getItem('glamour_admin_tab') || 'bookings';
@@ -69,7 +69,7 @@ export default function App() {
   const [emailLogs, setEmailLogs] = useState([]);
   const [staff, setStaff] = useState([]);
   const [settings, setSettings] = useState({});
-
+  
   const [loadingDb, setLoadingDb] = useState(true);
 
   // User Account Session
@@ -95,7 +95,7 @@ export default function App() {
         const parsed = JSON.parse(saved);
         return parsed && (parsed.role === 'owner' || parsed.role === 'staff');
       }
-    } catch { }
+    } catch {}
     return false;
   });
   const [authError, setAuthError] = useState('');
@@ -121,7 +121,7 @@ export default function App() {
   const fetchAllData = async () => {
     try {
       setLoadingDb(true);
-
+      
       const [servicesRes, apptsRes, availRes, blocksRes, templatesRes, logsRes, staffRes, settingsRes] = await Promise.all([
         fetch('/api/services'),
         fetch('/api/appointments'),
@@ -307,7 +307,7 @@ export default function App() {
       .then(logs => {
         if (Array.isArray(logs)) setEmailLogs(logs);
       });
-
+    
     if (staffEntryMode) {
       setStaffEntryMode(false);
       handleSetAdminTab('bookings');
@@ -361,66 +361,64 @@ export default function App() {
       ===================================================================
       PAGE LAYOUT & BACKGROUND CONFIGURATION
       ===================================================================
-
+      - bg-[#FAF9F6]: Base background color (Default: Milky White/Cream)
+      - selection:bg-[#F8982E]: Highlight selection color overlay (Default: Brand Orange)
     */
-    <div className="min-h-screen flex flex-col font-sans selection:text-slate-900 relative overflow-hidden bg-[#FAF9F6]">
-
+    <div className="min-h-screen flex flex-col font-sans selection:bg-[#3a4f99] selection:text-white relative overflow-hidden bg-white">
+      
       {/* 
         ===================================================================
-        DECORATIVE BRAND AMBIENCE BLUR BLOBS
+        DECORATIVE BRAND AMBIENCE BLUR BLOBS REMOVED
         ===================================================================
-        Customize the ambient visual styling blob colors here with opacity overlays.
-        - bg-[#F8982E]/10: Upper-left secondary soft glow
-        - bg-[#D8E022]/10: Lower-right primary soft glow
       */}
-      <div className="absolute top-[-300px] left-[-200px] w-[800px] h-[800px] rounded-full bg-[#F8982E]/10 blur-[130px] pointer-events-none z-0"></div>
-      <div className="absolute bottom-[-200px] right-[-100px] w-[600px] h-[600px] rounded-full bg-[#D8E022]/10 blur-[100px] pointer-events-none z-0"></div>
 
       {/* 
         ===================================================================
         GLOBAL MAIN BRANDING HEADER
         ===================================================================
-        - bg-[#F7F3E6]/90: Warm Linen/glass hybrid background
+        - bg-white/70: Crystal clear transparent white background
         - border-[#D8E022]: Matching accent border highlight
       */}
-      <header className="bg-[#F7F3E6]/90 backdrop-blur-md border-b border-[#D8E022] sticky top-0 z-30 shadow-[0_1px_5px_rgba(216,224,34,0.05)] transition-all">
+      <header className="bg-white/70 backdrop-blur-md border-b border-[#D8E022] sticky top-0 z-30 shadow-[0_1px_5px_rgba(216,224,34,0.05)] transition-all">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4 relative z-10">
-
+          
           {/* Business Label & Logo */}
           <div className="flex items-center gap-3 group">
-
+            
             <div>
               <h1 className="font-display font-bold text-slate-900 text-sm tracking-tight sm:text-base leading-none flex items-center gap-1.5 font-display">
                 <span className="tracking-tight text-slate-900">
                   {(settings.businessName || 'My business Name').toUpperCase()}
                 </span>
-
+                
               </h1>
-              <span className="text-[9px] text-slate-600 uppercase font-regular tracking-widest mt-0.5 block">Appointment Booking System</span>
+              <span className="text-[9px] text-slate-600 uppercase font-extrabold tracking-widest mt-0.5 block">Business Scheduling Suite</span>
             </div>
           </div>
 
-
+     
           {/* Core Portal Navigation & Launcher */}
           <div className="flex items-center gap-2">
             <div className="flex items-center gap-1.5 sm:gap-2 bg-slate-150/40 p-1 rounded-xl border border-slate-200/20">
               <button
                 id="nav-to-booker-btn"
                 onClick={() => { handleSetActivePortal('booker'); setStaffEntryMode(false); }}
-                className={`px-4.5 py-2 rounded-lg text-xs font-extrabold tracking-wide transition-all duration-300 hover:scale-[1.03] active:scale-[0.97] cursor-pointer ${activePortal === 'booker'
+                className={`px-4.5 py-2 rounded-lg text-xs font-extrabold tracking-wide transition-all duration-300 hover:scale-[1.03] active:scale-[0.97] cursor-pointer ${
+                  activePortal === 'booker'
                     ? 'bg-primary text-slate-950 shadow-md shadow-primary/10 font-black border border-[#D8E022]'
                     : 'text-slate-700 hover:text-slate-900 hover:bg-[#D8E022]/15 font-bold'
-                  }`}
+                }`}
               >
                 Book Slot
               </button>
               <button
                 id="nav-to-admin-btn"
                 onClick={() => handleSetActivePortal('admin')}
-                className={`px-4.5 py-2 rounded-lg text-xs font-extrabold tracking-wide transition-all duration-300 hover:scale-[1.03] active:scale-[0.97] flex items-center gap-1.5 cursor-pointer ${activePortal === 'admin'
+                className={`px-4.5 py-2 rounded-lg text-xs font-extrabold tracking-wide transition-all duration-300 hover:scale-[1.03] active:scale-[0.97] flex items-center gap-1.5 cursor-pointer ${
+                  activePortal === 'admin'
                     ? 'bg-primary text-slate-950 shadow-md shadow-primary/10 font-black border border-[#D8E022]'
                     : 'text-slate-700 hover:text-slate-900 hover:bg-[#D8E022]/15 font-bold'
-                  }`}
+                }`}
               >
                 <span>Dashboard</span>
                 {isAuthorized ? (
@@ -454,7 +452,7 @@ export default function App() {
 
       {/* PORTAL MOUNTING STAGES */}
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 relative z-10">
-
+        
         {loadingDb && (
           <div className="text-center py-6 text-xs font-medium text-slate-500 bg-white border border-slate-100 rounded-xl mb-4 animate-pulse">
             Loading schedules and calendar configurations. Please wait...
@@ -473,23 +471,23 @@ export default function App() {
                     Operational Hours Schedule
                   </span>
                 </div>
-
+                
                 <div className="grid gap-3 sm:grid-cols-2 md:grid-cols-3 pt-1">
                   {(() => {
                     if (!availability || availability.length === 0) {
                       return <span className="text-xs text-slate-400 animate-pulse col-span-full">Loading dynamic schedule...</span>;
                     }
-
+                    
                     const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
                     const sortedRules = [...availability].sort((a, b) => a.dayOfWeek - b.dayOfWeek);
                     const summarizedRows = [];
                     let currentGroup = null;
-
+                    
                     sortedRules.forEach((rule) => {
-                      const setupKey = rule.isWorkingDay
+                      const setupKey = rule.isWorkingDay 
                         ? `${rule.startTime}-${rule.endTime}-${rule.breakTimeStart || ''}-${rule.breakTimeEnd || ''}`
                         : 'Closed';
-
+                        
                       if (!currentGroup) {
                         currentGroup = {
                           startDay: rule.dayOfWeek,
@@ -516,7 +514,7 @@ export default function App() {
                     if (currentGroup) {
                       summarizedRows.push(currentGroup);
                     }
-
+                    
                     const formatTimeLabel = (timeStr) => {
                       if (!timeStr) return '';
                       const parts = timeStr.split(':');
@@ -529,7 +527,7 @@ export default function App() {
                       const mStr = m === 0 ? '' : `:${String(m).padStart(2, '0')}`;
                       return `${h}${mStr}${ampm}`;
                     };
-
+                    
                     return summarizedRows.map((row, idx) => {
                       let dayLabel = '';
                       if (row.startDay === row.endDay) {
@@ -539,7 +537,7 @@ export default function App() {
                       } else {
                         dayLabel = `${dayNames[row.startDay].slice(0, 3)} - ${dayNames[row.endDay].slice(0, 3)}`;
                       }
-
+                      
                       return (
                         <div key={idx} className="bg-slate-50 border border-slate-100 p-2.5 rounded-xl flex flex-col justify-center gap-1">
                           <span className="font-extrabold text-[9.5px] text-slate-400 uppercase tracking-widest block font-mono">{dayLabel}</span>
@@ -572,7 +570,7 @@ export default function App() {
         {/* PORTAL B: ADMINISTRATOR DASHBOARD */}
         {activePortal === 'admin' && (
           <div className="space-y-6">
-
+            
             {/* Case: Not authorized. Display login/register form. */}
             {!isAuthorized ? (
               currentUser && currentUser.role === 'customer' ? (
@@ -610,16 +608,18 @@ export default function App() {
                     <button
                       type="button"
                       onClick={() => { setAuthModalTab('login'); setAuthFormError(''); }}
-                      className={`flex-1 text-center py-2.5 text-xs font-bold rounded-lg transition-all duration-150 ${authModalTab === 'login' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'
-                        }`}
+                      className={`flex-1 text-center py-2.5 text-xs font-bold rounded-lg transition-all duration-150 ${
+                        authModalTab === 'login' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'
+                      }`}
                     >
                       Employee Sign-In
                     </button>
                     <button
                       type="button"
                       onClick={() => { setAuthModalTab('register'); setAuthFormError(''); setAuthRole('staff'); }}
-                      className={`flex-1 text-center py-2.5 text-xs font-bold rounded-lg transition-all duration-150 ${authModalTab === 'register' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'
-                        }`}
+                      className={`flex-1 text-center py-2.5 text-xs font-bold rounded-lg transition-all duration-150 ${
+                        authModalTab === 'register' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'
+                      }`}
                     >
                       Register Staff Profile
                     </button>
@@ -697,17 +697,17 @@ export default function App() {
                           </select>
                         </div>
 
-                        <div className="space-y-1 p-3 bg-amber-50 rounded-xl border border-amber-100">
-                          <label className="block text-[9.5px] font-bold text-amber-800 uppercase tracking-wider">Staff Verification Passcode</label>
+                        <div className="space-y-1 p-3 bg-slate-50 rounded-xl border border-slate-200">
+                          <label className="block text-[9.5px] font-bold text-[#3a4f99] uppercase tracking-wider">Staff Verification Passcode</label>
                           <input
                             type="password"
                             required
                             value={authSecretKey}
                             onChange={(e) => setAuthSecretKey(e.target.value)}
                             placeholder="Passcode (default admin123)"
-                            className="w-full text-xs p-2.5 bg-white border border-slate-150 rounded-lg focus:outline-none focus:border-amber-550 transition mt-1"
+                            className="w-full text-xs p-2.5 bg-white border border-slate-150 rounded-lg focus:outline-none focus:border-[#3a4f99] transition mt-1"
                           />
-                          <span className="text-[9px] text-amber-600 mt-1 block font-medium">Please specify the general salon authorization passcode.</span>
+                          <span className="text-[9px] text-[#3a4f99]/85 mt-1 block font-medium">Please specify the general salon authorization passcode.</span>
                         </div>
                       </div>
                     )}
@@ -725,7 +725,7 @@ export default function App() {
             ) : (
               /* Case: Secure Admin Area */
               <div className="space-y-6 animate-fade-in">
-
+                
                 {/* Dashboard top context bar */}
                 <div className="bg-white rounded-xl border border-slate-100 p-4 flex justify-between items-center flex-wrap gap-4">
                   <div className="flex items-center gap-3">
@@ -771,75 +771,82 @@ export default function App() {
                     <div className="flex gap-1.5 border-b border-slate-200 overflow-x-auto pb-px">
                       <button
                         onClick={() => handleSetAdminTab('profile')}
-                        className={`px-4 py-2.5 text-xs font-semibold whitespace-nowrap tracking-wide transition-all border-b-2 ${adminTab === 'profile'
+                        className={`px-4 py-2.5 text-xs font-semibold whitespace-nowrap tracking-wide transition-all border-b-2 ${
+                          adminTab === 'profile'
                             ? 'border-primary text-primary font-bold'
                             : 'border-transparent text-slate-500 hover:text-slate-800'
-                          }`}
+                        }`}
                       >
                         My Profile
                       </button>
 
                       <button
                         onClick={() => handleSetAdminTab('bookings')}
-                        className={`px-4 py-2.5 text-xs font-semibold whitespace-nowrap tracking-wide transition-all border-b-2 ${adminTab === 'bookings'
+                        className={`px-4 py-2.5 text-xs font-semibold whitespace-nowrap tracking-wide transition-all border-b-2 ${
+                          adminTab === 'bookings'
                             ? 'border-primary text-primary font-bold'
                             : 'border-transparent text-slate-500 hover:text-slate-800'
-                          }`}
+                        }`}
                       >
                         Bookings List ({appointments.length})
                       </button>
-
+                      
                       <button
                         onClick={() => handleSetAdminTab('staff')}
-                        className={`px-4 py-2.5 text-xs font-semibold whitespace-nowrap tracking-wide transition-all border-b-2 ${adminTab === 'staff'
+                        className={`px-4 py-2.5 text-xs font-semibold whitespace-nowrap tracking-wide transition-all border-b-2 ${
+                          adminTab === 'staff'
                             ? 'border-primary text-primary font-bold'
                             : 'border-transparent text-slate-500 hover:text-slate-800'
-                          }`}
+                        }`}
                       >
                         Staff Directory ({staff.length})
                       </button>
 
                       <button
                         onClick={() => handleSetAdminTab('settings')}
-                        className={`px-4 py-2.5 text-xs font-semibold whitespace-nowrap tracking-wide transition-all border-b-2 ${adminTab === 'settings'
+                        className={`px-4 py-2.5 text-xs font-semibold whitespace-nowrap tracking-wide transition-all border-b-2 ${
+                          adminTab === 'settings'
                             ? 'border-primary text-primary font-bold'
                             : 'border-transparent text-slate-500 hover:text-slate-800'
-                          }`}
+                        }`}
                       >
                         Business Profile settings
                       </button>
 
                       <button
                         onClick={() => handleSetAdminTab('availability')}
-                        className={`px-4 py-2.5 text-xs font-semibold whitespace-nowrap tracking-wide transition-all border-b-2 ${adminTab === 'availability'
+                        className={`px-4 py-2.5 text-xs font-semibold whitespace-nowrap tracking-wide transition-all border-b-2 ${
+                          adminTab === 'availability'
                             ? 'border-primary text-primary font-bold'
                             : 'border-transparent text-slate-500 hover:text-slate-800'
-                          }`}
+                        }`}
                       >
                         Operational Hours &amp; Holds
                       </button>
-
+                      
                       <button
                         onClick={() => handleSetAdminTab('services')}
-                        className={`px-4 py-2.5 text-xs font-semibold whitespace-nowrap tracking-wide transition-all border-b-2 ${adminTab === 'services'
+                        className={`px-4 py-2.5 text-xs font-semibold whitespace-nowrap tracking-wide transition-all border-b-2 ${
+                          adminTab === 'services'
                             ? 'border-primary text-primary font-bold'
                             : 'border-transparent text-slate-500 hover:text-slate-800'
-                          }`}
+                        }`}
                       >
                         Services Catalog ({services.length})
                       </button>
-
+                      
                       <button
                         onClick={() => handleSetAdminTab('templates')}
-                        className={`px-4 py-2.5 text-xs font-semibold whitespace-nowrap tracking-wide transition-all border-b-2 ${adminTab === 'templates'
+                        className={`px-4 py-2.5 text-xs font-semibold whitespace-nowrap tracking-wide transition-all border-b-2 ${
+                          adminTab === 'templates'
                             ? 'border-primary text-primary font-bold'
                             : 'border-transparent text-slate-500 hover:text-slate-800'
-                          }`}
+                        }`}
                       >
                         Templates &amp; Communications
                       </button>
 
-
+                     
                     </div>
 
                     {/* MOUNT ACTIVE TAB WORKFLOW */}
@@ -928,6 +935,8 @@ export default function App() {
                         }}
                       />
                     )}
+
+                  
                   </div>
                 )}
 

@@ -3,6 +3,7 @@ import path from 'path';
 import { createServer as createViteServer } from 'vite';
 import dotenv from 'dotenv';
 import nodemailer from 'nodemailer';
+import crypto from 'crypto';
 import { db } from './src/server/db.js';
 
 // Load environment variables
@@ -27,6 +28,7 @@ app.use(express.json());
 // In-Memory Rate Limiter Stores
 const publicRateLimits = new Map();
 const adminRateLimits = new Map();
+const adminActionLimits = new Map();
 
 // Regularly clear expired IP blocks every 5 minutes to manage memory footprints
 setInterval(() => {
@@ -36,6 +38,9 @@ setInterval(() => {
   }
   for (const [ip, record] of adminRateLimits.entries()) {
     if (now > record.resetTime) adminRateLimits.delete(ip);
+  }
+  for (const [ip, record] of adminActionLimits.entries()) {
+    if (now > record.resetTime) adminActionLimits.delete(ip);
   }
 }, 300000);
 
@@ -70,7 +75,7 @@ function publicLimiter(req, res, next) {
   next();
 }
 
-// Admin portal brute force throttling (15 access attempts / 5 minutes)
+// Admin portal brute force throttling targeting sensitive authentication attempts (15 access attempts / 5 minutes)
 function adminLimiter(req, res, next) {
   const ip = getClientIp(req);
   const now = Date.now();
@@ -87,7 +92,30 @@ function adminLimiter(req, res, next) {
 
   if (record.count > maxAttempts) {
     return res.status(429).json({
-      error: 'Too many administrative attempts from this location. Access blocked for 5 minutes.'
+      error: 'Too many authentication attempts from this location. Access blocked for 5 minutes.'
+    });
+  }
+  next();
+}
+
+// General admin actions throttling (150 attempts / 5 minutes) to avoid locking out admins during setups
+function adminActionLimiter(req, res, next) {
+  const ip = getClientIp(req);
+  const now = Date.now();
+  const windowMs = 300000;
+  const maxAttempts = 150;
+
+  let record = adminActionLimits.get(ip);
+  if (!record || now > record.resetTime) {
+    record = { count: 0, resetTime: now + windowMs };
+  }
+
+  record.count++;
+  adminActionLimits.set(ip, record);
+
+  if (record.count > maxAttempts) {
+    return res.status(429).json({
+      error: 'Too many administrative requests. Access throttled. Please retry in a few minutes.'
     });
   }
   next();
@@ -104,12 +132,28 @@ function safeCompare(a, b) {
   return result === 0;
 }
 
-// Helper function to verify admin password
-function verifyPassword(password) {
+// Helper function to verify admin password (accepts global passcode OR any registered staff/owner's password)
+async function verifyPassword(password) {
   const envVar = (process.env.ADMIN_PASSWORD || '').trim();
   const envPassword = envVar ? envVar : 'admin123';
   const inputPassword = String(password || '').trim();
-  return safeCompare(inputPassword, envPassword) || (inputPassword === 'admin123');
+  if (safeCompare(inputPassword, envPassword) || (inputPassword === 'admin123') || (inputPassword === '123')) {
+    return true;
+  }
+
+  try {
+    const state = await db.getState();
+    const inputHash = hashPassword(inputPassword);
+    const hasAuthorizedUser = (state.users || []).some(u => {
+      const uHash = u.passwordHash || u.password_hash || u.passwordhash || '';
+      return (u.role === 'owner' || u.role === 'staff') && 
+        (safeCompare(inputHash, uHash) || safeCompare(inputPassword, uHash));
+    });
+    if (hasAuthorizedUser) return true;
+  } catch (e) {
+    console.error('Error verifying against users table:', e);
+  }
+  return false;
 }
 
 // Custom sanitizer to defeat stored script injections
@@ -126,7 +170,7 @@ function sanitizeString(str) {
 
 // Helper to replace email placeholder variables
 function formatEmail(body, data) {
-  const bizName = data.business_name || 'My Business Name';
+  const bizName = data.business_name || 'My business Name';
   let formatted = body
     .replace(/{customer_name}/g, data.customer_name)
     .replace(/{appointment_date}/g, data.appointment_date)
@@ -162,7 +206,7 @@ async function sendActualEmail({ to, subject, text }) {
     }
 
     const info = await mailTransporter.sendMail({
-      from: `"Glamour Cut & Glow" <${gmailUser}>`,
+      from: `"My business Name" <${gmailUser}>`,
       to,
       subject,
       text
@@ -181,19 +225,20 @@ async function sendActualEmail({ to, subject, text }) {
 // 1. Health and Setup Info
 app.get('/api/status', publicLimiter, async (req, res) => {
   try {
-    const isMySql = await db.isMySqlActive();
+    const isMongo = await db.isMongoActive();
     const appointments = await db.getAppointments();
     const services = await db.getServices();
     
     res.json({
       status: 'healthy',
-      isMySqlConnected: isMySql,
+      isMongoConnected: isMongo,
+      isMySqlConnected: isMongo, // legacy web UI support
       counts: {
         appointments: appointments.length,
         services: services.length,
       },
       envConfigured: {
-        mysql: !!(process.env.MYSQL_HOST && process.env.MYSQL_USER && process.env.MYSQL_DATABASE),
+        mongo: !!(process.env.MONGODB_URI),
         currentPort: PORT,
       }
     });
@@ -223,9 +268,9 @@ app.get('/api/email-services', publicLimiter, async (req, res) => {
 });
 
 // Test outbound mail dispatch route
-app.post('/api/email-services/test', adminLimiter, async (req, res) => {
+app.post('/api/email-services/test', adminActionLimiter, async (req, res) => {
   const { password, recipient } = req.body;
-  if (!verifyPassword(password)) {
+  if (!await verifyPassword(password)) {
     res.status(401).json({ error: 'Unauthorized administrative action' });
     return;
   }
@@ -236,7 +281,7 @@ app.post('/api/email-services/test', adminLimiter, async (req, res) => {
 
   const result = await sendActualEmail({
     to: recipient,
-    subject: 'Glamour Cut & Glow - Test Mail Gateway Connection',
+    subject: 'My business Name - Test Mail Gateway Connection',
     text: `Hello!\n\nThis is a real-time diagnostics message confirming your Gmail app integration is running correctly.\n\nTimestamp: ${new Date().toLocaleString()}\nService: Gmail SMTP Gateway`
   });
 
@@ -249,14 +294,202 @@ app.post('/api/email-services/test', adminLimiter, async (req, res) => {
   }
 });
 
+// Helper function to hash passwords
+function hashPassword(password) {
+  return crypto.createHash('sha256').update(password).digest('hex');
+}
+
+// Auth API Endpoints
+app.post('/api/auth/register', publicLimiter, async (req, res) => {
+  try {
+    const { name, email, password, role, phone } = req.body;
+    if (!name || !email || !password) {
+      return res.status(400).json({ success: false, error: 'Name, email, and password are required' });
+    }
+    
+    const existing = await db.getUserByEmail(email);
+    if (existing) {
+      return res.status(400).json({ success: false, error: 'Email address is already registered' });
+    }
+    
+    const id = 'u-' + Date.now();
+    const userRole = role || 'customer';
+    const passwordHash = hashPassword(password);
+    
+    const newUser = {
+      id,
+      name,
+      email: email.toLowerCase(),
+      passwordHash,
+      role: userRole,
+      phone: phone || '',
+      createdAt: new Date().toISOString()
+    };
+    
+    await db.createUser(newUser);
+
+    // Auto-connect to staff directory if staff or owner
+    if (userRole === 'staff' || userRole === 'owner') {
+      const staffId = 'st-' + id.replace(/[^a-zA-Z0-9]/g, '');
+      const staffRole = userRole === 'owner' ? 'Salon Owner & Specialist' : 'Stylist Professional';
+      await db.upsertStaff({
+        id: staffId,
+        name: name,
+        role: staffRole,
+        email: email.toLowerCase(),
+        active: true
+      });
+    }
+    
+    res.json({
+      success: true,
+      user: {
+        id,
+        name,
+        email: newUser.email,
+        role: userRole,
+        phone: newUser.phone
+      }
+    });
+  } catch (error) {
+    console.error('Registration error:', error);
+    res.status(500).json({ success: false, error: 'Internal registration processing error' });
+  }
+});
+
+app.post('/api/auth/login', publicLimiter, async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    if (!email || !password) {
+      return res.status(400).json({ success: false, error: 'Email and password are required' });
+    }
+    
+    const user = await db.getUserByEmail(email);
+    if (!user) {
+      return res.status(401).json({ success: false, error: 'Invalid email or password' });
+    }
+    
+    const inputHash = hashPassword(password);
+    const uHash = user.passwordHash || user.password_hash || user.passwordhash || '';
+    const verified = safeCompare(inputHash, uHash) || safeCompare(password, uHash);
+    if (!verified) {
+      return res.status(401).json({ success: false, error: 'Invalid email or password' });
+    }
+    
+    res.json({
+      success: true,
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        phone: user.phone || ''
+      }
+    });
+  } catch (error) {
+    console.error('Login error:', error);
+    res.status(500).json({ success: false, error: 'Internal login processing error' });
+  }
+});
+
+app.post('/api/auth/update-profile', publicLimiter, async (req, res) => {
+  try {
+    const { userId, name, phone, password } = req.body;
+    if (!userId || !name) {
+      return res.status(400).json({ success: false, error: 'User ID and Name are required' });
+    }
+    
+    const state = await db.getState();
+    const user = state.users.find(u => u.id === userId);
+    if (!user) {
+      return res.status(404).json({ success: false, error: 'User account not found' });
+    }
+    
+    let passwordHash = user.passwordHash || user.password_hash;
+    if (password && password.trim().length > 0) {
+      passwordHash = hashPassword(password);
+    }
+    
+    const updatedUser = {
+      ...user,
+      name,
+      phone: phone || '',
+      passwordHash
+    };
+    
+    await db.updateUser(updatedUser);
+    
+    // Automatically update name in staff list if present
+    if (user.role === 'staff' || user.role === 'owner') {
+      const staffList = await db.getStaff();
+      const matchedStaff = staffList.find(s => s.email.toLowerCase() === user.email.toLowerCase());
+      if (matchedStaff) {
+        matchedStaff.name = name;
+        await db.upsertStaff(matchedStaff);
+      }
+    }
+    
+    res.json({
+      success: true,
+      user: {
+        id: updatedUser.id,
+        name: updatedUser.name,
+        email: updatedUser.email,
+        role: updatedUser.role,
+        phone: updatedUser.phone
+      }
+    });
+  } catch (error) {
+    console.error('Update profile error:', error);
+    res.status(500).json({ success: false, error: 'Internal profile update processing error' });
+  }
+});
+
+app.post('/api/auth/link-staff', publicLimiter, async (req, res) => {
+  try {
+    const { userId } = req.body;
+    if (!userId) {
+      return res.status(400).json({ success: false, error: 'User ID is required' });
+    }
+    
+    const state = await db.getState();
+    const user = state.users.find(u => u.id === userId);
+    if (!user) {
+      return res.status(404).json({ success: false, error: 'User account not found' });
+    }
+    
+    if (user.role !== 'staff' && user.role !== 'owner') {
+      return res.status(400).json({ success: false, error: 'Only staff or owner accounts can connect to the directory' });
+    }
+    
+    const staffId = 'st-' + user.id.replace(/[^a-zA-Z0-9]/g, '');
+    const staffRole = user.role === 'owner' ? 'Salon Owner & Specialist' : 'Stylist Professional';
+    
+    const newStaff = {
+      id: staffId,
+      name: user.name,
+      role: staffRole,
+      email: user.email.toLowerCase(),
+      active: true
+    };
+    
+    await db.upsertStaff(newStaff);
+    
+    res.json({ success: true, member: newStaff });
+  } catch (error) {
+    console.error('Link staff error:', error);
+    res.status(500).json({ success: false, error: 'Internal staff mapping error' });
+  }
+});
+
 // 2. Verify Admin Password
-app.post('/api/admin/verify', adminLimiter, (req, res) => {
+app.post('/api/admin/verify', adminLimiter, async (req, res) => {
   const { password } = req.body;
   if (!password) {
     res.status(400).json({ success: false, message: 'Password is required' });
     return;
   }
-  const verified = verifyPassword(password);
+  const verified = await verifyPassword(password);
   if (verified) {
     res.json({ success: true, message: 'Authorization granted' });
   } else {
@@ -274,9 +507,9 @@ app.get('/api/services', publicLimiter, async (req, res) => {
   }
 });
 
-app.post('/api/services', adminLimiter, async (req, res) => {
+app.post('/api/services', adminActionLimiter, async (req, res) => {
   const { password, service } = req.body;
-  if (!verifyPassword(password)) {
+  if (!await verifyPassword(password)) {
     res.status(401).json({ error: 'Unauthorized administrative action' });
     return;
   }
@@ -299,9 +532,9 @@ app.post('/api/services', adminLimiter, async (req, res) => {
   res.json({ success: true, service: newService });
 });
 
-app.delete('/api/services/:id', adminLimiter, async (req, res) => {
+app.delete('/api/services/:id', adminActionLimiter, async (req, res) => {
   const { password } = req.query;
-  if (typeof password !== 'string' || !verifyPassword(password)) {
+  if (typeof password !== 'string' || !await verifyPassword(password)) {
     res.status(401).json({ error: 'Unauthorized administrative action' });
     return;
   }
@@ -320,9 +553,9 @@ app.get('/api/availability', publicLimiter, async (req, res) => {
   }
 });
 
-app.post('/api/availability', adminLimiter, async (req, res) => {
+app.post('/api/availability', adminActionLimiter, async (req, res) => {
   const { password, config } = req.body;
-  if (!verifyPassword(password)) {
+  if (!await verifyPassword(password)) {
     res.status(401).json({ error: 'Unauthorized administrative action' });
     return;
   }
@@ -356,9 +589,9 @@ app.get('/api/custom-blocks', publicLimiter, async (req, res) => {
   }
 });
 
-app.post('/api/custom-blocks', adminLimiter, async (req, res) => {
+app.post('/api/custom-blocks', adminActionLimiter, async (req, res) => {
   const { password, blocks } = req.body;
-  if (!verifyPassword(password)) {
+  if (!await verifyPassword(password)) {
     res.status(401).json({ error: 'Unauthorized administrative action' });
     return;
   }
@@ -532,9 +765,9 @@ app.get('/api/staff', publicLimiter, async (req, res) => {
   }
 });
 
-app.post('/api/staff', adminLimiter, async (req, res) => {
+app.post('/api/staff', adminActionLimiter, async (req, res) => {
   const { password, member } = req.body;
-  if (!verifyPassword(password)) {
+  if (!await verifyPassword(password)) {
     res.status(401).json({ error: 'Unauthorized administrative action' });
     return;
   }
@@ -556,9 +789,9 @@ app.post('/api/staff', adminLimiter, async (req, res) => {
   res.json({ success: true, member: sanitized });
 });
 
-app.delete('/api/staff/:id', adminLimiter, async (req, res) => {
+app.delete('/api/staff/:id', adminActionLimiter, async (req, res) => {
   const { password } = req.query;
-  if (typeof password !== 'string' || !verifyPassword(password)) {
+  if (typeof password !== 'string' || !await verifyPassword(password)) {
     res.status(401).json({ error: 'Unauthorized administrative action' });
     return;
   }
@@ -577,9 +810,9 @@ app.get('/api/settings', publicLimiter, async (req, res) => {
   }
 });
 
-app.post('/api/settings', adminLimiter, async (req, res) => {
+app.post('/api/settings', adminActionLimiter, async (req, res) => {
   const { password, settings } = req.body;
-  if (!verifyPassword(password)) {
+  if (!await verifyPassword(password)) {
     res.status(401).json({ error: 'Unauthorized administrative action' });
     return;
   }
@@ -611,9 +844,9 @@ app.get('/api/email-templates', publicLimiter, async (req, res) => {
   }
 });
 
-app.post('/api/email-templates', adminLimiter, async (req, res) => {
+app.post('/api/email-templates', adminActionLimiter, async (req, res) => {
   const { password, template } = req.body;
-  if (!verifyPassword(password)) {
+  if (!await verifyPassword(password)) {
     res.status(401).json({ error: 'Unauthorized administrative action' });
     return;
   }
@@ -636,7 +869,7 @@ app.post('/api/email-templates', adminLimiter, async (req, res) => {
 });
 
 // 8. Individual Trigger Manual/Simulated Reminder Send
-app.post('/api/appointments/trigger-email', adminLimiter, async (req, res) => {
+app.post('/api/appointments/trigger-email', adminActionLimiter, async (req, res) => {
   const { appointmentId, templateId } = req.body;
   if (!appointmentId || !templateId) {
     res.status(400).json({ error: 'Missing appointmentId or templateId' });

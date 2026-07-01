@@ -224,7 +224,7 @@ export default function WizardBooker({
         <div>
           <h3 className="font-display font-bold text-slate-900 text-lg flex items-center gap-2">
             {staffMode ? (
-              <span className="bg-amber-100 text-amber-900 text-[9px] uppercase font-bold tracking-widest px-2.5 py-1 rounded-full border border-amber-200">
+              <span className="bg-[#291100]/10 text-[#291100] text-[9px] uppercase font-bold tracking-widest px-2.5 py-1 rounded-full border border-[#291100]/20">
                 Core Admin Override
               </span>
             ) : (
@@ -439,7 +439,7 @@ export default function WizardBooker({
                   } else if (isClosed) {
                     cellClasses += 'text-rose-500 bg-rose-50/40 pointer-events-none ';
                   } else if (isBlocked) {
-                    cellClasses += 'text-amber-600 bg-amber-55/30 ';
+                    cellClasses += 'text-slate-500 bg-slate-100/60 ';
                   } else if (isBookable) {
                     cellClasses += 'text-slate-800 hover:bg-primary hover:text-white hover:shadow-sm ';
                   }
@@ -460,7 +460,7 @@ export default function WizardBooker({
                     >
                       <span>{dateObj.getDate()}</span>
                       {isBlocked && (
-                        <span className="absolute bottom-1 w-1 h-1 bg-amber-400 rounded-full"></span>
+                        <span className="absolute bottom-1 w-1 h-1 bg-slate-400 rounded-full"></span>
                       )}
                     </button>
                   );
@@ -470,7 +470,7 @@ export default function WizardBooker({
               <div className="mt-5 pt-4 border-t border-slate-100 flex gap-4 text-[9px] text-slate-500 font-extrabold tracking-widest uppercase justify-center flex-wrap">
                 <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 bg-white border border-slate-250 rounded"></span>Available</span>
                 <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 bg-rose-50 border border-rose-100 rounded"></span>Closed</span>
-                <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 bg-amber-50 rounded border border-amber-200"></span>Blocked</span>
+                <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 bg-slate-100 rounded border border-slate-250"></span>Blocked</span>
                 <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 bg-primary rounded"></span>Selected</span>
               </div>
             </div>
@@ -627,52 +627,50 @@ export default function WizardBooker({
                 </div>
               </div>
 
-              {/* Right Column: Premium Sticky Stacking Dynamic Receipt Voucher */}
+              {/* Right Column: Clean, Minimalist Reservation Summary */}
               <div className="md:col-span-12 lg:col-span-5 sticky top-24 self-start space-y-4">
-                <div className="bg-slate-900 text-white rounded-3xl p-5.5 shadow-lg border border-slate-800 relative overflow-hidden">
-                  
-                  {/* Decorative Ticket Punches */}
-                  <div className="absolute left-[-10px] top-1/2 -translate-y-1/2 w-5 h-5 bg-white border border-slate-200 rounded-full z-10 hidden lg:block"></div>
-                  <div className="absolute right-[-10px] top-1/2 -translate-y-1/2 w-5 h-5 bg-white border border-slate-200 rounded-full z-10 hidden lg:block"></div>
-                  
-                  <div className="space-y-4">
-                    <span className="text-[9px] text-primary bg-secondary/30 border border-secondary/10 px-2.5 py-0.5 rounded-full uppercase font-extrabold tracking-widest font-mono inline-block">
-                      Reservation Summary
-                    </span>
+                <div className="bg-white rounded-2xl p-6 shadow-xs border border-slate-200/80 relative overflow-hidden">
+                  <div className="space-y-4.5">
+                    <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+                      <span className="text-[10px] text-[#291100] bg-[#ECF5E2] font-extrabold px-2.5 py-0.5 rounded uppercase tracking-wider font-mono">
+                        Summary
+                      </span>
+                      <span className="text-xs text-slate-500 font-medium">Final Confirmation</span>
+                    </div>
                     
-                    <div className="border-b border-white/10 pb-3">
-                      <h4 className="font-display font-extrabold text-slate-400 text-[9px] uppercase tracking-wider">Selected Package</h4>
-                      <div className="text-base font-bold font-serif text-white mt-1 leading-snug">{selectedService?.name}</div>
+                    <div>
+                      <h4 className="font-bold text-slate-400 text-[9px] uppercase tracking-wider">Service Selected</h4>
+                      <div className="text-base font-bold text-slate-900 mt-1 leading-snug">{selectedService?.name}</div>
                     </div>
 
                     <div className="grid grid-cols-2 gap-3 py-1 text-xs">
                       <div>
-                        <span className="text-slate-400 block font-bold text-[9px] uppercase">Stylist Assigned</span>
-                        <strong className="text-slate-250 block text-[11px] mt-0.5 truncate">
-                          {staff.find(s => s.id === selectedStaffId)?.name || 'Any Available Stylist'}
+                        <span className="text-slate-400 block font-bold text-[9px] uppercase tracking-wider">Specialist Assigned</span>
+                        <strong className="text-slate-800 block text-[11px] mt-0.5 truncate">
+                          {staff.find(s => s.id === selectedStaffId)?.name || 'Any Available Specialist'}
                         </strong>
                       </div>
                       <div>
-                        <span className="text-slate-400 block font-bold text-[9px] uppercase">Session Duration</span>
-                        <strong className="text-slate-250 block text-[11px] mt-0.5">{selectedService?.durationMinutes} Minutes</strong>
+                        <span className="text-slate-400 block font-bold text-[9px] uppercase tracking-wider">Duration</span>
+                        <strong className="text-slate-800 block text-[11px] mt-0.5">{selectedService?.durationMinutes} Minutes</strong>
                       </div>
                     </div>
 
-                    <div className="border-t border-white/10 pt-3.5 space-y-2 text-xs">
+                    <div className="border-t border-slate-100 pt-3.5 space-y-2 text-xs">
                       <div className="flex justify-between items-center">
-                        <span className="text-slate-400 font-bold text-[9px] uppercase">Date</span>
-                        <span className="text-slate-100 font-bold font-serif text-sm">{formatHumanDate(selectedDate)}</span>
+                        <span className="text-slate-400 font-bold text-[9px] uppercase tracking-wider">Date</span>
+                        <span className="text-slate-800 font-bold">{formatHumanDate(selectedDate)}</span>
                       </div>
                       <div className="flex justify-between items-center">
-                        <span className="text-slate-400 font-bold text-[9px] uppercase">Timing Slot</span>
-                        <span className="text-slate-100 font-bold font-mono text-[11px] bg-white/5 border border-white/10 px-2 py-0.5 rounded">{selectedSlot}</span>
+                        <span className="text-slate-400 font-bold text-[9px] uppercase tracking-wider">Timing Slot</span>
+                        <span className="text-slate-800 font-bold font-mono text-[11px] bg-slate-50 border border-slate-200 px-2 py-0.5 rounded">{selectedSlot}</span>
                       </div>
                     </div>
 
-                    <div className="border-t border-dashed border-white/20 pt-4 mt-2 flex justify-between items-end">
+                    <div className="border-t border-slate-100 pt-4 mt-2 flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-3">
                       <div>
-                        <span className="text-slate-400 font-bold text-[9px] uppercase tracking-wider">Total Est Value</span>
-                        <div className="text-emerald-400 font-extrabold text-lg leading-none mt-1 font-display">
+                        <span className="text-slate-400 font-bold text-[9px] uppercase tracking-wider block">Estimated Total</span>
+                        <div className="text-slate-900 font-extrabold text-lg leading-none mt-1 font-display">
                           {selectedService ? formatUSD(selectedService.price, settings.currency) : ''}
                         </div>
                       </div>
@@ -680,13 +678,13 @@ export default function WizardBooker({
                         id="submit-booking-btn"
                         type="submit"
                         disabled={loading}
-                        className="bg-primary hover:bg-primary/95 text-white rounded-xl px-5 py-3 text-xs font-extrabold tracking-wide transition-all duration-350 hover:scale-[1.03] active:scale-[0.97] flex items-center justify-center gap-1.5 shadow-md shadow-primary/25 cursor-pointer border border-primary/20"
+                        className="bg-secondary hover:opacity-90 text-white rounded-xl px-5 py-3 text-xs font-extrabold tracking-wide transition-all flex items-center justify-center gap-1.5 cursor-pointer"
                       >
                         {loading ? (
                           <span className="animate-pulse">Confirming...</span>
                         ) : (
                           <>
-                            <CheckCircle2 className="w-4 h-4 text-emerald-300" />
+                            <CheckCircle2 className="w-4 h-4 text-white" />
                             <span>Confirm Booking</span>
                           </>
                         )}

@@ -95,7 +95,7 @@ export default function AdminBookings({
     setMailSuccessAlert('');
   };
 
-  // Submit manual template simulation
+  // Send manual template 
   const handleSendManualMail = async () => {
     if (!activeMailApt || !selectedMailTemplateId) return;
     setMailTriggering(true);
@@ -119,7 +119,7 @@ export default function AdminBookings({
       const updatedApt = { ...activeMailApt, reminderSent: true, reminderTemplateId: selectedMailTemplateId };
       onBookingUpdated(updatedApt);
     } catch (err) {
-      alert('Error triggering email simulation: ' + err.message);
+      alert('Error triggering email: ' + err.message);
     } finally {
       setMailTriggering(false);
     }
@@ -269,7 +269,7 @@ export default function AdminBookings({
                         <span>{apt.customerName}</span>
                         {apt.notes && (
                           <span
-                            className="inline-block w-2.5 h-2.5 bg-amber-500 rounded-full cursor-help animate-pulse border-2 border-white shadow-2xs"
+                            className="inline-block w-2.5 h-2.5 bg-[#3a4f99] rounded-full cursor-help animate-pulse border-2 border-white shadow-2xs"
                             title={`Notes: ${apt.notes}`}
                           ></span>
                         )}
@@ -324,7 +324,7 @@ export default function AdminBookings({
                             className={`text-[10px] font-extrabold px-3 py-1.5 rounded-lg border focus:outline-none cursor-pointer uppercase tracking-wider transition-all shadow-2xs ${apt.status === 'confirmed'
                                 ? 'bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100/60'
                                 : apt.status === 'pending'
-                                  ? 'bg-amber-50/80 text-amber-850 border-amber-250 hover:bg-amber-150/40'
+                                  ? 'bg-[#3a4f99]/10 text-[#3a4f99] border-[#3a4f99]/20 hover:bg-[#3a4f99]/20'
                                   : apt.status === 'completed'
                                     ? 'bg-purple-50 text-purple-700 border-purple-200 font-extrabold'
                                     : 'bg-slate-100 text-slate-550 border-slate-200 hover:bg-slate-150/40'
@@ -393,12 +393,12 @@ export default function AdminBookings({
           </table>
         </div>
 
-        {/* Manual Template Simulation Popup */}
+        {/* Email Template Popup */}
         {activeMailApt && (
           <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
             <div className="bg-white rounded-2xl border border-slate-205 shadow-2xl max-w-lg w-full p-6 space-y-4 animate-fade-in">
               <div className="flex justify-between items-center pb-3 border-b border-slate-150">
-                <h4 className="font-display font-bold text-slate-900 text-sm">Send Professional Email Template</h4>
+                <h4 className="font-display font-bold text-slate-900 text-sm">Send Email</h4>
                 <button
                   onClick={() => setActiveMailApt(null)}
                   className="text-slate-400 hover:text-slate-700 text-xl font-bold cursor-pointer"
@@ -478,7 +478,7 @@ export default function AdminBookings({
                       className="bg-primary border border-primary text-white hover:bg-primary/95 rounded-lg px-4 py-2 text-xs font-bold transition flex items-center gap-1.5 shadow-md shadow-primary/10 cursor-pointer"
                     >
                       <Send className="w-3.5 h-3.5 text-white/90" />
-                      <span>{mailTriggering ? 'Simulating Dispatch...' : 'Dispatch Simulated Email'}</span>
+                      <span>{mailTriggering ? 'Sending..' : 'Send'}</span>
                     </button>
                   </div>
                 </div>

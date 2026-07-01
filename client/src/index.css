@@ -18,17 +18,20 @@
   --font-serif: "Playfair Display", serif;
   --font-mono: "JetBrains Mono", monospace;
 
-  /* Change these color hex codes to update your global branding palette */
-  --color-primary: #D8E022;       /* Your primary color (e.g., lime/brand highlight) */
-  --color-secondary: #F8982E;     /* Your secondary/accent color (e.g., orange highlight) */
-  --color-bg-linen: #F7F3E6;      /* Off-white canvas cream/linen background */
+ 
+  --color-primary: #D4C04D;       /* Old Gold (Vibrant premium gold highlight) */
+  --color-secondary: #291100;     /* Rich Mahogany (Deep, elegant dark chocolate/maroon) */
+  --color-accent-fern: #657733;    /* Fern (Deep natural forest green) */
+  --color-bg-linen: #ECF5E2;      /* Honeydew (Soft warm off-white cream background) */
+  --color-tea-green: #D7E3A4;     /* Tea Green (Muted fresh green accent) */
 }
 
 @layer base {
   body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    background: #ffffff !important;
+    /* Soft premium Honeydew cream canvas background */
+    background: #ECF5E2 !important;
     min-height: 100vh;
   }
 }
@@ -46,10 +49,12 @@
 section,
 .admin-sidebar,
 .section-container {
-  /* >>> CUSTOMIZE MAIN CONTENT BOX BACKGROUNDS HERE */
-  background-color: #F7F3E6 !important;
-  /* >>> CUSTOMIZE CARD BORDER HIGHLIGHT COLOR HERE */
-  border-color: #D8E022 !important;
+ 
+  background-color: rgba(255, 255, 255, 0.92) !important;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  
+  border-color: #D7E3A4 !important;
 }
 
 div.border-slate-200,
@@ -58,33 +63,29 @@ div.border-slate-100,
 div.border-slate-300,
 form.border-slate-200,
 header.border-b {
-  /* >>> CUSTOMIZE STANDARD SEPARATORS AND BORDERS COLOR HERE */
-  border-color: #D8E022 !important;
+  border-color: rgba(215, 227, 164, 0.45) !important;
 }
 
-/* Ensure premium readability on primary-themed buttons and badges */
+
 .bg-primary,
 button.bg-primary,
 button[class*="bg-primary"],
 span.bg-primary {
-  /* >>> CUSTOMIZE PRIMARY BUTTON BACKGROUND COLOR */
-  background-color: #D8E022 !important;
-  /* >>> CUSTOMIZE PRIMARY BUTTON TEXT COLOR */
-  color: #1c1d00 !important;
+  background-color: #D4C04D !important;
+  color: #291100 !important; 
 }
 
 .bg-secondary,
 span.bg-secondary,
 div.bg-secondary {
-  /* >>> CUSTOMIZE SECONDARY/ACCENT ACTION BUTTON COLOR */
-  background-color: #F8982E !important;
+  background-color: #291100 !important;
   color: #ffffff !important;
 }
 
 .premium-btn-shadow {
   box-shadow: 
-    0 10px 25px -5px rgba(248, 152, 46, 0.15),
-    0 8px 12px -6px rgba(248, 152, 46, 0.1);
+    0 10px 25px -5px rgba(41, 17, 0, 0.15),
+    0 8px 12px -6px rgba(41, 17, 0, 0.1);
 }
 
 

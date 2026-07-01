@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
-import mysql from 'mysql2/promise';
+import { MongoClient } from 'mongodb';
+import crypto from 'crypto';
 
 const DB_DIR = path.join(process.cwd(), 'data');
 const DB_FILE = path.join(DB_DIR, 'appointment_db.json');
@@ -54,21 +55,29 @@ const INITIAL_STATE = {
     // Saturday: 9:00 AM - 4:00 PM (No break)
     { dayOfWeek: 6, isWorkingDay: true, startTime: '09:00', endTime: '16:00' },
   ],
-  customBlocks: [],
+  customBlocks: [
+    {
+      id: 'block-1',
+      date: new Date(Date.now() + 86400000 * 5).toISOString().split('T')[0], // 5 days from now
+      reason: 'Staff training session',
+      startTime: '09:00',
+      endTime: '12:00',
+    }
+  ],
   emailTemplates: [
     {
       id: 'tpl-conf',
       name: 'Standard Booking Confirmation',
       type: 'confirmation',
       subject: 'Reservation Confirmed: {service_name} with {business_name}',
-      body: 'Hello {customer_name},\n\nYour appointment is confirmed!\n\n✨ Service: {service_name}\n📅 Date: {appointment_date}\n🕒 Time: {appointment_time}\n\n✂️ Staff Notes: {notes}\n\nWe look forward to giving you an exceptional experience. If you need to make corrections, reply to this email or call us directly!\n\nBest regards,\nThe Team at {business_name}'
+      body: 'Hello {customer_name},\n\nYour appointment is confirmed!\n\nService: {service_name}\nDate: {appointment_date}\nTime: {appointment_time}\n\nStaff Notes: {notes}\n\nWe look forward to giving you an exceptional experience. If you need to make corrections, reply to this email or call us directly!\n\nBest regards,\nThe Team at {business_name}'
     },
     {
       id: 'tpl-rem',
       name: 'Day-Before Appointment Reminder',
       type: 'reminder',
       subject: 'Reminder: Your upcoming reservation at {business_name} tomorrow',
-      body: 'Hi {customer_name},\n\nWe are looking forward to seeing you tomorrow for your appointment!\n\n🔹 Business: {business_name}\n🔹 Service: {service_name}\n📅 Date: {appointment_date}\n🕒 Time: {appointment_time}\n\nLocation: 404 Design District, Suite 300\n\nIf you must reschedule, please give us a courtesy heads-up.\n\nWarmly,\n{business_name}'
+      body: 'Hi {customer_name},\n\nWe are looking forward to seeing you tomorrow for your appointment!\n\nBusiness: {business_name}\nService: {service_name}\nDate: {appointment_date}\nTime: {appointment_time}\n\nLocation: 404 Design District, Suite 300\n\nIf you must reschedule, please give us a courtesy heads-up.\n\nWarmly,\n{business_name}'
     },
     {
       id: 'tpl-can',
@@ -80,15 +89,28 @@ const INITIAL_STATE = {
   ],
   emailLogs: [],
   staff: [
-    { id: 'st-1', name: 'Jordan Lee', role: 'Stylist Professional', email: 'jordan@example.com', active: true }
+    { id: 'st-1', name: 'Alex Rivera', role: 'Master Barber', email: 'alex@example.com', active: true },
+    { id: 'st-2', name: 'Maria Santos', role: 'Color Specialist', email: 'maria@example.com', active: true },
+    { id: 'st-3', name: 'Jordan Lee', role: 'Stylist Professional', email: 'jordan@example.com', active: true }
   ],
   settings: {
-    businessName: 'My Business Name',
+    businessName: 'My business Name',
     currency: 'RM',
     address: '404 Design District, Suite 300',
-    contactEmail: 'contact@example.com',
+    contactEmail: 'name@example.com',
     contactPhone: '555-0100'
-  }
+  },
+  users: [
+    {
+      id: 'u-1',
+      email: 'name@example.com',
+      passwordHash: 'a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3', // '123' sha256 hashed
+      name: 'Admin Owner',
+      role: 'owner',
+      phone: '555-0100',
+      createdAt: '2026-06-15T00:00:00.000Z'
+    }
+  ]
 };
 
 // Ensure the local database directory and file exist
@@ -108,6 +130,7 @@ function initializeLocalDB() {
     const merged = { ...INITIAL_STATE, ...parsed };
     if (!merged.staff) merged.staff = INITIAL_STATE.staff;
     if (!merged.settings) merged.settings = INITIAL_STATE.settings;
+    if (!merged.users) merged.users = INITIAL_STATE.users;
     return merged;
   } catch (e) {
     console.error('Error reading local file database. Resetting to initial state.', e);
@@ -129,269 +152,140 @@ function saveLocalDB(state) {
   }
 }
 
-// --- MySQL Setup and Integration ---
-let pool = null;
-let isMySqlActiveStatus = null; // null = uninitialized, false = failed, true = active
-let isMySqlConfigured = false;
+// --- MongoDB Setup and Integration ---
+let client = null;
+let dbInstance = null;
+let isMongoActiveStatus = null; // null = uninitialized, false = failed, true = active
+let isMongoConfigured = false;
 
-const mysqlHost = process.env.MYSQL_HOST || '';
-const mysqlUser = process.env.MYSQL_USER || '';
-const mysqlPassword = process.env.MYSQL_PASSWORD || '';
-const mysqlDatabase = process.env.MYSQL_DATABASE || '';
-const mysqlPort = process.env.MYSQL_PORT || '3306';
+const mongoUri = process.env.MONGODB_URI || '';
+const mongoDatabase = process.env.MONGODB_DATABASE || 'glamour_scheduling';
 
-if (mysqlHost && mysqlUser && mysqlDatabase) {
-  isMySqlConfigured = true;
+if (mongoUri) {
+  isMongoConfigured = true;
+}
+
+async function ensureMongoCollections() {
+  if (!mongoUri) {
+    isMongoActiveStatus = false;
+    return false;
+  }
+  if (isMongoActiveStatus === true) return true;
+  if (isMongoActiveStatus === false) return false;
+
   try {
-    pool = mysql.createPool({
-      host: mysqlHost,
-      user: mysqlUser,
-      password: mysqlPassword,
-      database: mysqlDatabase,
-      port: parseInt(mysqlPort, 10),
-      waitForConnections: true,
-      connectionLimit: 10,
-      queueLimit: 0,
-      connectTimeout: 5000 // 5 seconds fail fast
+    console.log('Connecting to MongoDB database...');
+    client = new MongoClient(mongoUri, {
+      connectTimeoutMS: 5000,
+      serverSelectionTimeoutMS: 5000
     });
-    console.log('MySQL Connection pool instantiated.');
+    await client.connect();
+    dbInstance = client.db(mongoDatabase);
+    console.log('MongoDB connection pool instantiated.');
+
+    // Seed collections if they are empty
+    await seedMongoCollection('services', INITIAL_STATE.services);
+    await seedMongoCollection('staff', INITIAL_STATE.staff);
+    await seedMongoCollection('availability', INITIAL_STATE.availability);
+    await seedMongoCollection('custom_blocks', INITIAL_STATE.customBlocks);
+    await seedMongoCollection('email_templates', INITIAL_STATE.emailTemplates);
+    await seedMongoCollection('email_logs', INITIAL_STATE.emailLogs);
+    await seedMongoCollection('appointments', INITIAL_STATE.appointments);
+    await seedMongoCollection('users', INITIAL_STATE.users);
+
+    const settingsColl = dbInstance.collection('settings');
+    const settingsCount = await settingsColl.countDocuments();
+    if (settingsCount === 0) {
+      await settingsColl.insertOne({ _id: 'singleton', ...INITIAL_STATE.settings });
+    }
+
+    console.log('MongoDB database schema verification and seed complete.');
+    isMongoActiveStatus = true;
+    return true;
   } catch (err) {
-    console.error('Failed to create MySQL pool:', err);
+    const isSslAlert80 = err.message && (
+      err.message.includes('alert number 80') || 
+      err.message.includes('ssl3_read_bytes') || 
+      err.message.includes('tlsv1 alert')
+    );
+    const diagMsg = isSslAlert80
+      ? 'MongoDB Atlas TLS handshake failed (SSL alert number 80). This typically indicates that your MongoDB Atlas IP Whitelist / IP Access List database rules are blocking connections from the Cloud Run container runtime. To resolve: Go to MongoDB Atlas -> Security -> Network Access -> Add IP Address, and authorize either 0.0.0.0/0 (Recommended for easy setup) or your specific container IP range.'
+      : `NoSQL Database connection could not be established. Details: ${err.message}`;
+    
+    console.log('[Notice] MongoDB connection bypassed. Using local JSON file-system storage fallback.');
+    console.log('[Notice] DB Connection Diagnostic:', diagMsg);
+    isMongoActiveStatus = false;
+    return false;
   }
 }
 
-async function ensureMySqlTables() {
-  if (!pool) {
-    isMySqlActiveStatus = false;
-    return false;
-  }
-  if (isMySqlActiveStatus === true) return true;
-
-  try {
-    // Ping to verify connection is active
-    await pool.query('SELECT 1');
-
-    console.log('Verifying or creating MySQL database tables...');
-
-    // 1. services
-    await pool.query(`
-      CREATE TABLE IF NOT EXISTS services (
-        id VARCHAR(50) PRIMARY KEY,
-        name VARCHAR(255) NOT NULL,
-        durationMinutes INT NOT NULL,
-        price DECIMAL(10,2) NOT NULL,
-        description TEXT,
-        isActive TINYINT(1) DEFAULT 1
-      )
-    `);
-
-    // 2. staff
-    await pool.query(`
-      CREATE TABLE IF NOT EXISTS staff (
-        id VARCHAR(50) PRIMARY KEY,
-        name VARCHAR(255) NOT NULL,
-        role VARCHAR(255),
-        email VARCHAR(255),
-        active TINYINT(1) DEFAULT 1
-      )
-    `);
-
-    // 3. appointments
-    await pool.query(`
-      CREATE TABLE IF NOT EXISTS appointments (
-        id VARCHAR(50) PRIMARY KEY,
-        customerName VARCHAR(255) NOT NULL,
-        customerEmail VARCHAR(255),
-        customerPhone VARCHAR(50),
-        date VARCHAR(50) NOT NULL,
-        timeSlot VARCHAR(20) NOT NULL,
-        serviceId VARCHAR(50),
-        staffId VARCHAR(50),
-        status VARCHAR(50) DEFAULT 'confirmed',
-        notes TEXT,
-        createdAt VARCHAR(100),
-        reminderSent TINYINT(1) DEFAULT 0,
-        reminderTemplateId VARCHAR(50)
-      )
-    `);
-
-    // 4. availability
-    await pool.query(`
-      CREATE TABLE IF NOT EXISTS availability (
-        dayOfWeek INT PRIMARY KEY,
-        isWorkingDay TINYINT(1) DEFAULT 1,
-        startTime VARCHAR(15),
-        endTime VARCHAR(15),
-        breakTimeStart VARCHAR(15),
-        breakTimeEnd VARCHAR(15)
-      )
-    `);
-
-    // 5. custom_blocks
-    await pool.query(`
-      CREATE TABLE IF NOT EXISTS custom_blocks (
-        id VARCHAR(50) PRIMARY KEY,
-        date VARCHAR(50) NOT NULL,
-        startTime VARCHAR(15),
-        endTime VARCHAR(15),
-        reason VARCHAR(255)
-      )
-    `);
-
-    // 6. email_templates
-    await pool.query(`
-      CREATE TABLE IF NOT EXISTS email_templates (
-        id VARCHAR(50) PRIMARY KEY,
-        name VARCHAR(255) NOT NULL,
-        type VARCHAR(50),
-        subject VARCHAR(255),
-        body TEXT
-      )
-    `);
-
-    // 7. email_logs
-    await pool.query(`
-      CREATE TABLE IF NOT EXISTS email_logs (
-        id VARCHAR(50) PRIMARY KEY,
-        appointmentId VARCHAR(50),
-        customerEmail VARCHAR(255),
-        subject VARCHAR(255),
-        body TEXT,
-        sentAt VARCHAR(100),
-        status VARCHAR(50)
-      )
-    `);
-
-    // 8. settings
-    await pool.query(`
-      CREATE TABLE IF NOT EXISTS settings (
-        id VARCHAR(50) PRIMARY KEY,
-        businessName VARCHAR(255),
-        currency VARCHAR(50),
-        address VARCHAR(255),
-        contactEmail VARCHAR(255),
-        contactPhone VARCHAR(50)
-      )
-    `);
-
-    // Seed tables if empty
-    // Services
-    const [currentServices] = await pool.query('SELECT COUNT(*) as cnt FROM services');
-    if (currentServices[0].cnt === 0) {
-      for (const s of INITIAL_STATE.services) {
-        await pool.query(
-          'INSERT INTO services (id, name, durationMinutes, price, description, isActive) VALUES (?, ?, ?, ?, ?, ?)',
-          [s.id, s.name, s.durationMinutes, s.price, s.description || '', s.isActive ? 1 : 0]
-        );
+async function seedMongoCollection(colName, initialData) {
+  const coll = dbInstance.collection(colName);
+  const count = await coll.countDocuments();
+  if (count === 0 && initialData && initialData.length > 0) {
+    const docs = initialData.map(item => {
+      const doc = { ...item };
+      if (item.id) {
+        doc._id = item.id;
+      } else if (item.dayOfWeek !== undefined) {
+        doc._id = `day-${item.dayOfWeek}`;
       }
+      return doc;
+    });
+    try {
+      await coll.insertMany(docs);
+    } catch (e) {
+      console.warn(`Seeding collection ${colName} failed:`, e.message);
     }
-
-    // Staff
-    const [currentStaff] = await pool.query('SELECT COUNT(*) as cnt FROM staff');
-    if (currentStaff[0].cnt === 0) {
-      for (const st of INITIAL_STATE.staff) {
-        await pool.query(
-          'INSERT INTO staff (id, name, role, email, active) VALUES (?, ?, ?, ?, ?)',
-          [st.id, st.name, st.role || '', st.email || '', st.active ? 1 : 0]
-        );
-      }
-    }
-
-    // Availability
-    const [currentAvail] = await pool.query('SELECT COUNT(*) as cnt FROM availability');
-    if (currentAvail[0].cnt === 0) {
-      for (const a of INITIAL_STATE.availability) {
-        await pool.query(
-          'INSERT INTO availability (dayOfWeek, isWorkingDay, startTime, endTime, breakTimeStart, breakTimeEnd) VALUES (?, ?, ?, ?, ?, ?)',
-          [a.dayOfWeek, a.isWorkingDay ? 1 : 0, a.startTime, a.endTime, a.breakTimeStart || null, a.breakTimeEnd || null]
-        );
-      }
-    }
-
-    // Custom Blocks
-    const [currentBlocks] = await pool.query('SELECT COUNT(*) as cnt FROM custom_blocks');
-    if (currentBlocks[0].cnt === 0) {
-      for (const b of INITIAL_STATE.customBlocks) {
-        await pool.query(
-          'INSERT INTO custom_blocks (id, date, startTime, endTime, reason) VALUES (?, ?, ?, ?, ?)',
-          [b.id, b.date, b.startTime, b.endTime, b.reason || '']
-        );
-      }
-    }
-
-    // Email Templates
-    const [currentTemplates] = await pool.query('SELECT COUNT(*) as cnt FROM email_templates');
-    if (currentTemplates[0].cnt === 0) {
-      for (const t of INITIAL_STATE.emailTemplates) {
-        await pool.query(
-          'INSERT INTO email_templates (id, name, type, subject, body) VALUES (?, ?, ?, ?, ?)',
-          [t.id, t.name, t.type || '', t.subject || '', t.body || '']
-        );
-      }
-    }
-
-    // Settings
-    const [currentSettings] = await pool.query('SELECT COUNT(*) as cnt FROM settings');
-    if (currentSettings[0].cnt === 0) {
-      const s = INITIAL_STATE.settings;
-      await pool.query(
-        'INSERT INTO settings (id, businessName, currency, address, contactEmail, contactPhone) VALUES (?, ?, ?, ?, ?, ?)',
-        ['singleton', s.businessName, s.currency, s.address, s.contactEmail, s.contactPhone]
-      );
-    }
-
-    // Appointments seeding
-    const [currentAppts] = await pool.query('SELECT COUNT(*) as cnt FROM appointments');
-    if (currentAppts[0].cnt === 0) {
-      for (const a of INITIAL_STATE.appointments) {
-        await pool.query(
-          'INSERT INTO appointments (id, customerName, customerEmail, customerPhone, date, timeSlot, serviceId, staffId, status, notes, createdAt, reminderSent) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
-          [a.id, a.customerName, a.customerEmail || null, a.customerPhone || null, a.date, a.timeSlot, a.serviceId, a.staffId || null, a.status, a.notes || '', a.createdAt, a.reminderSent ? 1 : 0]
-        );
-      }
-    }
-
-    console.log('MySQL setup completed successfully.');
-    isMySqlActiveStatus = true;
-    return true;
-  } catch (err) {
-    console.warn('MySQL initialization/migration failed. Falling back to local file store. Error:', err.message);
-    isMySqlActiveStatus = false;
-    return false;
   }
 }
 
 // Fire table initialization in background
-ensureMySqlTables().catch(err => {
-  console.error('Asynchronous initial MySQL setup error:', err);
+ensureMongoCollections().catch(err => {
+  console.log('Background MongoDB initialization query bypassed.');
 });
 
 export const db = {
-  // Check if MySQL setup is active and responsive.
+  // Check if MongoDB setup is active and responsive.
+  async isMongoActive() {
+    if (!mongoUri) return false;
+    if (isMongoActiveStatus === true) return true;
+    if (isMongoActiveStatus === false) return false;
+    return await ensureMongoCollections();
+  },
+
+  // Maintain compatibility with existing interfaces
   async isMySqlActive() {
-    if (!pool) return false;
-    if (isMySqlActiveStatus === true) return true;
-    return await ensureMySqlTables();
+    return await this.isMongoActive();
   },
 
   async getState() {
-    const isMySql = await this.isMySqlActive();
-    if (!isMySql) {
-      return { ...localState, isMySqlConnected: false };
+    const isMongo = await this.isMongoActive();
+    if (!isMongo) {
+      const safeUsers = (localState.users || []).map(u => ({
+        id: u.id,
+        email: u.email,
+        name: u.name,
+        role: u.role,
+        phone: u.phone || '',
+        createdAt: u.createdAt
+      }));
+      return { ...localState, users: safeUsers, isMySqlConnected: false, isMongoConnected: false };
     }
 
     try {
-      const [appointments] = await pool.query('SELECT * FROM appointments');
-      const [services] = await pool.query('SELECT * FROM services');
-      const [availability] = await pool.query('SELECT * FROM availability');
-      const [customBlocks] = await pool.query('SELECT * FROM custom_blocks');
-      const [emailTemplates] = await pool.query('SELECT * FROM email_templates');
-      const [emailLogs] = await pool.query('SELECT * FROM email_logs');
-      const [staff] = await pool.query('SELECT * FROM staff');
-      const [settingsRows] = await pool.query('SELECT * FROM settings WHERE id = "singleton"');
+      const appointments = await dbInstance.collection('appointments').find({}).toArray();
+      const services = await dbInstance.collection('services').find({}).toArray();
+      const availability = await dbInstance.collection('availability').find({}).toArray();
+      const customBlocks = await dbInstance.collection('custom_blocks').find({}).toArray();
+      const emailTemplates = await dbInstance.collection('email_templates').find({}).toArray();
+      const emailLogs = await dbInstance.collection('email_logs').find({}).toArray();
+      const staff = await dbInstance.collection('staff').find({}).toArray();
+      const users = await dbInstance.collection('users').find({}).toArray();
+      const settingsRows = await dbInstance.collection('settings').find({ _id: 'singleton' }).toArray();
 
       const mappedAppts = appointments.map(a => ({
-        id: a.id,
+        id: a.id || a._id,
         customerName: a.customerName,
         customerEmail: a.customerEmail || '',
         customerPhone: a.customerPhone || '',
@@ -407,7 +301,7 @@ export const db = {
       }));
 
       const mappedServices = services.map(s => ({
-        id: s.id,
+        id: s.id || s._id,
         name: s.name,
         durationMinutes: s.durationMinutes,
         price: Number(s.price),
@@ -425,7 +319,7 @@ export const db = {
       }));
 
       const mappedBlocks = customBlocks.map(b => ({
-        id: b.id,
+        id: b.id || b._id,
         date: b.date,
         startTime: b.startTime,
         endTime: b.endTime,
@@ -433,7 +327,7 @@ export const db = {
       }));
 
       const mappedTemplates = emailTemplates.map(t => ({
-        id: t.id,
+        id: t.id || t._id,
         name: t.name,
         type: t.type,
         subject: t.subject,
@@ -441,21 +335,30 @@ export const db = {
       }));
 
       const mappedLogs = emailLogs.map(l => ({
-        id: l.id,
+        id: l.id || l._id,
         appointmentId: l.appointmentId,
         customerEmail: l.customerEmail,
         subject: l.subject,
         body: l.body,
         sentAt: l.sentAt,
         status: l.status
-      }));
+      })).sort((a,b) => b.sentAt.localeCompare(a.sentAt));
 
       const mappedStaff = staff.map(st => ({
-        id: st.id,
+        id: st.id || st._id,
         name: st.name,
         role: st.role || '',
         email: st.email || '',
         active: Boolean(st.active)
+      }));
+
+      const mappedUsers = users.map(u => ({
+        id: u.id || u._id,
+        email: u.email,
+        name: u.name,
+        role: u.role,
+        phone: u.phone || '',
+        createdAt: u.createdAt
       }));
 
       let mappedSettings = localState.settings;
@@ -479,11 +382,13 @@ export const db = {
         emailLogs: mappedLogs,
         staff: mappedStaff,
         settings: mappedSettings,
-        isMySqlConnected: true
+        users: mappedUsers,
+        isMySqlConnected: true,
+        isMongoConnected: true
       };
     } catch (e) {
-      console.error('MySQL query state failed. Using local storage.', e);
-      return { ...localState, isMySqlConnected: false };
+      console.error('MongoDB query state failed. Using local storage.', e);
+      return { ...localState, isMySqlConnected: false, isMongoConnected: false };
     }
   },
 
@@ -506,41 +411,15 @@ export const db = {
     }
     saveLocalDB(state);
 
-    if (await this.isMySqlActive()) {
+    if (await this.isMongoActive()) {
       try {
-        await pool.query(`
-          INSERT INTO appointments (id, customerName, customerEmail, customerPhone, date, timeSlot, serviceId, staffId, status, notes, createdAt, reminderSent, reminderTemplateId)
-          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-          ON DUPLICATE KEY UPDATE 
-            customerName = VALUES(customerName),
-            customerEmail = VALUES(customerEmail),
-            customerPhone = VALUES(customerPhone),
-            date = VALUES(date),
-            timeSlot = VALUES(timeSlot),
-            serviceId = VALUES(serviceId),
-            staffId = VALUES(staffId),
-            status = VALUES(status),
-            notes = VALUES(notes),
-            createdAt = VALUES(createdAt),
-            reminderSent = VALUES(reminderSent),
-            reminderTemplateId = VALUES(reminderTemplateId)
-        `, [
-          apt.id,
-          apt.customerName,
-          apt.customerEmail || null,
-          apt.customerPhone || null,
-          apt.date,
-          apt.timeSlot,
-          apt.serviceId,
-          apt.staffId || null,
-          apt.status,
-          apt.notes || '',
-          apt.createdAt,
-          apt.reminderSent ? 1 : 0,
-          apt.reminderTemplateId || null
-        ]);
+        await dbInstance.collection('appointments').replaceOne(
+          { _id: apt.id },
+          { _id: apt.id, ...apt },
+          { upsert: true }
+        );
       } catch (e) {
-        console.error('MySQL appointment upsert error:', e);
+        console.error('MongoDB appointment upsert error:', e);
       }
     }
     return apt;
@@ -552,11 +431,11 @@ export const db = {
     state.appointments = state.appointments.filter(a => a.id !== id);
     saveLocalDB(state);
 
-    if (await this.isMySqlActive()) {
+    if (await this.isMongoActive()) {
       try {
-        await pool.query('DELETE FROM appointments WHERE id = ?', [id]);
+        await dbInstance.collection('appointments').deleteOne({ _id: id });
       } catch (e) {
-        console.error('MySQL appointment delete error:', e);
+        console.error('MongoDB appointment delete error:', e);
       }
     }
     return state.appointments.length < originalLength;
@@ -577,27 +456,15 @@ export const db = {
     }
     saveLocalDB(state);
 
-    if (await this.isMySqlActive()) {
+    if (await this.isMongoActive()) {
       try {
-        await pool.query(`
-          INSERT INTO services (id, name, durationMinutes, price, description, isActive)
-          VALUES (?, ?, ?, ?, ?, ?)
-          ON DUPLICATE KEY UPDATE
-            name = VALUES(name),
-            durationMinutes = VALUES(durationMinutes),
-            price = VALUES(price),
-            description = VALUES(description),
-            isActive = VALUES(isActive)
-        `, [
-          service.id,
-          service.name,
-          service.durationMinutes,
-          service.price,
-          service.description || '',
-          service.isActive ? 1 : 0
-        ]);
+        await dbInstance.collection('services').replaceOne(
+          { _id: service.id },
+          { _id: service.id, ...service },
+          { upsert: true }
+        );
       } catch (e) {
-        console.error('MySQL service upsert error:', e);
+        console.error('MongoDB service upsert error:', e);
       }
     }
     return service;
@@ -608,11 +475,11 @@ export const db = {
     state.services = state.services.filter(s => s.id !== id);
     saveLocalDB(state);
 
-    if (await this.isMySqlActive()) {
+    if (await this.isMongoActive()) {
       try {
-        await pool.query('DELETE FROM services WHERE id = ?', [id]);
+        await dbInstance.collection('services').deleteOne({ _id: id });
       } catch (e) {
-        console.error('MySQL service delete error:', e);
+        console.error('MongoDB service delete error:', e);
       }
     }
     return true;
@@ -628,24 +495,16 @@ export const db = {
     state.availability = config;
     saveLocalDB(state);
 
-    if (await this.isMySqlActive()) {
+    if (await this.isMongoActive()) {
       try {
-        await pool.query('DELETE FROM availability');
-        for (const c of config) {
-          await pool.query(`
-            INSERT INTO availability (dayOfWeek, isWorkingDay, startTime, endTime, breakTimeStart, breakTimeEnd)
-            VALUES (?, ?, ?, ?, ?, ?)
-          `, [
-            c.dayOfWeek,
-            c.isWorkingDay ? 1 : 0,
-            c.startTime,
-            c.endTime,
-            c.breakTimeStart || null,
-            c.breakTimeEnd || null
-          ]);
+        const coll = dbInstance.collection('availability');
+        await coll.deleteMany({});
+        if (config.length > 0) {
+          const docs = config.map(c => ({ _id: `day-${c.dayOfWeek}`, ...c }));
+          await coll.insertMany(docs);
         }
       } catch (e) {
-        console.error('MySQL availability update error:', e);
+        console.error('MongoDB availability update error:', e);
       }
     }
     return config;
@@ -661,23 +520,16 @@ export const db = {
     state.customBlocks = blocks;
     saveLocalDB(state);
 
-    if (await this.isMySqlActive()) {
+    if (await this.isMongoActive()) {
       try {
-        await pool.query('DELETE FROM custom_blocks');
-        for (const b of blocks) {
-          await pool.query(`
-            INSERT INTO custom_blocks (id, date, startTime, endTime, reason)
-            VALUES (?, ?, ?, ?, ?)
-          `, [
-            b.id,
-            b.date,
-            b.startTime,
-            b.endTime,
-            b.reason || ''
-          ]);
+        const coll = dbInstance.collection('custom_blocks');
+        await coll.deleteMany({});
+        if (blocks.length > 0) {
+          const docs = blocks.map(b => ({ _id: b.id, ...b }));
+          await coll.insertMany(docs);
         }
       } catch (e) {
-        console.error('MySQL custom blocks save error:', e);
+        console.error('MongoDB custom blocks save error:', e);
       }
     }
     return blocks;
@@ -698,25 +550,15 @@ export const db = {
     }
     saveLocalDB(state);
 
-    if (await this.isMySqlActive()) {
+    if (await this.isMongoActive()) {
       try {
-        await pool.query(`
-          INSERT INTO email_templates (id, name, type, subject, body)
-          VALUES (?, ?, ?, ?, ?)
-          ON DUPLICATE KEY UPDATE
-            name = VALUES(name),
-            type = VALUES(type),
-            subject = VALUES(subject),
-            body = VALUES(body)
-        `, [
-          template.id,
-          template.name,
-          template.type,
-          template.subject,
-          template.body
-        ]);
+        await dbInstance.collection('email_templates').replaceOne(
+          { _id: template.id },
+          { _id: template.id, ...template },
+          { upsert: true }
+        );
       } catch (e) {
-        console.error('MySQL template upsert error:', e);
+        console.error('MongoDB template upsert error:', e);
       }
     }
     return template;
@@ -727,22 +569,11 @@ export const db = {
     state.emailLogs.unshift(log);
     saveLocalDB(state);
 
-    if (await this.isMySqlActive()) {
+    if (await this.isMongoActive()) {
       try {
-        await pool.query(`
-          INSERT INTO email_logs (id, appointmentId, customerEmail, subject, body, sentAt, status)
-          VALUES (?, ?, ?, ?, ?, ?, ?)
-        `, [
-          log.id,
-          log.appointmentId,
-          log.customerEmail,
-          log.subject,
-          log.body,
-          log.sentAt,
-          log.status
-        ]);
+        await dbInstance.collection('email_logs').insertOne({ _id: log.id, ...log });
       } catch (e) {
-        console.error('MySQL email log error:', e);
+        console.error('MongoDB email log error:', e);
       }
     }
     return log;
@@ -769,25 +600,15 @@ export const db = {
     }
     saveLocalDB(state);
 
-    if (await this.isMySqlActive()) {
+    if (await this.isMongoActive()) {
       try {
-        await pool.query(`
-          INSERT INTO staff (id, name, role, email, active)
-          VALUES (?, ?, ?, ?, ?)
-          ON DUPLICATE KEY UPDATE
-            name = VALUES(name),
-            role = VALUES(role),
-            email = VALUES(email),
-            active = VALUES(active)
-        `, [
-          staffMember.id,
-          staffMember.name,
-          staffMember.role || '',
-          staffMember.email || '',
-          staffMember.active ? 1 : 0
-        ]);
+        await dbInstance.collection('staff').replaceOne(
+          { _id: staffMember.id },
+          { _id: staffMember.id, ...staffMember },
+          { upsert: true }
+        );
       } catch (e) {
-        console.error('MySQL staff upsert error:', e);
+        console.error('MongoDB staff upsert error:', e);
       }
     }
     return staffMember;
@@ -799,11 +620,11 @@ export const db = {
     state.staff = state.staff.filter(s => s.id !== id);
     saveLocalDB(state);
 
-    if (await this.isMySqlActive()) {
+    if (await this.isMongoActive()) {
       try {
-        await pool.query('DELETE FROM staff WHERE id = ?', [id]);
+        await dbInstance.collection('staff').deleteOne({ _id: id });
       } catch (e) {
-        console.error('MySQL staff delete error:', e);
+        console.error('MongoDB staff delete error:', e);
       }
     }
     return true;
@@ -819,28 +640,76 @@ export const db = {
     state.settings = { ...INITIAL_STATE.settings, ...state.settings, ...settings };
     saveLocalDB(state);
 
-    if (await this.isMySqlActive()) {
+    if (await this.isMongoActive()) {
       try {
-        await pool.query(`
-          INSERT INTO settings (id, businessName, currency, address, contactEmail, contactPhone)
-          VALUES ('singleton', ?, ?, ?, ?, ?)
-          ON DUPLICATE KEY UPDATE
-            businessName = VALUES(businessName),
-            currency = VALUES(currency),
-            address = VALUES(address),
-            contactEmail = VALUES(contactEmail),
-            contactPhone = VALUES(contactPhone)
-        `, [
-          settings.businessName || INITIAL_STATE.settings.businessName,
-          settings.currency || INITIAL_STATE.settings.currency,
-          settings.address || INITIAL_STATE.settings.address,
-          settings.contactEmail || INITIAL_STATE.settings.contactEmail,
-          settings.contactPhone || INITIAL_STATE.settings.contactPhone
-        ]);
+        await dbInstance.collection('settings').replaceOne(
+          { _id: 'singleton' },
+          { _id: 'singleton', ...state.settings },
+          { upsert: true }
+        );
       } catch (e) {
-        console.error('MySQL settings save error:', e);
+        console.error('MongoDB settings save error:', e);
       }
     }
     return state.settings;
+  },
+
+  async getUserByEmail(email) {
+    const isMongo = await this.isMongoActive();
+    if (isMongo) {
+      try {
+        const u = await dbInstance.collection('users').findOne({ email: new RegExp(`^${email}$`, 'i') });
+        if (u) {
+          return { ...u, id: u.id || u._id };
+        }
+        return null;
+      } catch (e) {
+        console.error('MongoDB getUserByEmail error:', e);
+      }
+    }
+    const state = { ...localState };
+    if (!state.users) state.users = INITIAL_STATE.users;
+    return state.users.find(u => u.email.toLowerCase() === email.toLowerCase()) || null;
+  },
+
+  async createUser(user) {
+    const state = { ...localState };
+    if (!state.users) state.users = INITIAL_STATE.users;
+    state.users.push(user);
+    saveLocalDB(state);
+
+    const isMongo = await this.isMongoActive();
+    if (isMongo) {
+      try {
+        await dbInstance.collection('users').insertOne({ _id: user.id, ...user });
+      } catch (e) {
+        console.error('MongoDB createUser error:', e);
+      }
+    }
+    return user;
+  },
+
+  async updateUser(user) {
+    const state = { ...localState };
+    if (!state.users) state.users = INITIAL_STATE.users;
+    const index = state.users.findIndex(u => u.id === user.id);
+    if (index >= 0) {
+      state.users[index] = { ...state.users[index], ...user };
+    }
+    saveLocalDB(state);
+
+    const isMongo = await this.isMongoActive();
+    if (isMongo) {
+      try {
+        await dbInstance.collection('users').replaceOne(
+          { _id: user.id },
+          { _id: user.id, ...user },
+          { upsert: true }
+        );
+      } catch (e) {
+        console.error('MongoDB updateUser error:', e);
+      }
+    }
+    return user;
   }
 };
