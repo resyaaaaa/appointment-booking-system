@@ -157,7 +157,6 @@ export default function AdminProfile({
       <div className="md:col-span-2 bg-white rounded-2xl border border-slate-200/80 shadow-[0_4px_20px_rgba(15,23,42,0.02)] p-6 space-y-5">
         <div className="border-b border-slate-100 pb-3">
           <h3 className="font-display font-bold text-slate-900 text-sm">Account Settings</h3>
-          <p className="text-[10px] text-slate-400 font-medium">Modify contact details and update administrative login credentials.</p>
         </div>
 
         {formSuccess && (
@@ -209,7 +208,7 @@ export default function AdminProfile({
           </div>
 
           <div className="space-y-1">
-            <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Email Address (Read-Only)</label>
+            <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Email Address</label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-300">
                 <Mail size={14} />
@@ -221,7 +220,6 @@ export default function AdminProfile({
                 className="w-full text-xs pl-9 p-2.5 bg-slate-100 border border-slate-200 rounded-xl text-slate-450 cursor-not-allowed font-medium"
               />
             </div>
-            <span className="text-[9.5px] text-slate-400 mt-1 block">Your login email address is tied permanently to security roles. Contact administrators to change it.</span>
           </div>
 
           <div className="pt-3 border-t border-slate-100">
@@ -237,7 +235,6 @@ export default function AdminProfile({
                 placeholder="•••••••• (Leave empty to keep secure/unchanged)"
                 className="w-full text-xs p-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/5 transition font-semibold"
               />
-              <span className="text-[9px] text-slate-400 mt-1 block leading-normal">Enter a new secure value only if you intend to cycle or replace your current password.</span>
             </div>
           </div>
 

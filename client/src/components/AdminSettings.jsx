@@ -55,14 +55,13 @@ export default function AdminSettings({
         <Settings className="w-5 h-5 text-primary" />
         <div>
           <h4 className="font-display font-semibold text-slate-905 text-sm">Business Profile &amp; Settings</h4>
-          <p className="text-[10px] text-slate-500">Configure client interaction styles and currency defaults.</p>
         </div>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-4 text-xs">
         <div className="grid sm:grid-cols-2 gap-4">
           <div>
-            <label className="block text-slate-705 font-semibold mb-1">Company / Salon Name</label>
+            <label className="block text-slate-705 font-semibold mb-1">Company / Business Name</label>
             <input
               type="text"
               required
@@ -74,7 +73,7 @@ export default function AdminSettings({
 
           <div>
             <label className="block text-slate-705 font-semibold mb-1 flex items-center gap-1">
-              <span>Local Currency symbol or Code</span>
+              <span>Local Currency</span>
               <span className="text-[9px] text-slate-400 font-normal hover:text-slate-600" title="Supports e.g., $, €, £, AED, CHF, SGD etc.">
                 (e.g., $, €, £, USD, EUR)
               </span>
@@ -103,7 +102,7 @@ export default function AdminSettings({
 
         <div className="grid sm:grid-cols-2 gap-4">
           <div>
-            <label className="block text-slate-705 font-semibold mb-1">Public Reservation Email</label>
+            <label className="block text-slate-705 font-semibold mb-1">Business Email</label>
             <input
               type="email"
               value={contactEmail}
@@ -113,7 +112,7 @@ export default function AdminSettings({
           </div>
 
           <div>
-            <label className="block text-slate-705 font-semibold mb-1">Help Desk Phone</label>
+            <label className="block text-slate-705 font-semibold mb-1">Contact Number</label>
             <input
               type="text"
               value={contactPhone}

@@ -19,8 +19,8 @@
   --font-mono: "JetBrains Mono", monospace;
 
  
-  --color-primary: #D4C04D;       /* Old Gold (Vibrant premium gold highlight) */
-  --color-secondary: #291100;     /* Rich Mahogany (Deep, elegant dark chocolate/maroon) */
+  --color-primary: #FFD166;       
+  --color-secondary: #210B2C;    
   --color-accent-fern: #657733;    /* Fern (Deep natural forest green) */
   --color-bg-linen: #ECF5E2;      /* Honeydew (Soft warm off-white cream background) */
   --color-tea-green: #D7E3A4;     /* Tea Green (Muted fresh green accent) */
@@ -54,7 +54,7 @@ section,
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   
-  border-color: #D7E3A4 !important;
+  border-color: #210B2C !important;
 }
 
 div.border-slate-200,
@@ -63,7 +63,7 @@ div.border-slate-100,
 div.border-slate-300,
 form.border-slate-200,
 header.border-b {
-  border-color: rgba(215, 227, 164, 0.45) !important;
+  border-color: #210B2C!important;
 }
 
 
@@ -71,14 +71,14 @@ header.border-b {
 button.bg-primary,
 button[class*="bg-primary"],
 span.bg-primary {
-  background-color: #D4C04D !important;
-  color: #291100 !important; 
+  background-color: #FFD166 !important;
+  color: #210B2C !important; 
 }
 
 .bg-secondary,
 span.bg-secondary,
 div.bg-secondary {
-  background-color: #291100 !important;
+  background-color: #210B2C !important;
   color: #ffffff !important;
 }
 

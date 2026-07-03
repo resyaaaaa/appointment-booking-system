@@ -189,7 +189,7 @@ export default function AdminBookings({
         </div>
 
         {/* Status Filter */}
-        <div className="md:col-span-2.5 flex items-center gap-2 bg-white/70 border border-slate-200/80 rounded-xl px-3 py-3 shadow-3xs hover:border-slate-300 transition-all">
+        <div className="md:col-span-2 flex items-center gap-2 bg-white/70 border border-slate-200/80 rounded-xl px-3 py-3 shadow-3xs hover:border-slate-300 transition-all">
           <Filter className="w-3.5 h-3.5 text-slate-400 shrink-0" />
           <select
             id="book-status-filter"
@@ -206,7 +206,7 @@ export default function AdminBookings({
         </div>
 
         {/* Staff Filter */}
-        <div className="md:col-span-2.5 flex items-center gap-2 bg-white/70 border border-slate-200/80 rounded-xl px-3 py-3 shadow-3xs hover:border-slate-300 transition-all">
+        <div className="md:col-span-2 flex items-center gap-2 bg-white/70 border border-slate-200/80 rounded-xl px-3 py-3 shadow-3xs hover:border-slate-300 transition-all">
           <User className="w-3.5 h-3.5 text-slate-400 font-bold shrink-0" />
           <select
             id="book-staff-filter"
@@ -241,7 +241,7 @@ export default function AdminBookings({
             className="w-full bg-primary hover:bg-primary/95 text-white rounded-xl py-3 text-xs font-extrabold transition-all duration-200 flex items-center justify-center gap-1.5 shadow-md shadow-primary/15 cursor-pointer hover:scale-[1.03] active:scale-95"
             title="Book Appt manually"
           >
-            <span>+ Add</span>
+            <span> Add </span>
           </button>
         </div>
       </div>

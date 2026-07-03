@@ -94,7 +94,7 @@ export default function AdminStaff({
     <div className="grid md:grid-cols-3 gap-6">
       {/* ADD/EDIT STAFF CARD */}
       <div className="bg-white rounded-xl border border-slate-200 p-5 shadow-sm space-y-4">
-        <h4 className="font-display font-bold text-sm text-slate-900">Add Professional Staff</h4>
+        <h4 className="font-display font-bold text-sm text-slate-900">Add New Staff</h4>
         <form onSubmit={handleSubmit} className="space-y-3.5 text-xs">
           <div>
             <label className="block text-slate-705 font-semibold mb-1">Full Name *</label>
@@ -150,7 +150,6 @@ export default function AdminStaff({
             disabled={loading}
             className="w-full bg-primary hover:bg-primary/95 text-white font-bold p-2.5 rounded-lg transition text-xs shadow-sm flex items-center justify-center gap-1"
           >
-            <Plus className="w-3.5 h-3.5" />
             <span>Add Staff Member</span>
           </button>
         </form>
@@ -159,7 +158,7 @@ export default function AdminStaff({
       {/* STAFF LIST */}
       <div className="md:col-span-2 bg-white rounded-xl border border-slate-200 p-5 shadow-sm flex flex-col justify-between">
         <div>
-          <h4 className="font-display font-bold text-sm text-slate-900 mb-4">Professional Directory</h4>
+          <h4 className="font-display font-bold text-sm text-slate-900 mb-4">Staff Directory</h4>
           <div className="space-y-3">
             {staff.map((member) => (
               <div
@@ -191,12 +190,12 @@ export default function AdminStaff({
                       member.active ? 'bg-emerald-50/50 border-emerald-200 text-emerald-600' : 'bg-slate-50 border-slate-200 text-slate-400'
                     }`}
                   >
-                    {member.active ? 'Pause' : 'Activate'}
+                    {member.active ? 'Not Available' : 'Available'}
                   </button>
                   <button
                     onClick={() => handleDelete(member.id)}
                     className="p-2 bg-rose-50 border border-rose-100 text-rose-655 hover:bg-rose-100 rounded-lg transition"
-                    title="Delete Professional"
+                    title="Delete Staff"
                   >
                     <Trash2 className="w-3.5 h-3.5" />
                   </button>

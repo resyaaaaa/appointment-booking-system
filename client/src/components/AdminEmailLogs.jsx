@@ -60,11 +60,6 @@ export default function AdminEmailLogs({
 
   return (
     <div className="space-y-6 text-xs max-w-3xl mx-auto">
-      <div className="bg-slate-50 border border-slate-200/80 p-5 rounded-2xl shadow-sm">
-        <h4 className="font-display font-bold text-slate-900 text-base">Professional Notifications & Templates</h4>
-        <p className="text-xs text-slate-550 leading-relaxed font-semibold mt-0.5">Customize default email message variables. System placeholder fields automatically map client details on dispatch.</p>
-      </div>
-
       <div className="bg-white rounded-2xl border border-slate-200 shadow-[0_4px_24px_rgba(15,23,42,0.02)] p-6 space-y-5">
         <div className="space-y-2.5">
           <h5 className="font-display font-bold text-slate-900 text-sm">Select Notification Template</h5>
@@ -73,11 +68,10 @@ export default function AdminEmailLogs({
               <button
                 key={t.id}
                 onClick={() => setSelectedTemplateId(t.id)}
-                className={`px-4 py-2 rounded-xl font-bold border text-[10px] uppercase tracking-wide transition-all cursor-pointer ${
-                  selectedTemplateId === t.id
+                className={`px-4 py-2 rounded-xl font-bold border text-[10px] uppercase tracking-wide transition-all cursor-pointer ${selectedTemplateId === t.id
                     ? 'bg-primary border-primary text-white shadow-md shadow-primary/10'
                     : 'border-slate-200 bg-white text-slate-605 hover:bg-slate-50'
-                }`}
+                  }`}
               >
                 {t.name}
               </button>
@@ -88,9 +82,8 @@ export default function AdminEmailLogs({
         {chosenTpl ? (
           <form onSubmit={handleSaveTemplate} className="space-y-4 text-left">
             {saveStatus && (
-              <div className={`p-3.5 rounded-xl text-xs font-bold leading-relaxed animate-fade-in ${
-                saveStatus.includes('successfully') ? 'bg-emerald-50 text-emerald-800 border-emerald-200 border' : 'bg-rose-50 text-rose-800 border-rose-200 border'
-              }`}>
+              <div className={`p-3.5 rounded-xl text-xs font-bold leading-relaxed animate-fade-in ${saveStatus.includes('successfully') ? 'bg-emerald-50 text-emerald-800 border-emerald-200 border' : 'bg-rose-50 text-rose-800 border-rose-200 border'
+                }`}>
                 {saveStatus}
               </div>
             )}
@@ -135,7 +128,7 @@ export default function AdminEmailLogs({
               disabled={loading}
               className="w-full bg-primary border border-primary text-white hover:bg-primary/95 py-3 rounded-xl text-xs font-bold shadow-md shadow-primary/10 cursor-pointer transition-all flex items-center justify-center gap-2"
             >
-              <Save className="w-4 h-4" />
+
               <span>{loading ? 'Applying modifications...' : 'Save Template Modifications'}</span>
             </button>
           </form>

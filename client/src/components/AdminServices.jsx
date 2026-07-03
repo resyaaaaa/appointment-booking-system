@@ -9,7 +9,7 @@ export default function AdminServices({
   onServiceDeleted
 }) {
   const [editingService, setEditingService] = useState(null);
-  
+
   // Custom Form States
   const [name, setName] = useState('');
   const [price, setPrice] = useState(0);
@@ -113,15 +113,14 @@ export default function AdminServices({
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-slate-50 border border-slate-200/80 p-5 rounded-2xl shadow-sm">
         <div className="space-y-1">
-          <h4 className="font-display font-bold text-slate-900 text-base">Business Services Catalog</h4>
-          <p className="text-xs text-slate-500 leading-relaxed font-semibold">Configure core duration guidelines and price structures for clients booking slots.</p>
+          <h4 className="font-display font-bold text-slate-900 text-base">Services Catalog</h4>
+          <p className="text-xs text-slate-500 leading-relaxed font-semibold">Configure service details and price structures for clients booking slots.</p>
         </div>
         <button
           id="add-service-shortcut-btn"
           onClick={handleStartCreate}
           className="bg-primary border border-primary text-white hover:bg-primary/95 text-xs px-4.5 py-2.5 rounded-xl font-bold flex items-center justify-center gap-1.5 shadow-md shadow-primary/10 cursor-pointer transition-all"
         >
-          <Plus className="w-4 h-4 text-white" />
           <span>Add Custom Service</span>
         </button>
       </div>
@@ -143,7 +142,7 @@ export default function AdminServices({
             <form onSubmit={handleSaveService} className="space-y-4">
               <div>
                 <label className="block text-xs font-semibold text-slate-700 mb-1.5">Service Name *</label>
-                 <input
+                <input
                   id="srv-inp-name"
                   type="text"
                   required
@@ -243,9 +242,8 @@ export default function AdminServices({
         {services.map((srv) => (
           <div
             key={srv.id}
-            className={`p-5 rounded-2xl border flex flex-col justify-between transition-all duration-200 hover:shadow-md ${
-              srv.isActive ? 'border-slate-200 bg-white shadow-sm' : 'border-slate-255 bg-slate-50/70 text-slate-400'
-            }`}
+            className={`p-5 rounded-2xl border flex flex-col justify-between transition-all duration-200 hover:shadow-md ${srv.isActive ? 'border-slate-200 bg-white shadow-sm' : 'border-slate-255 bg-slate-50/70 text-slate-400'
+              }`}
           >
             <div>
               <div className="flex justify-between items-start gap-4">

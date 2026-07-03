@@ -135,7 +135,7 @@ export default function AdminAvailability({
       <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 space-y-4">
         <div className="flex justify-between items-center flex-wrap gap-4 pb-4 border-b border-slate-150">
           <div>
-            <h4 className="font-display font-bold text-slate-900 text-sm">Default Weekly Schedules</h4>
+            <h4 className="font-display font-bold text-slate-900 text-sm">Default Operational Hours</h4>
             <p className="text-xs text-slate-500 mt-1">Select business toggle times and block out lunch hour breaks.</p>
           </div>
           <button

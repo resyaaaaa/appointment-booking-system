@@ -1,33 +1,18 @@
 {
   "appointments": [
     {
-      "id": "apt-q9o6c7obzr",
-      "customerName": "resya",
-      "customerEmail": "resyalizatul@gmail.com",
-      "customerPhone": "123456789",
-      "date": "2026-07-01",
-      "timeSlot": "10:00 AM",
-      "serviceId": "s1",
+      "id": "apt-lad2sn8zp4",
+      "customerName": "dsd",
+      "customerEmail": "name@example.com",
+      "customerPhone": "",
+      "date": "2026-07-10",
+      "timeSlot": "02:30 PM",
+      "serviceId": "s4",
       "staffId": "st-1",
-      "status": "completed",
+      "status": "confirmed",
       "notes": "",
-      "createdAt": "2026-07-01T07:25:39.923Z",
+      "createdAt": "2026-07-03T07:37:02.745Z",
       "reminderSent": false
-    },
-    {
-      "id": "apt-861bgr3qg1",
-      "customerName": "tapai",
-      "customerEmail": "resyalizatul@gmail.com",
-      "customerPhone": "123456",
-      "date": "2026-07-03",
-      "timeSlot": "03:30 PM",
-      "serviceId": "s2",
-      "staffId": "st-1",
-      "status": "cancelled",
-      "notes": "",
-      "createdAt": "2026-07-01T07:45:42.309Z",
-      "reminderSent": true,
-      "reminderTemplateId": "tpl-rem"
     }
   ],
   "services": [
@@ -159,6 +144,15 @@
   ],
   "emailLogs": [
     {
+      "id": "log-n4xnjjyc3",
+      "appointmentId": "apt-lad2sn8zp4",
+      "customerEmail": "name@example.com",
+      "subject": "Reservation Confirmed: Classic Face Massage & Facial with Business Name",
+      "body": "Hello dsd,\n\nYour appointment is confirmed!\n\nService: Classic Face Massage & Facial\nDate: 2026-07-10\nTime: 02:30 PM\n\nStaff Notes: \n\nWe look forward to giving you an exceptional experience. If you need to make corrections, reply to this email or call us directly!\n\nBest regards,\nThe Team at Business Name\n\n[Gateway Delivery Success: Gmail SMTP (MessageId: <5c9100a8-e5da-15ac-1709-b0d22de40f61@gmail.com>)]",
+      "sentAt": "2026-07-03T07:37:06.547Z",
+      "status": "sent"
+    },
+    {
       "id": "log-eyllf3o63",
       "appointmentId": "apt-861bgr3qg1",
       "customerEmail": "resyalizatul@gmail.com",
@@ -268,14 +262,21 @@
       "role": "Staff",
       "email": "res@a.com",
       "active": true
+    },
+    {
+      "id": "stu1",
+      "name": "Admin Owner",
+      "role": "Business Owner",
+      "email": "name@example.com",
+      "active": true
     }
   ],
   "settings": {
-    "businessName": "My business Name",
+    "businessName": "Resya co",
     "currency": "RM",
-    "address": "Imago",
+    "address": "Imago Loft Entrance",
     "contactEmail": "name@example.com",
-    "contactPhone": "1211123456"
+    "contactPhone": "222777"
   },
   "users": [
     {

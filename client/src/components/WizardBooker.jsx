@@ -235,7 +235,7 @@ export default function WizardBooker({
             <span>Schedule Appointment</span>
           </h3>
           <p className="text-xs text-slate-500 mt-1 font-semibold">
-            {step === 1 && 'Step 1: Pick from our catalog of hair & skin treatments'}
+            {step === 1 && 'Step 1: Pick service from our catalog'}
             {step === 2 && 'Step 2: Select available session day & hourly slot'}
             {step === 3 && 'Step 3: Provide client details for automatic confirmations'}
             {step === 4 && 'Complete: Success confirmation & automatic trigger feedback'}
