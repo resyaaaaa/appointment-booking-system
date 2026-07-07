@@ -59,6 +59,8 @@ export default function App() {
     setAdminTab(tab);
     localStorage.setItem('glamour_admin_tab', tab);
   };
+  
+  const API_URL = import.meta.env.VITE_API_URL || '';
 
   // Unified Server State
   const [appointments, setAppointments] = useState([]);
@@ -114,7 +116,6 @@ export default function App() {
 
   // Switch to add appointment wizard within staff mode
   const [staffEntryMode, setStaffEntryMode] = useState(false);
-  const API_URL = import.meta.env.VITE_API_URL || '';
 
   // Toggle states to minimize visual clutter on default customer booking views
 
