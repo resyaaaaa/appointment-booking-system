@@ -919,21 +919,27 @@ app.get('/api/email-logs', publicLimiter, async (req, res) => {
    VITE + SERVER START
 ========================= */
 
+pp.use(cors({
+  origin: [
+    "http://localhost:5173",
+    process.env.FRONTEND_URL
+  ],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  credentials: true
+}));
+
+app.use(express.json());
+
+app.get("/", (req, res) => {
+  res.send("Backend API is running");
+});
+
 function startServer() {
   logDbMode();
-  app.use(cors({
-    origin: [
-      "http://localhost:5173",
-      "https://appointment-booking-system-omega.vercel.app"
-    ],
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    credentials: true
-  }));
-  app.get("/", (req, res) => {
-    res.send("Backend API is running");
-  });
+
   app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
   });
 }
+
 startServer();

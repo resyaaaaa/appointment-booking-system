@@ -192,15 +192,7 @@
       "role": "owner",
       "phone": "555-0100",
       "createdAt": "2026-06-15T00:00:00.000Z"
-    },
-    {
-      "id": "u1783440859331",
-      "name": "ew",
-      "email": "ew@example.com",
-      "passwordHash": "a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3",
-      "role": "staff",
-      "phone": "23456",
-      "createdAt": "2026-07-07T16:14:19.331Z"
     }
+    
   ]
 }
