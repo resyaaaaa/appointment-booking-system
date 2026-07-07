@@ -924,8 +924,10 @@ function startServer() {
   app.use(cors({
     origin: [
       "http://localhost:5173",
-      "https://appointment-booking-system-alpha.vercel.app/"
-    ]
+      "https://appointment-booking-system-omega.vercel.app"
+    ],
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    credentials: true
   }));
   app.get("/", (req, res) => {
     res.send("Backend API is running");
