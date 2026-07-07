@@ -919,7 +919,7 @@ app.get('/api/email-logs', publicLimiter, async (req, res) => {
    VITE + SERVER START
 ========================= */
 
-pp.use(cors({
+app.use(cors({
   origin: [
     "http://localhost:5173",
     process.env.FRONTEND_URL,
