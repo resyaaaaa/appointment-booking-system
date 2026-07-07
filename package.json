@@ -1,0 +1,27 @@
+{
+  "name": "appointment-booking-system",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "client": "npm --prefix client run dev",
+    "backend": "npm --prefix backend start",
+    "dev": "concurrently \"npm run backend\" \"npm run client\"",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/resyaaaaa/appointment-booking-system.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/resyaaaaa/appointment-booking-system/issues"
+  },
+  "homepage": "https://github.com/resyaaaaa/appointment-booking-system#readme",
+  "devDependencies": {
+    "concurrently": "^10.0.3"
+  }
+}
