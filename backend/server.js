@@ -922,7 +922,7 @@ app.get('/api/email-logs', publicLimiter, async (req, res) => {
 pp.use(cors({
   origin: [
     "http://localhost:5173",
-    process.env.FRONTEND_URL
+    process.env.FRONTEND_URL,
   ],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   credentials: true
