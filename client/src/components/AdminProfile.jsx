@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
-import { 
-  User, 
-  Mail, 
-  Phone, 
-  Lock, 
-  Shield, 
-  CheckCircle2, 
-  AlertTriangle, 
-  RefreshCcw 
+import {
+  User,
+  Mail,
+  Phone,
+  Lock,
+  Shield,
+  CheckCircle2,
+  AlertTriangle,
+  RefreshCcw
 } from 'lucide-react';
 
 export default function AdminProfile({
@@ -28,14 +28,13 @@ export default function AdminProfile({
   const connectedStaffMember = staff.find(
     s => s.email?.toLowerCase() === currentUser?.email?.toLowerCase()
   );
-
+  const API_URL = import.meta.env.VITE_API_URL || '';
   const handleConnectToStaffDirectory = async () => {
     setFormSuccess('');
     setFormError('');
     setLinkLoading(true);
-
     try {
-      const response = await fetch('/api/auth/link-staff', {
+      const response = await fetch(`${API_URL}/api/auth/link-staff`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -49,7 +48,7 @@ export default function AdminProfile({
       }
 
       setFormSuccess('Successfully linked your profile to the Salon Specialist Directory!');
-      
+
       // Trigger global data reload (stretching to refresh staff listings)
       if (onRefreshData) {
         await onRefreshData();
@@ -70,7 +69,7 @@ export default function AdminProfile({
     setLoading(true);
 
     try {
-      const response = await fetch('/api/auth/update-profile', {
+      const response = await fetch(`${API_URL}/api/auth/update-profile`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -89,7 +88,7 @@ export default function AdminProfile({
       onProfileUpdated(data.user);
       setPassword('');
       setFormSuccess('Profile details updated successfully!');
-      
+
       // Refresh global app data to apply name change across the board
       if (onRefreshData) {
         await onRefreshData();
@@ -114,14 +113,13 @@ export default function AdminProfile({
 
   return (
     <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto items-start">
-      
+
       {/* LEFT COLUMN: STAFF STATUS CARD */}
       <div className="md:col-span-1 space-y-6">
         <div className="bg-white rounded-2xl border border-slate-200/80 shadow-[0_4px_20px_rgba(15,23,42,0.02)] p-5 text-center relative overflow-hidden">
           {/* Subtle colored accent circle */}
-          <div className={`absolute -top-10 -right-10 w-24 h-24 rounded-full opacity-10 ${
-            connectedStaffMember ? 'bg-emerald-500' : 'bg-[#3a4f99]'
-          }`} />
+          <div className={`absolute -top-10 -right-10 w-24 h-24 rounded-full opacity-10 ${connectedStaffMember ? 'bg-emerald-500' : 'bg-[#3a4f99]'
+            }`} />
 
           <div className="mx-auto w-16 h-16 bg-slate-50 border border-slate-100 rounded-full flex items-center justify-center text-slate-700 font-display font-extrabold text-xl shadow-xs relative z-10">
             {currentUser?.name?.slice(0, 2).toUpperCase() || 'ST'}

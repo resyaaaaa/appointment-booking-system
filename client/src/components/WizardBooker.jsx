@@ -19,7 +19,7 @@ export default function WizardBooker({
   const [selectedDate, setSelectedDate] = useState('');
   const [selectedSlot, setSelectedSlot] = useState('');
   const [selectedStaffId, setSelectedStaffId] = useState('');
-  
+
   // Passenger Form State
   const [customerName, setCustomerName] = useState('');
   const [customerEmail, setCustomerEmail] = useState('');
@@ -43,9 +43,9 @@ export default function WizardBooker({
   const [currentMonth, setCurrentMonth] = useState(new Date());
 
   const activeServices = useMemo(() => services.filter(s => s.isActive), [services]);
-  
-  const selectedService = useMemo(() => 
-    services.find(s => s.id === selectedServiceId), 
+
+  const selectedService = useMemo(() =>
+    services.find(s => s.id === selectedServiceId),
     [services, selectedServiceId]
   );
 
@@ -55,21 +55,21 @@ export default function WizardBooker({
     const month = currentMonth.getMonth();
     const firstDay = new Date(year, month, 1);
     const lastDay = new Date(year, month + 1, 0);
-    
+
     const results = [];
-    
+
     // Add prefix padding days from previous month
-    const startPadding = firstDay.getDay(); 
+    const startPadding = firstDay.getDay();
     for (let i = startPadding; i > 0; i--) {
       results.push(new Date(year, month, 1 - i));
     }
-    
+
     // Add actual month days
     const totalDays = lastDay.getDate();
     for (let d = 1; d <= totalDays; d++) {
       results.push(new Date(year, month, d));
     }
-    
+
     return results;
   }, [currentMonth]);
 
@@ -103,22 +103,22 @@ export default function WizardBooker({
   // Handle individual date click
   const handleDateClick = (date) => {
     const today = new Date();
-    today.setHours(0,0,0,0);
-    
+    today.setHours(0, 0, 0, 0);
+
     if (date < today) return; // Cannot book past dates
- 
+
     const dateStr = formatDateStr(date);
-    
+
     // Find if closed on this day of week
     const dow = date.getDay();
     const rule = availability.find(r => r.dayOfWeek === dow);
     if (!rule || !rule.isWorkingDay) return;
 
     // Check custom block
-    const isFullBlock = customBlocks.some(b => 
+    const isFullBlock = customBlocks.some(b =>
       b.date === dateStr && (
-        !b.startTime || 
-        b.startTime === '' || 
+        !b.startTime ||
+        b.startTime === '' ||
         b.startTime === '00:00' ||
         (b.startTime === '00:00' && b.endTime === '23:59') ||
         (b.startTime === '00:00' && b.endTime === '24:00') ||
@@ -153,10 +153,10 @@ export default function WizardBooker({
     if (!finalStaffId) {
       const activeStaff = staff.filter(s => s.active);
       const freeStaff = activeStaff.find(s => {
-        return !appointments.some(a => 
-          a.date === selectedDate && 
-          a.timeSlot === selectedSlot && 
-          a.staffId === s.id && 
+        return !appointments.some(a =>
+          a.date === selectedDate &&
+          a.timeSlot === selectedSlot &&
+          a.staffId === s.id &&
           (a.status === 'confirmed' || a.status === 'pending')
         );
       });
@@ -180,9 +180,9 @@ export default function WizardBooker({
         status: 'confirmed'
       }
     };
-
+    const API_URL = import.meta.env.VITE_API_URL || '';
     try {
-      const response = await fetch('/api/appointments', {
+      const response = await fetch(`${API_URL}/api/appointments`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
@@ -241,19 +241,18 @@ export default function WizardBooker({
             {step === 4 && 'Complete: Success confirmation & automatic trigger feedback'}
           </p>
         </div>
-        
+
         {step < 4 && (
           <div className="flex items-center gap-2">
             {[1, 2, 3].map((s) => (
               <div
                 key={s}
-                className={`w-8.5 h-8.5 rounded-full flex items-center justify-center text-xs font-bold tracking-wider transition-all duration-300 ${
-                  step === s
+                className={`w-8.5 h-8.5 rounded-full flex items-center justify-center text-xs font-bold tracking-wider transition-all duration-300 ${step === s
                     ? 'bg-primary text-white shadow-md shadow-primary/15 scale-110 font-extrabold'
                     : step > s
-                    ? 'bg-emerald-500 text-white shadow-sm'
-                    : 'bg-slate-100 text-slate-400 border border-slate-200/60'
-                }`}
+                      ? 'bg-emerald-500 text-white shadow-sm'
+                      : 'bg-slate-100 text-slate-400 border border-slate-200/60'
+                  }`}
               >
                 {step > s ? '✓' : s}
               </div>
@@ -283,11 +282,10 @@ export default function WizardBooker({
                 key={srv.id}
                 id={`srv-btn-${srv.id}`}
                 onClick={() => handleServiceSelect(srv.id)}
-                className={`group text-left p-6 rounded-2xl border transition-all duration-300 flex flex-col justify-between hover:border-primary/45 hover:bg-slate-50/20 hover:shadow-[0_8px_30px_rgba(0,0,0,0.03)] cursor-pointer hover:scale-[1.025] active:scale-[0.98] ${
-                  selectedServiceId === srv.id
+                className={`group text-left p-6 rounded-2xl border transition-all duration-300 flex flex-col justify-between hover:border-primary/45 hover:bg-slate-50/20 hover:shadow-[0_8px_30px_rgba(0,0,0,0.03)] cursor-pointer hover:scale-[1.025] active:scale-[0.98] ${selectedServiceId === srv.id
                     ? 'border-primary bg-secondary/10 ring-2 ring-primary/10 shadow-lg'
                     : 'border-slate-200 bg-white shadow-xs'
-                }`}
+                  }`}
               >
                 <div className="w-full">
                   <div className="flex justify-between items-start gap-4 w-full">
@@ -328,7 +326,7 @@ export default function WizardBooker({
           transition={{ duration: 0.35, ease: 'easeOut' }}
           className="space-y-6"
         >
-          <button 
+          <button
             type="button"
             onClick={() => setStep(1)}
             className="text-xs font-bold text-slate-500 hover:text-slate-800 flex items-center gap-1.5 mb-2 hover:-translate-x-1 transition-all duration-350 cursor-pointer"
@@ -346,11 +344,10 @@ export default function WizardBooker({
               <button
                 type="button"
                 onClick={() => { setSelectedStaffId(''); setSelectedSlot(''); }}
-                className={`p-3 rounded-xl border text-left transition-all duration-300 hover:scale-[1.02] hover:border-primary/40 cursor-pointer relative ${
-                  selectedStaffId === ''
+                className={`p-3 rounded-xl border text-left transition-all duration-300 hover:scale-[1.02] hover:border-primary/40 cursor-pointer relative ${selectedStaffId === ''
                     ? 'border-primary bg-secondary/20 ring-2 ring-primary/10 font-bold shadow-xs'
                     : 'border-slate-200 text-slate-800 bg-white shadow-xs'
-                }`}
+                  }`}
               >
                 <span className="block text-xs font-extrabold text-slate-800">Any Stylist</span>
                 <span className="text-[9px] text-slate-450 font-normal mt-0.5 block">Fastest availability</span>
@@ -361,11 +358,10 @@ export default function WizardBooker({
                   key={s.id}
                   type="button"
                   onClick={() => { setSelectedStaffId(s.id); setSelectedSlot(''); }}
-                  className={`p-3 rounded-xl border text-left transition-all duration-300 hover:scale-[1.02] hover:border-primary/40 cursor-pointer relative ${
-                    selectedStaffId === s.id
+                  className={`p-3 rounded-xl border text-left transition-all duration-300 hover:scale-[1.02] hover:border-primary/40 cursor-pointer relative ${selectedStaffId === s.id
                       ? 'border-primary bg-secondary/20 ring-2 ring-primary/10 font-bold shadow-xs'
                       : 'border-slate-200 text-slate-800 bg-white shadow-xs'
-                  }`}
+                    }`}
                 >
                   <span className="block text-xs font-extrabold text-slate-800 truncate">{s.name}</span>
                   <span className="text-[9px] text-slate-450 font-normal mt-0.5 block truncate">{s.role}</span>
@@ -380,14 +376,14 @@ export default function WizardBooker({
               <div className="flex justify-between items-center mb-4.5">
                 <h4 className="font-display font-extrabold text-sm text-slate-800 tracking-tight uppercase">{monthLabel}</h4>
                 <div className="flex gap-1.5">
-                  <button 
+                  <button
                     type="button"
                     onClick={handlePrevMonth}
                     className="p-1 px-2 text-slate-600 hover:bg-slate-100 hover:text-primary rounded-lg text-xs font-bold transition-all"
                   >
                     <ChevronLeft className="w-4 h-4" />
                   </button>
-                  <button 
+                  <button
                     type="button"
                     onClick={handleNextMonth}
                     className="p-1 px-2 text-slate-600 hover:bg-slate-100 hover:text-primary rounded-lg text-xs font-bold transition-all"
@@ -413,11 +409,11 @@ export default function WizardBooker({
                 {daysInMonth.map((dateObj, idx) => {
                   const dStr = formatDateStr(dateObj);
                   const today = new Date();
-                  today.setHours(0,0,0,0);
-                  
+                  today.setHours(0, 0, 0, 0);
+
                   const isCurrentMonth = dateObj.getMonth() === currentMonth.getMonth();
                   const isPast = dateObj < today;
-                  
+
                   // Rule eligibility
                   const dow = dateObj.getDay();
                   const rule = availability.find(r => r.dayOfWeek === dow);
@@ -431,7 +427,7 @@ export default function WizardBooker({
                   const isSelected = selectedDate === dStr;
 
                   let cellClasses = 'h-10 w-full flex flex-col items-center justify-center rounded-xl text-xs font-bold relative transition-all duration-350 cursor-pointer hover:scale-105 active:scale-95 ';
-                  
+
                   if (!isCurrentMonth) {
                     cellClasses += 'text-slate-300 pointer-events-none ';
                   } else if (isPast) {
@@ -491,7 +487,7 @@ export default function WizardBooker({
                   <p className="text-xs font-semibold text-slate-500 mb-3 bg-white p-2.5 rounded-lg border border-slate-200/60 text-center shadow-2xs">
                     Date: <strong className="text-slate-800 font-bold">{formatHumanDate(selectedDate)}</strong>
                   </p>
-                  
+
                   {availableSlots.length === 0 ? (
                     <div className="flex-1 flex flex-col items-center justify-center p-6 border border-rose-100 rounded-xl bg-white text-center">
                       <span className="text-xs text-rose-600 font-bold">No available timeslots.</span>
@@ -507,11 +503,10 @@ export default function WizardBooker({
                             id={`time-btn-${slot}`}
                             type="button"
                             onClick={() => setSelectedSlot(slot)}
-                            className={`p-2.5 text-center text-xs font-bold rounded-xl border transition-all duration-300 hover:scale-[1.03] active:scale-[0.97] cursor-pointer ${
-                              isMatch
+                            className={`p-2.5 text-center text-xs font-bold rounded-xl border transition-all duration-300 hover:scale-[1.03] active:scale-[0.97] cursor-pointer ${isMatch
                                 ? 'bg-primary border-primary text-white shadow-md shadow-primary/10'
                                 : 'border-slate-200 hover:border-primary/40 text-slate-700 bg-white shadow-2xs hover:bg-slate-50/50'
-                            }`}
+                              }`}
                           >
                             {slot}
                           </button>
@@ -547,7 +542,7 @@ export default function WizardBooker({
             transition={{ duration: 0.35, ease: 'easeOut' }}
             className="space-y-4"
           >
-            <button 
+            <button
               type="button"
               onClick={() => setStep(2)}
               className="text-xs font-bold text-slate-500 hover:text-slate-800 flex items-center gap-1.5 mb-3 hover:-translate-x-1 transition-all duration-350 cursor-pointer"
@@ -561,7 +556,7 @@ export default function WizardBooker({
                 <h4 className="font-display font-extrabold text-[11px] text-slate-600 uppercase tracking-widest border-b border-slate-100 pb-2.5">
                   Guest Credentials
                 </h4>
-                
+
                 <div className="space-y-4">
                   <div>
                     <label className="block text-xs font-extrabold text-slate-700 mb-1.5 uppercase tracking-wider">Customer Name *</label>
@@ -637,7 +632,7 @@ export default function WizardBooker({
                       </span>
                       <span className="text-xs text-slate-500 font-medium">Final Confirmation</span>
                     </div>
-                    
+
                     <div>
                       <h4 className="font-bold text-slate-400 text-[9px] uppercase tracking-wider">Service Selected</h4>
                       <div className="text-base font-bold text-slate-900 mt-1 leading-snug">{selectedService?.name}</div>

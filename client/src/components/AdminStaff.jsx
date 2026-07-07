@@ -12,7 +12,7 @@ export default function AdminStaff({
   const [role, setRole] = useState('Stylist');
   const [email, setEmail] = useState('');
   const [active, setActive] = useState(true);
-
+  const API_URL = import.meta.env.VITE_API_URL || '';
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!name) {
@@ -22,7 +22,7 @@ export default function AdminStaff({
 
     setLoading(true);
     try {
-      const response = await fetch('/api/staff', {
+      const response = await fetch(`${API_URL}/api/staff`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -49,7 +49,7 @@ export default function AdminStaff({
     setLoading(true);
     const updated = { ...member, active: !member.active };
     try {
-      const response = await fetch('/api/staff', {
+      const response = await fetch(`${API_URL}/api/staff`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -74,7 +74,7 @@ export default function AdminStaff({
     }
     setLoading(true);
     try {
-      const response = await fetch(`/api/staff/${id}?password=${encodeURIComponent(adminPassword)}`, {
+      const response = await fetch(`${API_URL}/api/staff/${id}?password=${encodeURIComponent(adminPassword)}`, {
         method: 'DELETE'
       });
       if (!response.ok) {
@@ -167,7 +167,7 @@ export default function AdminStaff({
               >
                 <div className="flex items-center gap-3">
                   <div className="w-9 h-9 rounded-full bg-secondary/40 text-primary font-bold text-xs flex items-center justify-center">
-                    {member.name.split(' ').map(n=>n[0]).join('').slice(0, 2).toUpperCase()}
+                    {member.name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase()}
                   </div>
                   <div>
                     <h5 className="font-bold text-slate-905 text-xs flex items-center gap-1.5">
@@ -186,9 +186,8 @@ export default function AdminStaff({
                   <button
                     onClick={() => handleToggleActive(member)}
                     title={member.active ? 'Set Inactive' : 'Set Active'}
-                    className={`p-1.5 rounded-lg border transition ${
-                      member.active ? 'bg-emerald-50/50 border-emerald-200 text-emerald-600' : 'bg-slate-50 border-slate-200 text-slate-400'
-                    }`}
+                    className={`p-1.5 rounded-lg border transition ${member.active ? 'bg-emerald-50/50 border-emerald-200 text-emerald-600' : 'bg-slate-50 border-slate-200 text-slate-400'
+                      }`}
                   >
                     {member.active ? 'Not Available' : 'Available'}
                   </button>

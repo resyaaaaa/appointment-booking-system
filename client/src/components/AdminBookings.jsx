@@ -94,7 +94,7 @@ export default function AdminBookings({
     setSelectedMailTemplateId(primaryReminder?.id || '');
     setMailSuccessAlert('');
   };
-
+  const API_URL = import.meta.env.VITE_API_URL || '';
   // Send manual template 
   const handleSendManualMail = async () => {
     if (!activeMailApt || !selectedMailTemplateId) return;
@@ -102,7 +102,7 @@ export default function AdminBookings({
     setMailSuccessAlert('');
 
     try {
-      const response = await fetch('/api/appointments/trigger-email', {
+      const response = await fetch(`${API_URL}/api/appointments/trigger-email`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -141,7 +141,7 @@ export default function AdminBookings({
     }
 
     try {
-      const response = await fetch(`/api/appointments/${id}`, {
+      const response = await fetch(`${API_URL}/api/appointments/${id}`, {
         method: 'DELETE'
       });
       if (response.ok) {
@@ -155,7 +155,7 @@ export default function AdminBookings({
   // Inline save update status/staff re-assignment helper
   const handleInlineSave = async (apt, updatedFields) => {
     try {
-      const response = await fetch('/api/appointments', {
+      const response = await fetch(`${API_URL}/api/appointments`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -322,12 +322,12 @@ export default function AdminBookings({
                             value={apt.status || 'confirmed'}
                             onChange={(e) => handleInlineSave(apt, { status: e.target.value })}
                             className={`text-[10px] font-extrabold px-3 py-1.5 rounded-lg border focus:outline-none cursor-pointer uppercase tracking-wider transition-all shadow-2xs ${apt.status === 'confirmed'
-                                ? 'bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100/60'
-                                : apt.status === 'pending'
-                                  ? 'bg-[#3a4f99]/10 text-[#3a4f99] border-[#3a4f99]/20 hover:bg-[#3a4f99]/20'
-                                  : apt.status === 'completed'
-                                    ? 'bg-purple-50 text-purple-700 border-purple-200 font-extrabold'
-                                    : 'bg-slate-100 text-slate-550 border-slate-200 hover:bg-slate-150/40'
+                              ? 'bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100/60'
+                              : apt.status === 'pending'
+                                ? 'bg-[#3a4f99]/10 text-[#3a4f99] border-[#3a4f99]/20 hover:bg-[#3a4f99]/20'
+                                : apt.status === 'completed'
+                                  ? 'bg-purple-50 text-purple-700 border-purple-200 font-extrabold'
+                                  : 'bg-slate-100 text-slate-550 border-slate-200 hover:bg-slate-150/40'
                               }`}
                           >
                             <option value="pending">Pending</option>
@@ -549,8 +549,8 @@ export default function AdminBookings({
                         type="button"
                         onClick={() => setCurrentPage(p)}
                         className={`w-8 h-8 rounded-xl text-xs font-bold transition duration-150 flex items-center justify-center cursor-pointer ${p === activePage
-                            ? 'bg-primary text-white shadow-md shadow-primary/15 font-bold'
-                            : 'bg-white border border-slate-200/80 hover:bg-slate-50 hover:border-slate-350 text-slate-750 shadow-3xs'
+                          ? 'bg-primary text-white shadow-md shadow-primary/15 font-bold'
+                          : 'bg-white border border-slate-200/80 hover:bg-slate-50 hover:border-slate-350 text-slate-750 shadow-3xs'
                           }`}
                       >
                         {p}

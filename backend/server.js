@@ -921,9 +921,12 @@ app.get('/api/email-logs', publicLimiter, async (req, res) => {
 
 function startServer() {
   logDbMode();
-
-  
-
+  app.use(cors({
+    origin: [
+      "http://localhost:5173",
+      "https://appointment-booking-system-alpha.vercel.app/"
+    ]
+  }));
   app.get("/", (req, res) => {
     res.send("Backend API is running");
   });

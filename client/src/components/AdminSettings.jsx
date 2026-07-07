@@ -30,8 +30,9 @@ export default function AdminSettings({
           contactPhone
         }
       };
+      const API_URL = import.meta.env.VITE_API_URL || '';
 
-      const response = await fetch('/api/settings', {
+      const response = await fetch(`${API_URL}/api/settings`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)

@@ -39,9 +39,10 @@ export default function AdminEmailLogs({
         body: editingBody
       }
     };
+    const API_URL = import.meta.env.VITE_API_URL || '';
 
     try {
-      const response = await fetch('/api/email-templates', {
+      const response = await fetch(`${API_URL}/api/email-templates`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(revisedPayload)
@@ -69,8 +70,8 @@ export default function AdminEmailLogs({
                 key={t.id}
                 onClick={() => setSelectedTemplateId(t.id)}
                 className={`px-4 py-2 rounded-xl font-bold border text-[10px] uppercase tracking-wide transition-all cursor-pointer ${selectedTemplateId === t.id
-                    ? 'bg-primary border-primary text-white shadow-md shadow-primary/10'
-                    : 'border-slate-200 bg-white text-slate-605 hover:bg-slate-50'
+                  ? 'bg-primary border-primary text-white shadow-md shadow-primary/10'
+                  : 'border-slate-200 bg-white text-slate-605 hover:bg-slate-50'
                   }`}
               >
                 {t.name}

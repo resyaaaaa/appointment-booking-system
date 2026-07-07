@@ -39,12 +39,12 @@ export default function AdminAvailability({
     });
     setAvailList(updated);
   };
-
+  const API_URL = import.meta.env.VITE_API_URL || '';
   // Submit standard business hours to backend
   const handleSaveHours = async () => {
     setLoading(true);
     try {
-      const response = await fetch('/api/availability', {
+      const response = await fetch(`${API_URL}/api/availability`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -84,7 +84,7 @@ export default function AdminAvailability({
     setLoading(true);
 
     try {
-      const response = await fetch('/api/custom-blocks', {
+      const response = await fetch(`${API_URL}/api/custom-blocks`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -110,7 +110,7 @@ export default function AdminAvailability({
     const finalBlocks = customBlocks.filter(b => b.id !== id);
     setLoading(true);
     try {
-      const response = await fetch('/api/custom-blocks', {
+      const response = await fetch(`${API_URL}/api/custom-blocks`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -156,9 +156,9 @@ export default function AdminAvailability({
             return (
               <div key={idx} className="py-4 sm:flex justify-between items-center gap-4">
                 <div className="w-28 font-bold text-slate-800 flex items-center gap-2 mb-2 sm:mb-0">
-                  <button 
+                  <button
                     type="button"
-                    onClick={() => handleToggleWorkingDay(idx)} 
+                    onClick={() => handleToggleWorkingDay(idx)}
                     className="text-slate-500 hover:text-slate-900 transition-all cursor-pointer"
                   >
                     {config.isWorkingDay ? (

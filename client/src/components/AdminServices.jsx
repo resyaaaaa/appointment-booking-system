@@ -72,9 +72,10 @@ export default function AdminServices({
         isActive
       }
     };
+    const API_URL = import.meta.env.VITE_API_URL || '';
 
     try {
-      const response = await fetch('/api/services', {
+      const response = await fetch(`${API_URL}/api/services`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
@@ -98,7 +99,7 @@ export default function AdminServices({
       return;
     }
     try {
-      const r = await fetch(`/api/services/${id}?password=${encodeURIComponent(adminPassword)}`, {
+      const r = await fetch(`${API_URL}/api/services/${id}?password=${encodeURIComponent(adminPassword)}`, {
         method: 'DELETE'
       });
       if (r.ok) {

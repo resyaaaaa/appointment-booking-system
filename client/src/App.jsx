@@ -114,6 +114,7 @@ export default function App() {
 
   // Switch to add appointment wizard within staff mode
   const [staffEntryMode, setStaffEntryMode] = useState(false);
+  const API_URL = import.meta.env.VITE_API_URL || '';
 
   // Toggle states to minimize visual clutter on default customer booking views
 
@@ -123,14 +124,14 @@ export default function App() {
       setLoadingDb(true);
 
       const [servicesRes, apptsRes, availRes, blocksRes, templatesRes, logsRes, staffRes, settingsRes] = await Promise.all([
-        fetch('/api/services'),
-        fetch('/api/appointments'),
-        fetch('/api/availability'),
-        fetch('/api/custom-blocks'),
-        fetch('/api/email-templates'),
-        fetch('/api/email-logs'),
-        fetch('/api/staff'),
-        fetch('/api/settings')
+        fetch(`${API_URL}/api/services`),
+        fetch(`${API_URL}/api/appointments`),
+        fetch(`${API_URL}/api/availability`),
+        fetch(`${API_URL}/api/custom-blocks`),
+        fetch(`${API_URL}/api/email-templates`),
+        fetch(`${API_URL}/api/email-logs`),
+        fetch(`${API_URL}/api/staff`),
+        fetch(`${API_URL}/api/settings`)
       ]);
 
       const srvs = await servicesRes.json();
@@ -169,7 +170,7 @@ export default function App() {
     setAuthError('');
 
     try {
-      const response = await fetch('/api/admin/verify', {
+      const response = await fetch(`${API_URL}/api/admin/verify`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ password: adminPassword })
@@ -239,7 +240,7 @@ export default function App() {
           }
         }
 
-        const res = await fetch('/api/auth/register', {
+        const res = await fetch(`${API_URL}/api/auth/register`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -267,7 +268,7 @@ export default function App() {
         }
       } else {
         // Login Workflow
-        const res = await fetch('/api/auth/login', {
+        const res = await fetch(`${API_URL}/api/auth/login`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -302,7 +303,7 @@ export default function App() {
   const handleBookingAdded = (newAppt) => {
     setAppointments(prev => [newAppt, ...prev]);
     // Refresh templates logs since newly booked triggers an automated confirmation email!
-    fetch('/api/email-logs')
+    fetch(`${API_URL}/api/email-logs`)
       .then(r => r.json())
       .then(logs => {
         if (Array.isArray(logs)) setEmailLogs(logs);
@@ -323,7 +324,7 @@ export default function App() {
       return prev.filter(a => a.id !== idOrIds);
     });
     // Pull email logs down to sync cancelled automated alerts
-    fetch('/api/email-logs')
+    fetch(`${API_URL}/api/email-logs`)
       .then(r => r.json())
       .then(logs => {
         if (Array.isArray(logs)) setEmailLogs(logs);
@@ -333,7 +334,7 @@ export default function App() {
   const handleBookingUpdated = (updatedAppt) => {
     setAppointments(prev => prev.map(a => a.id === updatedAppt.id ? updatedAppt : a));
     // Re-pull email logs
-    fetch('/api/email-logs')
+    fetch(`${API_URL}/api/email-logs`)
       .then(r => r.json())
       .then(logs => {
         if (Array.isArray(logs)) setEmailLogs(logs);
@@ -404,8 +405,8 @@ export default function App() {
                 id="nav-to-booker-btn"
                 onClick={() => { handleSetActivePortal('booker'); setStaffEntryMode(false); }}
                 className={`px-4.5 py-2 rounded-lg text-xs font-extrabold tracking-wide transition-all duration-300 hover:scale-[1.03] active:scale-[0.97] cursor-pointer ${activePortal === 'booker'
-                    ? 'bg-primary text-slate-950 shadow-md shadow-primary/10 font-black border border-[#D8E022]'
-                    : 'text-slate-700 hover:text-slate-900 hover:bg-[#D8E022]/15 font-bold'
+                  ? 'bg-primary text-slate-950 shadow-md shadow-primary/10 font-black border border-[#D8E022]'
+                  : 'text-slate-700 hover:text-slate-900 hover:bg-[#D8E022]/15 font-bold'
                   }`}
               >
                 Book Slot
@@ -414,8 +415,8 @@ export default function App() {
                 id="nav-to-admin-btn"
                 onClick={() => handleSetActivePortal('admin')}
                 className={`px-4.5 py-2 rounded-lg text-xs font-extrabold tracking-wide transition-all duration-300 hover:scale-[1.03] active:scale-[0.97] flex items-center gap-1.5 cursor-pointer ${activePortal === 'admin'
-                    ? 'bg-primary text-slate-950 shadow-md shadow-primary/10 font-black border border-[#D8E022]'
-                    : 'text-slate-700 hover:text-slate-900 hover:bg-[#D8E022]/15 font-bold'
+                  ? 'bg-primary text-slate-950 shadow-md shadow-primary/10 font-black border border-[#D8E022]'
+                  : 'text-slate-700 hover:text-slate-900 hover:bg-[#D8E022]/15 font-bold'
                   }`}
               >
                 <span>Dashboard</span>
@@ -756,8 +757,8 @@ export default function App() {
                       <button
                         onClick={() => handleSetAdminTab('profile')}
                         className={`px-4 py-2.5 text-xs font-semibold whitespace-nowrap tracking-wide transition-all border-b-2 ${adminTab === 'profile'
-                            ? 'border-primary text-primary font-bold'
-                            : 'border-transparent text-slate-500 hover:text-slate-800'
+                          ? 'border-primary text-primary font-bold'
+                          : 'border-transparent text-slate-500 hover:text-slate-800'
                           }`}
                       >
                         My Profile
@@ -766,8 +767,8 @@ export default function App() {
                       <button
                         onClick={() => handleSetAdminTab('bookings')}
                         className={`px-4 py-2.5 text-xs font-semibold whitespace-nowrap tracking-wide transition-all border-b-2 ${adminTab === 'bookings'
-                            ? 'border-primary text-primary font-bold'
-                            : 'border-transparent text-slate-500 hover:text-slate-800'
+                          ? 'border-primary text-primary font-bold'
+                          : 'border-transparent text-slate-500 hover:text-slate-800'
                           }`}
                       >
                         Bookings List ({appointments.length})
@@ -776,8 +777,8 @@ export default function App() {
                       <button
                         onClick={() => handleSetAdminTab('staff')}
                         className={`px-4 py-2.5 text-xs font-semibold whitespace-nowrap tracking-wide transition-all border-b-2 ${adminTab === 'staff'
-                            ? 'border-primary text-primary font-bold'
-                            : 'border-transparent text-slate-500 hover:text-slate-800'
+                          ? 'border-primary text-primary font-bold'
+                          : 'border-transparent text-slate-500 hover:text-slate-800'
                           }`}
                       >
                         Staff Directory ({staff.length})
@@ -786,8 +787,8 @@ export default function App() {
                       <button
                         onClick={() => handleSetAdminTab('settings')}
                         className={`px-4 py-2.5 text-xs font-semibold whitespace-nowrap tracking-wide transition-all border-b-2 ${adminTab === 'settings'
-                            ? 'border-primary text-primary font-bold'
-                            : 'border-transparent text-slate-500 hover:text-slate-800'
+                          ? 'border-primary text-primary font-bold'
+                          : 'border-transparent text-slate-500 hover:text-slate-800'
                           }`}
                       >
                         Business Profile settings
@@ -796,8 +797,8 @@ export default function App() {
                       <button
                         onClick={() => handleSetAdminTab('availability')}
                         className={`px-4 py-2.5 text-xs font-semibold whitespace-nowrap tracking-wide transition-all border-b-2 ${adminTab === 'availability'
-                            ? 'border-primary text-primary font-bold'
-                            : 'border-transparent text-slate-500 hover:text-slate-800'
+                          ? 'border-primary text-primary font-bold'
+                          : 'border-transparent text-slate-500 hover:text-slate-800'
                           }`}
                       >
                         Operational Hours &amp; Holds
@@ -806,8 +807,8 @@ export default function App() {
                       <button
                         onClick={() => handleSetAdminTab('services')}
                         className={`px-4 py-2.5 text-xs font-semibold whitespace-nowrap tracking-wide transition-all border-b-2 ${adminTab === 'services'
-                            ? 'border-primary text-primary font-bold'
-                            : 'border-transparent text-slate-500 hover:text-slate-800'
+                          ? 'border-primary text-primary font-bold'
+                          : 'border-transparent text-slate-500 hover:text-slate-800'
                           }`}
                       >
                         Services Catalog ({services.length})
@@ -816,8 +817,8 @@ export default function App() {
                       <button
                         onClick={() => handleSetAdminTab('templates')}
                         className={`px-4 py-2.5 text-xs font-semibold whitespace-nowrap tracking-wide transition-all border-b-2 ${adminTab === 'templates'
-                            ? 'border-primary text-primary font-bold'
-                            : 'border-transparent text-slate-500 hover:text-slate-800'
+                          ? 'border-primary text-primary font-bold'
+                          : 'border-transparent text-slate-500 hover:text-slate-800'
                           }`}
                       >
                         Templates &amp; Communications
