@@ -59,8 +59,6 @@ export default function App() {
     setAdminTab(tab);
     localStorage.setItem('glamour_admin_tab', tab);
   };
-  
-  const API_URL = import.meta.env.VITE_API_URL || '';
 
   // Unified Server State
   const [appointments, setAppointments] = useState([]);
@@ -73,6 +71,7 @@ export default function App() {
   const [settings, setSettings] = useState({});
 
   const [loadingDb, setLoadingDb] = useState(true);
+  const API_URL = import.meta.env.VITE_API_URL || '';
 
   // User Account Session
   const [currentUser, setCurrentUser] = useState(() => {
