@@ -42,22 +42,22 @@ export default function App() {
 
   // Navigation Tabs: 'booker' | 'admin'
   const [activePortal, setActivePortal] = useState(() => {
-    return localStorage.getItem('glamour_active_portal') || 'booker';
+    return localStorage.getItem('biz_active_portal') || 'booker';
   });
 
   // Admin module tab: 'bookings' | 'staff' | 'settings' | 'availability' | 'services' | 'templates'
   const [adminTab, setAdminTab] = useState(() => {
-    return localStorage.getItem('glamour_admin_tab') || 'bookings';
+    return localStorage.getItem('biz_admin_tab') || 'bookings';
   });
 
   const handleSetActivePortal = (portal) => {
     setActivePortal(portal);
-    localStorage.setItem('glamour_active_portal', portal);
+    localStorage.setItem('biz_active_portal', portal);
   };
 
   const handleSetAdminTab = (tab) => {
     setAdminTab(tab);
-    localStorage.setItem('glamour_admin_tab', tab);
+    localStorage.setItem('biz_admin_tab', tab);
   };
 
   // Unified Server State
@@ -76,22 +76,22 @@ export default function App() {
   // User Account Session
   const [currentUser, setCurrentUser] = useState(() => {
     try {
-      const saved = localStorage.getItem('glamour_profile');
+      const saved = localStorage.getItem('biz_profile');
       return saved ? JSON.parse(saved) : null;
     } catch {
       return null;
     }
   });
   const [showAuthModal, setShowAuthModal] = useState(false);
-  const [authModalTab, setAuthModalTab] = useState('login'); // 'login' | 'register'
+  const [authModalTab, setAuthModalTab] = useState('login');
 
-  // Administrative Passcode Auth States - persistent in localStorage to prevent rapid re-logs
+  // Administrative Passcode Auth States
   const [adminPassword, setAdminPassword] = useState(() => {
-    return localStorage.getItem('glamour_admin_passwd') || '';
+    return localStorage.getItem('biz_admin_passwd') || '';
   });
   const [isAuthorized, setIsAuthorized] = useState(() => {
     try {
-      const saved = localStorage.getItem('glamour_profile');
+      const saved = localStorage.getItem('biz_profile');
       if (saved) {
         const parsed = JSON.parse(saved);
         return parsed && (parsed.role === 'owner' || parsed.role === 'staff');
@@ -102,23 +102,21 @@ export default function App() {
   const [authError, setAuthError] = useState('');
   const [verifying, setVerifying] = useState(false);
 
-  // Sync admin dashboard access if logged in as staff or owner
+  // Sync admin dashboard access if login as staff or owner
   useEffect(() => {
     if (currentUser && (currentUser.role === 'owner' || currentUser.role === 'staff')) {
       setIsAuthorized(true);
-      localStorage.setItem('glamour_is_authorized', 'true');
+      localStorage.setItem('biz_is_authorized', 'true');
     } else {
       setIsAuthorized(false);
-      localStorage.removeItem('glamour_is_authorized');
+      localStorage.removeItem('biz_is_authorized');
     }
   }, [currentUser]);
 
   // Switch to add appointment wizard within staff mode
   const [staffEntryMode, setStaffEntryMode] = useState(false);
 
-  // Toggle states to minimize visual clutter on default customer booking views
-
-  // Fetch all database lists from server API unified
+  // Fetch all database lists 
   const fetchAllData = async () => {
     try {
       setLoadingDb(true);
@@ -163,7 +161,7 @@ export default function App() {
     fetchAllData();
   }, []);
 
-  // Handle staff passcode auth submission
+  // Handle staff passcode
   const handleAdminVerify = async (e) => {
     e.preventDefault();
     setVerifying(true);
@@ -179,10 +177,9 @@ export default function App() {
 
       if (response.ok && data.success) {
         setIsAuthorized(true);
-        localStorage.setItem('glamour_is_authorized', 'true');
-        localStorage.setItem('glamour_admin_passwd', adminPassword);
+        localStorage.setItem('biz_is_authorized', 'true');
+        localStorage.setItem('biz_admin_passwd', adminPassword);
         setAuthError('');
-        // Trigger background polling state fetch upon lock release
         fetchAllData();
       } else {
         setAuthError(data.message || 'Invalid administrative password. Try admin123');
@@ -198,18 +195,18 @@ export default function App() {
     setIsAuthorized(false);
     setAdminPassword('');
     setCurrentUser(null);
-    localStorage.removeItem('glamour_is_authorized');
-    localStorage.removeItem('glamour_admin_passwd');
-    localStorage.removeItem('glamour_profile');
+    localStorage.removeItem('biz_is_authorized');
+    localStorage.removeItem('biz_admin_passwd');
+    localStorage.removeItem('biz_profile');
     setStaffEntryMode(false);
   };
 
-  // Account authentication modal inputs
+  // Account authentication 
   const [authEmail, setAuthEmail] = useState('');
   const [authPassword, setAuthPassword] = useState('');
   const [authName, setAuthName] = useState('');
   const [authPhone, setAuthPhone] = useState('');
-  const [authRole, setAuthRole] = useState('customer'); // 'customer' | 'staff' | 'owner'
+  const [authRole, setAuthRole] = useState('customer'); 
   const [authSecretKey, setAuthSecretKey] = useState('');
   const [authFormError, setAuthFormError] = useState('');
   const [authLoading, setAuthLoading] = useState(false);
@@ -255,10 +252,10 @@ export default function App() {
         const data = await res.json();
         if (res.ok && data.success) {
           setCurrentUser(data.user);
-          localStorage.setItem('glamour_profile', JSON.stringify(data.user));
+          localStorage.setItem('biz_profile', JSON.stringify(data.user));
           if (data.user.role === 'staff' || data.user.role === 'owner') {
             setAdminPassword(authPassword);
-            localStorage.setItem('glamour_admin_passwd', authPassword);
+            localStorage.setItem('biz_admin_passwd', authPassword);
           }
           setShowAuthModal(false);
           clearAuthFields();
@@ -280,10 +277,10 @@ export default function App() {
         const data = await res.json();
         if (res.ok && data.success) {
           setCurrentUser(data.user);
-          localStorage.setItem('glamour_profile', JSON.stringify(data.user));
+          localStorage.setItem('biz_profile', JSON.stringify(data.user));
           if (data.user.role === 'staff' || data.user.role === 'owner') {
             setAdminPassword(authPassword);
-            localStorage.setItem('glamour_admin_passwd', authPassword);
+            localStorage.setItem('biz_admin_passwd', authPassword);
           }
           setShowAuthModal(false);
           clearAuthFields();
@@ -358,28 +355,7 @@ export default function App() {
   };
 
   return (
-    /* 
-      ===================================================================
-      PAGE LAYOUT & BACKGROUND CONFIGURATION
-      ===================================================================
-      - bg-[#FAF9F6]: Base background color (Default: Milky White/Cream)
-      - selection:bg-[#F8982E]: Highlight selection color overlay (Default: Brand Orange)
-    */
     <div className="min-h-screen flex flex-col font-sans selection:bg-[#3a4f99] selection:text-white relative overflow-hidden bg-white">
-
-      {/* 
-        ===================================================================
-        DECORATIVE BRAND AMBIENCE BLUR BLOBS REMOVED
-        ===================================================================
-      */}
-
-      {/* 
-        ===================================================================
-        GLOBAL MAIN BRANDING HEADER
-        ===================================================================
-        - bg-white/70: Crystal clear transparent white background
-        - border-[#D8E022]: Matching accent border highlight
-      */}
       <header className="bg-white/70 backdrop-blur-md border-b border-[#D8E022] sticky top-0 z-30 shadow-[0_1px_5px_rgba(216,224,34,0.05)] transition-all">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4 relative z-10">
 
@@ -834,7 +810,7 @@ export default function App() {
                         staff={staff}
                         onProfileUpdated={(updatedUser) => {
                           setCurrentUser(updatedUser);
-                          localStorage.setItem('glamour_profile', JSON.stringify(updatedUser));
+                          localStorage.setItem('biz_profile', JSON.stringify(updatedUser));
                         }}
                         onRefreshData={fetchAllData}
                       />
