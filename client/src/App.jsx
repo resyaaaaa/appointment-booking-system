@@ -363,7 +363,7 @@ export default function App() {
           <div className="flex items-center gap-3 group">
 
             <div>
-              <h1 className="font-display font-bold text-slate-900 text-sm tracking-tight sm:text-base leading-none flex items-center gap-1.5 font-display">
+              <h1 className="font-display font-bold text-slate-900 text-sm tracking-tight sm:text-base leading-none flex items-center gap-1.5">
                 <span className="tracking-tight text-slate-900">
                   {(settings.businessName || 'My business Name').toUpperCase()}
                 </span>
@@ -407,7 +407,7 @@ export default function App() {
               {currentUser && (
                 <div className="flex items-center gap-2 pl-2 border-l border-[#D8E022] ml-1">
                   <div className="hidden sm:flex flex-col text-right select-none">
-                    <span className="text-[11px] font-bold text-slate-950 leading-none truncate max-w-[100px]">{currentUser.name}</span>
+                    <span className="text-[11px] font-bold text-slate-950 leading-none truncate max-w-25">{currentUser.name}</span>
                     <span className="text-[8px] font-extrabold text-slate-900 bg-[#D8E022] uppercase tracking-widest font-mono mt-0.5 px-1 rounded">{currentUser.role === 'owner' ? 'Owner' : 'Staff'}</span>
                   </div>
                   <button
