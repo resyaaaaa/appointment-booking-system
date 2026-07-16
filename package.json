@@ -2,7 +2,7 @@
   "name": "appointment-booking-system",
   "version": "1.0.0",
   "description": "",
-  "main": "app.jsx",
+  "main": "index.js",
   "scripts": {
     "client": "npm --prefix client run dev",
     "backend": "npm --prefix backend start",
