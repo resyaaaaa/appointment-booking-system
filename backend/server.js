@@ -922,8 +922,7 @@ app.get('/api/email-logs', publicLimiter, async (req, res) => {
 app.use(cors({
   origin: [
     //"http://localhost:5173",
-    "https://appointment-booking-system-8ivm.vercel.app",
-    //process.env.FRONTEND_URL,
+    process.env.FRONTEND_URL,
   ],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   credentials: true
