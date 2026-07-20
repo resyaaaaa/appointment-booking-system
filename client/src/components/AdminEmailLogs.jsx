@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Mail, FileText, Save, CheckCircle } from 'lucide-react';
+const API_URL = (import.meta.env.VITE_API_URL || '').replace(/\/$/, '');
 
 export default function AdminEmailLogs({
   emailTemplates,
@@ -39,7 +40,6 @@ export default function AdminEmailLogs({
         body: editingBody
       }
     };
-    const API_URL = import.meta.env.VITE_API_URL || '';
 
     try {
       const response = await fetch(`${API_URL}/api/email-templates`, {

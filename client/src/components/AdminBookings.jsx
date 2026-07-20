@@ -15,6 +15,7 @@ import {
   Sparkles
 } from 'lucide-react';
 import { formatUSD, formatHumanDate, formatHumanDateTime } from '../utils';
+const API_URL = (import.meta.env.VITE_API_URL || '').replace(/\/$/, '');
 
 export default function AdminBookings({
   appointments,
@@ -94,7 +95,6 @@ export default function AdminBookings({
     setSelectedMailTemplateId(primaryReminder?.id || '');
     setMailSuccessAlert('');
   };
-  const API_URL = import.meta.env.VITE_API_URL || '';
   // Send manual template 
   const handleSendManualMail = async () => {
     if (!activeMailApt || !selectedMailTemplateId) return;

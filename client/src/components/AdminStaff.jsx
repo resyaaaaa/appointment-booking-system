@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { User, Mail, Shield, Plus, Trash2, ToggleLeft, ToggleRight } from 'lucide-react';
+const API_URL = (import.meta.env.VITE_API_URL || '').replace(/\/$/, '');
 
 export default function AdminStaff({
   staff,
@@ -12,7 +13,6 @@ export default function AdminStaff({
   const [role, setRole] = useState('Stylist');
   const [email, setEmail] = useState('');
   const [active, setActive] = useState(true);
-  const API_URL = import.meta.env.VITE_API_URL || '';
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!name) {

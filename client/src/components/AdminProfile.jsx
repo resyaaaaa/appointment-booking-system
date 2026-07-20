@@ -9,6 +9,7 @@ import {
   AlertTriangle,
   RefreshCcw
 } from 'lucide-react';
+const API_URL = (import.meta.env.VITE_API_URL || '').replace(/\/$/, '');
 
 export default function AdminProfile({
   currentUser,
@@ -28,7 +29,6 @@ export default function AdminProfile({
   const connectedStaffMember = staff.find(
     s => s.email?.toLowerCase() === currentUser?.email?.toLowerCase()
   );
-  const API_URL = import.meta.env.VITE_API_URL || '';
   const handleConnectToStaffDirectory = async () => {
     setFormSuccess('');
     setFormError('');

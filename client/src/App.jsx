@@ -36,6 +36,7 @@ import AdminEmailLogs from './components/AdminEmailLogs';
 import AdminStaff from './components/AdminStaff';
 import AdminSettings from './components/AdminSettings';
 import AdminProfile from './components/AdminProfile';
+const API_URL = (import.meta.env.VITE_API_URL || '').replace(/\/$/, '');
 
 export default function App() {
   const [showMenuOverlay, setShowMenuOverlay] = useState(false);
@@ -71,7 +72,6 @@ export default function App() {
   const [settings, setSettings] = useState({});
 
   const [loadingDb, setLoadingDb] = useState(true);
-  const API_URL = import.meta.env.VITE_API_URL || '';
 
   // User Account Session
   const [currentUser, setCurrentUser] = useState(() => {
@@ -206,7 +206,7 @@ export default function App() {
   const [authPassword, setAuthPassword] = useState('');
   const [authName, setAuthName] = useState('');
   const [authPhone, setAuthPhone] = useState('');
-  const [authRole, setAuthRole] = useState('customer'); 
+  const [authRole, setAuthRole] = useState('customer');
   const [authSecretKey, setAuthSecretKey] = useState('');
   const [authFormError, setAuthFormError] = useState('');
   const [authLoading, setAuthLoading] = useState(false);

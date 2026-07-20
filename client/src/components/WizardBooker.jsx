@@ -2,6 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { Calendar, Clock, User, Phone, Mail, FileText, CheckCircle2, ChevronRight, ChevronLeft, Plus, Users, Award } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { generateAvailableSlots, formatUSD, DAYS_OF_WEEK, getBlockedReason, formatDateStr, formatHumanDate } from '../utils';
+const API_URL = (import.meta.env.VITE_API_URL || '').replace(/\/$/, '');
 
 export default function WizardBooker({
   services,
@@ -180,7 +181,6 @@ export default function WizardBooker({
         status: 'confirmed'
       }
     };
-    const API_URL = import.meta.env.VITE_API_URL || '';
     try {
       const response = await fetch(`${API_URL}/api/appointments`, {
         method: 'POST',

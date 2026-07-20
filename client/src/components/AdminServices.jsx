@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Sparkles, DollarSign, Clock, FileText, Check, Plus, Edit2, Trash2 } from 'lucide-react';
 import { formatUSD } from '../utils';
+const API_URL = (import.meta.env.VITE_API_URL || '').replace(/\/$/, '');
 
 export default function AdminServices({
   services,
@@ -72,7 +73,6 @@ export default function AdminServices({
         isActive
       }
     };
-    const API_URL = import.meta.env.VITE_API_URL || '';
 
     try {
       const response = await fetch(`${API_URL}/api/services`, {

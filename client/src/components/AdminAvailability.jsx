@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Sparkles, Calendar, Clock, ToggleLeft, ToggleRight, Trash2, Plus, Copy } from 'lucide-react';
 import { DAYS_OF_WEEK } from '../utils';
+const API_URL = (import.meta.env.VITE_API_URL || '').replace(/\/$/, '');
 
 export default function AdminAvailability({
   availability,
@@ -39,7 +40,7 @@ export default function AdminAvailability({
     });
     setAvailList(updated);
   };
-  const API_URL = import.meta.env.VITE_API_URL || '';
+
   // Submit standard business hours to backend
   const handleSaveHours = async () => {
     setLoading(true);

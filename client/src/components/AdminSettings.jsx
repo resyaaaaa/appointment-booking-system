@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Settings, Check, HelpCircle } from 'lucide-react';
+const API_URL = (import.meta.env.VITE_API_URL || '').replace(/\/$/, '');
 
 export default function AdminSettings({
   settings,
@@ -30,7 +31,6 @@ export default function AdminSettings({
           contactPhone
         }
       };
-      const API_URL = import.meta.env.VITE_API_URL || '';
 
       const response = await fetch(`${API_URL}/api/settings`, {
         method: 'POST',
