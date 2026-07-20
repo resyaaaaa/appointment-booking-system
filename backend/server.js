@@ -918,6 +918,7 @@ app.get('/api/email-logs', publicLimiter, async (req, res) => {
 /* =========================
    VITE + SERVER START
 ========================= */
+const cors = require('cors');
 
 app.use(cors({
   origin: [
