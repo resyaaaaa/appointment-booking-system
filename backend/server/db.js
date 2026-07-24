@@ -16,34 +16,34 @@ const INITIAL_STATE = {
   services: [
     {
       id: 's1',
-      name: 'Deluxe Haircut & Styling',
-      durationMinutes: 45,
-      price: 45.00,
-      description: 'Signature haircut, shampoo wash, scalp massage, and custom blow-dry blow styling.',
+      name: 'Head Spa & Scalp Detox',
+      durationMinutes: 60,
+      price: 180.00,
+      description: 'Deeply detoxify your scalp for healthier, revitalized hair.',
       isActive: true,
     },
     {
       id: 's2',
-      name: 'Premium Beard Grooming',
-      durationMinutes: 30,
-      price: 30.00,
-      description: 'Hot towel prep, detailed straight-razor lineup, trimming, and organic beard oil treatment.',
+      name: 'Tokio Inkarami Hair Repair Treatment',
+      durationMinutes: 75,
+      price: 320.00,
+      description: 'Japan’s top therapy to instantly rebuild damaged hair.',
       isActive: true,
     },
     {
       id: 's3',
-      name: 'The Royal Service (Combo)',
-      durationMinutes: 75,
-      price: 70.00,
-      description: 'Deluxe haircut combined with Premium Beard Grooming and a refreshing charcoal peeling mask.',
+      name: 'Milbon Smooth Moisture Treatment',
+      durationMinutes: 45,
+      price: 220.00,
+      description: 'Silk-protein hydration for silky, weightless, frizz-free shine.',
       isActive: true,
     },
     {
       id: 's4',
-      name: 'Classic Face Massage & Facial',
-      durationMinutes: 45,
-      price: 50.00,
-      description: 'Rejuvenating mud mask, steaming hot towels, facial massage, and hydrating sunscreen application.',
+      name: 'Japanese Silk Straightening & Treatment',
+      durationMinutes: 180,
+      price: 450.00,
+      description: 'Permanent glass-smooth straightness infused with deep collagen care.',
       isActive: true,
     },
   ],
@@ -93,25 +93,25 @@ const INITIAL_STATE = {
   ],
   emailLogs: [],
   staff: [
-    { id: 'st-1', name: 'Alex Rivera', role: 'Master Barber', email: 'alex@example.com', active: true },
-    { id: 'st-2', name: 'Maria Santos', role: 'Color Specialist', email: 'maria@example.com', active: true },
-    { id: 'st-3', name: 'Jordan Lee', role: 'Stylist Professional', email: 'jordan@example.com', active: true }
+    { id: 'st-1', name: 'Alex', role: 'Master Barber', email: 'alex@example.com', active: true },
+    { id: 'st-2', name: 'Maria', role: 'Color Specialist', email: 'maria@example.com', active: true },
+    { id: 'st-3', name: 'Jimmy', role: 'Stylist Professional', email: 'jimmy@example.com', active: true }
   ],
   settings: {
     businessName: 'My business Name',
     currency: 'RM',
     address: '404 Design District, Suite 300',
-    contactEmail: 'name@example.com',
-    contactPhone: '555-0100'
+    contactEmail: 'businessname@example.com',
+    contactPhone: '123456789'
   },
   users: [
     {
       id: 'u-1',
-      email: 'name@example.com',
+      email: 'owner@example.com',
       passwordHash: 'a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3', // '123' sha256 hashed
-      name: 'Admin Owner',
+      name: 'Business Owner',
       role: 'owner',
-      phone: '555-0100',
+      phone: '123456789',
       createdAt: '2026-06-15T00:00:00.000Z'
     }
   ]
