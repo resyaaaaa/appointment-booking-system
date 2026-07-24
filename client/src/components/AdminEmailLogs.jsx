@@ -63,7 +63,7 @@ export default function AdminEmailLogs({
     <div className="space-y-6 text-xs max-w-3xl mx-auto">
       <div className="bg-white rounded-2xl border border-slate-200 shadow-[0_4px_24px_rgba(15,23,42,0.02)] p-6 space-y-5">
         <div className="space-y-2.5">
-          <h5 className="font-display font-bold text-slate-900 text-sm">Select Notification Template</h5>
+          <h5 className="font-display font-bold text-slate-900 text-sm">Select and configure notification template</h5>
           <div className="flex flex-wrap gap-2">
             {emailTemplates.map(t => (
               <button
@@ -90,7 +90,7 @@ export default function AdminEmailLogs({
             )}
 
             <div>
-              <label className="block text-slate-705 font-bold mb-1.5 uppercase text-[10px] tracking-wide">Subject Header Rule</label>
+              <label className="block text-slate-705 font-bold mb-1.5 uppercase text-[10px] tracking-wide">Subject Header</label>
               <input
                 id="tpl-inp-subj"
                 type="text"
@@ -101,7 +101,7 @@ export default function AdminEmailLogs({
             </div>
 
             <div>
-              <label className="block text-slate-705 font-bold mb-1.5 uppercase text-[10px] tracking-wide">Letter / Body Content</label>
+              <label className="block text-slate-705 font-bold mb-1.5 uppercase text-[10px] tracking-wide">Body Content</label>
               <textarea
                 id="tpl-inp-body"
                 rows={10}
@@ -112,7 +112,7 @@ export default function AdminEmailLogs({
             </div>
 
             <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 text-[10px] space-y-2">
-              <span className="font-bold text-slate-400 uppercase tracking-widest block">Available System Placeholders</span>
+              <span className="font-bold text-slate-400 uppercase tracking-widest block">Use Only Available System Placeholders Here</span>
               <div className="flex flex-wrap gap-x-3 gap-y-1.5 text-slate-600 font-mono font-bold select-all bg-white p-2.5 rounded-lg border border-slate-150">
                 <span>{"{customer_name}"}</span>
                 <span>{"{appointment_date}"}</span>

@@ -229,10 +229,9 @@ export default function WizardBooker({
               </span>
             ) : (
               <span className="bg-secondary text-primary text-[9px] uppercase font-bold tracking-widest px-2.5 py-1 rounded-full border border-secondary">
-                Secure Client Portal
+                Schedule Appointment
               </span>
             )}
-            <span>Schedule Appointment</span>
           </h3>
           <p className="text-xs text-slate-500 mt-1 font-semibold">
             {step === 1 && 'Step 1: Pick service from our catalog'}
@@ -566,7 +565,7 @@ export default function WizardBooker({
                         id="inp-customer-name"
                         type="text"
                         required
-                        placeholder="e.g., Charles Xavier"
+                        placeholder="e.g., Jane"
                         value={customerName}
                         onChange={(e) => setCustomerName(e.target.value)}
                         className="w-full text-sm pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-primary focus:bg-white focus:ring-4 focus:ring-primary/5 transition-all text-slate-800 font-semibold"
@@ -582,7 +581,7 @@ export default function WizardBooker({
                         id="inp-customer-email"
                         type="email"
                         required
-                        placeholder="e.g., charles@xavier-school.org"
+                        placeholder="e.g., name@example.com"
                         value={customerEmail}
                         onChange={(e) => setCustomerEmail(e.target.value)}
                         className="w-full text-sm pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-primary focus:bg-white focus:ring-4 focus:ring-primary/5 transition-all text-slate-800 font-semibold"
@@ -597,7 +596,7 @@ export default function WizardBooker({
                       <input
                         id="inp-customer-phone"
                         type="tel"
-                        placeholder="e.g., 555-0155"
+                        placeholder="e.g., 0123456789"
                         value={customerPhone}
                         onChange={(e) => setCustomerPhone(e.target.value)}
                         className="w-full text-sm pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-primary focus:bg-white focus:ring-4 focus:ring-primary/5 transition-all text-slate-800 font-semibold"

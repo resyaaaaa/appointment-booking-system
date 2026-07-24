@@ -115,7 +115,7 @@ export default function AdminServices({
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-slate-50 border border-slate-200/80 p-5 rounded-2xl shadow-sm">
         <div className="space-y-1">
           <h4 className="font-display font-bold text-slate-900 text-base">Services Catalog</h4>
-          <p className="text-xs text-slate-500 leading-relaxed font-semibold">Configure service details and price structures for clients booking slots.</p>
+          <p className="text-xs text-slate-500 mt-1">Configure service details, duration and price for clients booking slots.</p>
         </div>
         <button
           id="add-service-shortcut-btn"

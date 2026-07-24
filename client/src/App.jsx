@@ -369,7 +369,7 @@ export default function App() {
                 </span>
 
               </h1>
-              <span className="text-[9px] text-slate-600 uppercase font-extrabold tracking-widest mt-0.5 block">Appointment Booking System</span>
+              {/*<span className="text-[9px] text-slate-600 uppercase font-extrabold tracking-widest mt-0.5 block">Appointment Booking System</span>*/}
             </div>
           </div>
 
@@ -443,7 +443,7 @@ export default function App() {
                 <div className="flex items-center gap-2 border-b border-slate-150 pb-2.5">
                   <Clock className="w-4 h-4 text-[#D8E022]" />
                   <span className="font-display font-bold text-xs uppercase tracking-wider text-slate-700">
-                    Operational Hours Schedule
+                    Operating Hours
                   </span>
                 </div>
 
