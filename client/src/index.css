@@ -60,7 +60,7 @@ section,
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   
-  border-color: #210B2C !important;
+  border-color: #0A2D43 !important;
 }
 
 div.border-slate-200,
@@ -69,7 +69,7 @@ div.border-slate-100,
 div.border-slate-300,
 form.border-slate-200,
 header.border-b {
-  border-color: #210B2C!important;
+  border-color: #0A2D43!important;
 }
 
 
@@ -77,14 +77,14 @@ header.border-b {
 button.bg-primary,
 button[class*="bg-primary"],
 span.bg-primary {
-  background-color: #FFD166 !important;
+  background-color: #b084ff !important;
   color: #210B2C !important; 
 }
 
 .bg-secondary,
 span.bg-secondary,
 div.bg-secondary {
-  background-color: #210B2C !important;
+  background-color: #0A2D43 !important;
   color: #ffffff !important;
 }
 
