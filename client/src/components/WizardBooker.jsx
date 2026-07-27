@@ -218,7 +218,7 @@ export default function WizardBooker({
   };
 
   return (
-    <div className="bg-linen rounded-3xl border border-slate-200/90 shadow-[0_10px_30px_rgba(15,23,42,0.04)] p-6 sm:p-8 max-w-3xl mx-auto backdrop-blur-3xl">
+    <div className="bg-white rounded-3xl border border-slate-200/90 shadow-[0_10px_30px_rgba(15,23,42,0.04)] p-6 sm:p-8 max-w-3xl mx-auto backdrop-blur-3xl">
       {/* Wizard Step Progression Timeline */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-5 mb-6">
         <div>
