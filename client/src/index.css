@@ -12,10 +12,10 @@
   --color-accent-fern: #79C7FF;     
   --color-bg-linen: #0A2D43;        
   --color-tea-green: #204C67;       
-  --color-bg-gradient: radial-gradient(at 0% 0%, #56ffa4 0px, transparent 50%),
-                       radial-gradient(at 100% 0%, #b084ff 0px, transparent 50%),
-                       radial-gradient(at 100% 100%, #79c7ff 0px, transparent 50%),
-                       radial-gradient(at 0% 100%, #0a2d43 0px, transparent 50%) !important;
+  --color-bg-gradient: radial-gradient(at 0% 0%, #e5f8f0 0px, transparent 50%),
+                       radial-gradient(at 100% 0%, #81cfff 0px, transparent 50%),
+                       radial-gradient(at 100% 100%, #ecffbe 0px, transparent 50%),
+                       radial-gradient(at 0% 100%, #4a69ce 0px, transparent 50%) !important;
 }
 
 @layer base {
