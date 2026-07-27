@@ -355,7 +355,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col font-sans selection:bg-[#3a4f99] selection:text-white relative overflow-hidden bg-white">
+    <div className="min-h-screen flex flex-col font-sans selection:bg-[#3a4f99] selection:text-white relative overflow-hidden bg-gradient">
       <header className="bg-white/70 backdrop-blur-md border-b border-[#D8E022] sticky top-0 z-30 shadow-[0_1px_5px_rgba(216,224,34,0.05)] transition-all">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4 relative z-10">
 
