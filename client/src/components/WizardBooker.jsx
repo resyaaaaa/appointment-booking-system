@@ -553,7 +553,7 @@ export default function WizardBooker({
               {/* Left Column: Guest Registration Fields */}
               <div className="md:col-span-12 lg:col-span-7 space-y-4 bg-white border border-slate-200/80 rounded-2xl p-5 shadow-xs">
                 <h4 className="font-display font-extrabold text-[11px] text-slate-600 uppercase tracking-widest border-b border-slate-100 pb-2.5">
-                  Guest Credentials
+                  Customer Details
                 </h4>
 
                 <div className="space-y-4">
