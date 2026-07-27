@@ -5,93 +5,93 @@
 ===========================================================================
   THEME CONFIGURATION & BRAND CUSTOMIZATION MANUAL
 ===========================================================================
-  To adapt the styling to your business guidelines:
-  1. Primary color (--color-primary): Used for primary buttons & highlights.
-  2. Secondary color (--color-secondary): Used for accents & secondary highlights.
-  3. Linen / Card color (--color-bg-linen): Used for card backgrounds.
-  4. System fonts are declared under --font-* properties below.
+  1. Primary (--color-primary): Modern Violet/Purple accent.
+  2. Secondary (--color-secondary): Deep Navy Blue structure.
+  3. Canvas: Clean glassmorphic cards sitting over a vibrant mesh gradient.
 ===========================================================================
 */
 @theme {
-  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --font-display: "Outfit", sans-serif;
   --font-serif: "Playfair Display", serif;
   --font-mono: "JetBrains Mono", monospace;
 
- 
-  --color-primary: #b084ff;        
-  --color-secondary: #0A2D43;       
-  --color-accent-fern: #79C7FF;     
-  --color-bg-linen: #0A2D43;        
-  --color-tea-green: #204C67;       
-  --color-bg-gradient: radial-gradient(at 0% 0%, #e5f8f0 0px, transparent 50%),
-                       radial-gradient(at 100% 0%, #81cfff 0px, transparent 50%),
-                       radial-gradient(at 100% 100%, #ecffbe 0px, transparent 50%),
-                       radial-gradient(at 0% 100%, #4a69ce 0px, transparent 50%) !important;
+  --color-primary: #8b5cf6;
+  --color-primary-hover: #7c3aed;
+  --color-secondary: #0f172a;
+  --color-accent-fern: #38bdf8;
+  --color-tea-green: #1e293b;
+  --color-card-bg: rgba(255, 255, 255, 0.85);
+  --color-card-border: rgba(255, 255, 255, 0.4);
 }
 
 @layer base {
   body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    background: linear-gradient radial-gradient(at 0% 0%, #e5f8f0 0px, transparent 50%),
-                       radial-gradient(at 100% 0%, #81cfff 0px, transparent 50%),
-                       radial-gradient(at 100% 100%, #ecffbe 0px, transparent 50%),
-                       radial-gradient(at 0% 100%, #4a69ce 0px, transparent 50%) !important;
     min-height: 100vh;
+    color: #0f172a;
+    background-color: #f8fafc;
+    background-image: 
+      radial-gradient(at 0% 0%, rgba(229, 248, 240, 0.8) 0px, transparent 50%),
+      radial-gradient(at 100% 0%, rgba(129, 207, 255, 0.7) 0px, transparent 50%),
+      radial-gradient(at 100% 100%, rgba(236, 255, 190, 0.6) 0px, transparent 50%),
+      radial-gradient(at 0% 100%, rgba(74, 105, 206, 0.5) 0px, transparent 50%);
+    background-attachment: fixed;
   }
 }
 
-.font-display {
-  font-family: var(--font-display);
-}
+/* Typography Helper Classes */
+.font-display { font-family: var(--font-display); }
+.font-serif { font-family: var(--font-serif); }
+.font-mono { font-family: var(--font-mono); }
 
-.font-serif {
-  font-family: var(--font-serif);
-}
-
-/* Custom container backgrounds and border colors */
+/* Modern Clean Glassmorphism Cards & Containers */
 .layered-card,
-section,
+section.card,
 .admin-sidebar,
 .section-container {
- 
-  background-color: rgba(255, 255, 255, 0.92) !important;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  
-  border-color: #0A2D43 !important;
+  background: var(--color-card-bg) !important;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--color-card-border) !important;
+  box-shadow: 0 10px 30px -5px rgba(15, 23, 42, 0.05);
+  border-radius: 1rem;
 }
 
-div.border-slate-200,
-div.border-slate-150,
-div.border-slate-100,
-div.border-slate-300,
-form.border-slate-200,
+/* Subtler UI Dividers & Borders */
+div[class*="border-slate-"],
+form[class*="border-slate-"],
 header.border-b {
-  border-color: #0A2D43!important;
+  border-color: rgba(15, 23, 42, 0.08) !important;
 }
 
-
+/* Primary Button & Highlight Overrides */
 .bg-primary,
 button.bg-primary,
 button[class*="bg-primary"],
 span.bg-primary {
-  background-color: #b084ff !important;
-  color: #210B2C !important; 
+  background-color: var(--color-primary) !important;
+  color: #ffffff !important;
+  transition: background-color 0.2s ease, transform 0.1s ease;
 }
 
+.bg-primary:hover,
+button.bg-primary:hover {
+  background-color: var(--color-primary-hover) !important;
+}
+
+/* Secondary Button / Container Overrides */
 .bg-secondary,
 span.bg-secondary,
 div.bg-secondary {
-  background-color: #0A2D43 !important;
+  background-color: var(--color-secondary) !important;
   color: #ffffff !important;
 }
 
+/* Polished Soft Elevation Shadow */
 .premium-btn-shadow {
   box-shadow: 
-    0 10px 25px -5px rgba(41, 17, 0, 0.15),
-    0 8px 12px -6px rgba(41, 17, 0, 0.1);
+    0 10px 20px -3px rgba(139, 92, 246, 0.25),
+    0 4px 6px -4px rgba(139, 92, 246, 0.1);
 }
-
-
