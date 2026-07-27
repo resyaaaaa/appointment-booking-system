@@ -398,7 +398,7 @@ export default function AdminBookings({
           <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
             <div className="bg-white rounded-2xl border border-slate-205 shadow-2xl max-w-lg w-full p-6 space-y-4 animate-fade-in">
               <div className="flex justify-between items-center pb-3 border-b border-slate-150">
-                <h4 className="font-display font-bold text-slate-900 text-sm">Send Email</h4>
+                <h4 className="font-display font-bold text-slate-900 text-sm">Compose Email</h4>
                 <button
                   onClick={() => setActiveMailApt(null)}
                   className="text-slate-400 hover:text-slate-700 text-xl font-bold cursor-pointer"
@@ -421,12 +421,12 @@ export default function AdminBookings({
                 <div className="space-y-4">
                   <div>
                     <p className="text-xs text-slate-550">
-                      Recipient Client: <strong className="text-slate-800">{activeMailApt.customerName} ({activeMailApt.customerEmail})</strong>
+                      Recipient: <strong className="text-slate-800">{activeMailApt.customerName} ({activeMailApt.customerEmail})</strong>
                     </p>
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold text-slate-700 mb-1.5 uppercase tracking-wide text-[10px]">Select Template Definition</label>
+                    <label className="block text-xs font-semibold text-slate-700 mb-1.5 uppercase tracking-wide text-[10px]">Select Email Template</label>
                     <select
                       id="manual-mail-template-select"
                       value={selectedMailTemplateId}
@@ -440,7 +440,7 @@ export default function AdminBookings({
                   </div>
 
                   <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-1.5 shadow-[0_1px_2px_rgba(0,0,0,0.01)]">
-                    <span className="text-[10px] text-slate-400 block font-bold uppercase tracking-widest">Live Content Preview</span>
+                    <span className="text-[10px] text-slate-400 block font-bold uppercase tracking-widest">Template Preview</span>
                     {(() => {
                       const chosen = emailTemplates.find(t => t.id === selectedMailTemplateId);
                       if (!chosen) return null;
