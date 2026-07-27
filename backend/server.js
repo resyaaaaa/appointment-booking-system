@@ -441,7 +441,7 @@ app.post('/api/auth/link-staff', publicLimiter, async (req, res) => {
     }
 
     if (user.role !== 'staff admin' && user.role !== 'owner') {
-      return res.status(403).json({ success: false, error: 'User not allowed for manage staff' });
+      return res.status(403).json({ success: false, error: 'User are not authorized' });
     }
 
     const staffId = 'st' + user.id.replace(/[^a-zA-Z0-9]/g, '');

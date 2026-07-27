@@ -385,7 +385,7 @@ export default function AdminBookings({
               {visibleAppointments.length === 0 && (
                 <tr>
                   <td colSpan={5} className="p-10 text-center text-slate-450 font-bold tracking-tight pb-16 pt-16">
-                    No active bookings match other filters in the register.
+                    No active bookings.
                   </td>
                 </tr>
               )}

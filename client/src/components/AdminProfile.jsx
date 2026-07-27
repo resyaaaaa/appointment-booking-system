@@ -47,7 +47,7 @@ export default function AdminProfile({
         throw new Error(data.error || 'Failed to link account to the staff directory.');
       }
 
-      setFormSuccess('Successfully linked your profile to the Salon Specialist Directory!');
+      setFormSuccess('Welcome back!');
 
       // Trigger global data reload (stretching to refresh staff listings)
       if (onRefreshData) {
@@ -129,7 +129,7 @@ export default function AdminProfile({
             {currentUser?.name}
           </h3>
           <p className="text-[10px] text-slate-400 font-mono tracking-widest font-extrabold uppercase mt-0.5">
-            {currentUser?.role === 'owner' ? 'Salon Owner' : 'Stylist / Staff'}
+            {currentUser?.role === 'owner' ? 'Business Owner' : 'Staff Admin'}
           </p>
 
           <div className="border-t border-slate-100 my-4 pt-4 text-xs space-y-2 text-left leading-normal">

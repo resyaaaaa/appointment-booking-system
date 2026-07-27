@@ -639,7 +639,7 @@ export default function WizardBooker({
 
                     <div className="grid grid-cols-2 gap-3 py-1 text-xs">
                       <div>
-                        <span className="text-slate-400 block font-bold text-[9px] uppercase tracking-wider">Specialist Assigned</span>
+                        <span className="text-slate-400 block font-bold text-[9px] uppercase tracking-wider">Staff Assigned</span>
                         <strong className="text-slate-800 block text-[11px] mt-0.5 truncate">
                           {staff.find(s => s.id === selectedStaffId)?.name || 'Any Available Specialist'}
                         </strong>
@@ -656,7 +656,7 @@ export default function WizardBooker({
                         <span className="text-slate-800 font-bold">{formatHumanDate(selectedDate)}</span>
                       </div>
                       <div className="flex justify-between items-center">
-                        <span className="text-slate-400 font-bold text-[9px] uppercase tracking-wider">Timing Slot</span>
+                        <span className="text-slate-400 font-bold text-[9px] uppercase tracking-wider">Time</span>
                         <span className="text-slate-800 font-bold font-mono text-[11px] bg-slate-50 border border-slate-200 px-2 py-0.5 rounded">{selectedSlot}</span>
                       </div>
                     </div>

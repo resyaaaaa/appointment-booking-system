@@ -306,7 +306,7 @@ export default function AdminAvailability({
               type="submit"
               className="w-full bg-primary border border-primary hover:bg-primary/95 text-white font-bold rounded-lg py-2.5 text-xs shadow-md shadow-primary/10 cursor-pointer transition-all"
             >
-              Add Hold Request
+              Add Custom Block
             </button>
           </form>
         </div>
