@@ -248,7 +248,7 @@ export function generateAvailableSlots(
 }
 
 // Format Currency (defaults to RM for Malaysian businesses)
-export function formatUSD(value, currency = 'RM') {
+export function formatMYR(value, currency = 'RM') {
   const norm = (currency || 'RM').trim();
   const numVal = Number(value);
   const formattedNum = isNaN(numVal) ? '0.00' : numVal.toFixed(2);
@@ -270,7 +270,7 @@ export function formatUSD(value, currency = 'RM') {
   try {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
-      currency: norm.length === 3 ? norm : 'USD'
+      currency: norm.length === 3 ? norm : 'MYR'
     }).format(value).replace('$', norm + ' ');
   } catch (e) {
     return `${norm} ${formattedNum}`;

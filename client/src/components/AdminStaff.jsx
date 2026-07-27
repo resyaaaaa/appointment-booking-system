@@ -10,7 +10,7 @@ export default function AdminStaff({
 }) {
   const [loading, setLoading] = useState(false);
   const [name, setName] = useState('');
-  const [role, setRole] = useState('Stylist');
+  const [role, setRole] = useState('Specialist');
   const [email, setEmail] = useState('');
   const [active, setActive] = useState(true);
   const handleSubmit = async (e) => {
@@ -69,7 +69,7 @@ export default function AdminStaff({
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm('Delete this staff member? All assignable slots will revert to Any Available.')) {
+    if (!window.confirm('Are you sure to delete this staff member?')) {
       return;
     }
     setLoading(true);
@@ -94,14 +94,14 @@ export default function AdminStaff({
     <div className="grid md:grid-cols-3 gap-6">
       {/* ADD/EDIT STAFF CARD */}
       <div className="bg-white rounded-xl border border-slate-200 p-5 shadow-sm space-y-4">
-        <h4 className="font-display font-bold text-sm text-slate-900">Add New Staff</h4>
+        <h4 className="font-display font-bold text-sm text-slate-900">Create New Staff</h4>
         <form onSubmit={handleSubmit} className="space-y-3.5 text-xs">
           <div>
             <label className="block text-slate-705 font-semibold mb-1">Full Name *</label>
             <input
               type="text"
               required
-              placeholder="e.g. Alex Rivera"
+              placeholder="e.g. Jane Smith"
               value={name}
               onChange={(e) => setName(e.target.value)}
               className="w-full p-2.5 bg-slate-50 border border-slate-205 rounded-lg focus:outline-none focus:bg-white focus:border-primary focus:ring-1 focus:ring-secondary/50"
@@ -123,7 +123,7 @@ export default function AdminStaff({
             <label className="block text-slate-705 font-semibold mb-1">Staff Email</label>
             <input
               type="email"
-              placeholder="e.g. alex@business.com"
+              placeholder="e.g. name@example.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="w-full p-2.5 bg-slate-50 border border-slate-205 rounded-lg focus:outline-none focus:bg-white focus:border-primary focus:ring-1 focus:ring-secondary/50"
@@ -150,7 +150,7 @@ export default function AdminStaff({
             disabled={loading}
             className="w-full bg-primary hover:bg-primary/95 text-white font-bold p-2.5 rounded-lg transition text-xs shadow-sm flex items-center justify-center gap-1"
           >
-            <span>Add Staff Member</span>
+            <span>Add Staff</span>
           </button>
         </form>
       </div>

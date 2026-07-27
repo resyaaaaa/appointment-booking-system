@@ -130,7 +130,7 @@ export default function AdminEmailLogs({
               className="w-full bg-primary border border-primary text-white hover:bg-primary/95 py-3 rounded-xl text-xs font-bold shadow-md shadow-primary/10 cursor-pointer transition-all flex items-center justify-center gap-2"
             >
 
-              <span>{loading ? 'Applying modifications...' : 'Save Template Modifications'}</span>
+              <span>{loading ? 'Saving Changes...' : 'Save Changes'}</span>
             </button>
           </form>
         ) : (

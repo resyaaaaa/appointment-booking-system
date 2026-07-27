@@ -14,7 +14,7 @@ import {
   Send,
   Sparkles
 } from 'lucide-react';
-import { formatUSD, formatHumanDate, formatHumanDateTime } from '../utils';
+import { formatMYR, formatHumanDate, formatHumanDateTime } from '../utils';
 const API_URL = (import.meta.env.VITE_API_URL || '').replace(/\/$/, '');
 
 export default function AdminBookings({
@@ -181,7 +181,7 @@ export default function AdminBookings({
           <input
             id="book-mgmt-search"
             type="text"
-            placeholder="Search bookings, customer details or hair trials..."
+            placeholder="Search bookings..."
             value={searchQuery}
             onChange={(e) => handleSearchChange(e.target.value)}
             className="w-full pl-10 pr-3.5 py-3 text-xs bg-white/70 border border-slate-200/80 rounded-xl focus:outline-none focus:border-primary focus:bg-white focus:ring-4 focus:ring-primary/5 transition-all font-medium placeholder:text-slate-400 shadow-3xs"
@@ -241,7 +241,7 @@ export default function AdminBookings({
             className="w-full bg-primary hover:bg-primary/95 text-white rounded-xl py-3 text-xs font-extrabold transition-all duration-200 flex items-center justify-center gap-1.5 shadow-md shadow-primary/15 cursor-pointer hover:scale-[1.03] active:scale-95"
             title="Book Appt manually"
           >
-            <span> Add </span>
+            <span>Create New</span>
           </button>
         </div>
       </div>
@@ -290,7 +290,7 @@ export default function AdminBookings({
 
                     <td className="p-4">
                       <span className="font-bold text-slate-900 block text-xs tracking-tight">{srv ? srv.name : 'Unknown Service'}</span>
-                      <span className="text-slate-500 text-[10.5px] font-semibold block mt-1">{srv ? `${srv.durationMinutes} min • ${formatUSD(srv.price, settings.currency)}` : ''}</span>
+                      <span className="text-slate-500 text-[10.5px] font-semibold block mt-1">{srv ? `${srv.durationMinutes} min • ${formatMYR(srv.price, settings.currency)}` : ''}</span>
                     </td>
 
                     <td className="p-4 col-span-1">

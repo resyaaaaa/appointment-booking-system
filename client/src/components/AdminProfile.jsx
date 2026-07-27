@@ -241,7 +241,7 @@ export default function AdminProfile({
             disabled={loading}
             className="w-full bg-primary hover:bg-primary/95 text-white font-bold text-xs py-3 rounded-xl transition shadow-md shadow-primary/10 mt-4 cursor-pointer disabled:opacity-50"
           >
-            {loading ? 'Saving Profile Changes...' : 'Save Profile Changes'}
+            {loading ? 'Saving Changes...' : 'Save Changes'}
           </button>
         </form>
       </div>

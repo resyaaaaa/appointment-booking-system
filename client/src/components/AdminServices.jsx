@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Sparkles, DollarSign, Clock, FileText, Check, Plus, Edit2, Trash2 } from 'lucide-react';
-import { formatUSD } from '../utils';
+import { Sparkles, Clock, FileText, Check, Plus, Edit2, Trash2 } from 'lucide-react';
+import { formatMYR } from '../utils';
 const API_URL = (import.meta.env.VITE_API_URL || '').replace(/\/$/, '');
 
 export default function AdminServices({
@@ -95,7 +95,7 @@ export default function AdminServices({
   };
 
   const handleDeleteService = async (id) => {
-    if (!window.confirm('Delete this service from directory? Overlapping future appointments may become unmappable.')) {
+    if (!window.confirm('Are you sure to delete this service from catalog?')) {
       return;
     }
     try {
@@ -122,7 +122,7 @@ export default function AdminServices({
           onClick={handleStartCreate}
           className="bg-primary border border-primary text-white hover:bg-primary/95 text-xs px-4.5 py-2.5 rounded-xl font-bold flex items-center justify-center gap-1.5 shadow-md shadow-primary/10 cursor-pointer transition-all"
         >
-          <span>Add Custom Service</span>
+          <span>Create New Service</span>
         </button>
       </div>
 
@@ -137,7 +137,7 @@ export default function AdminServices({
         <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="bg-white rounded-2xl p-6 border border-slate-205 max-w-md w-full shadow-2xl space-y-4 animate-fade-in text-left">
             <h4 className="font-display font-bold text-slate-900 text-base pb-2 border-b border-slate-100">
-              {editingService.id ? 'Modify Catalog Service' : 'Add New Premium Service'}
+              {editingService.id ? 'Modify Service' : 'Create New Service'}
             </h4>
 
             <form onSubmit={handleSaveService} className="space-y-4">
@@ -174,7 +174,6 @@ export default function AdminServices({
                 <div>
                   <label className="block text-xs font-semibold text-slate-705 mb-1.5">Price</label>
                   <div className="relative">
-                    <DollarSign className="absolute left-3 top-3 w-4 h-4 text-slate-400" />
                     <input
                       id="srv-inp-price"
                       type="number"
@@ -222,7 +221,7 @@ export default function AdminServices({
                   onClick={() => setEditingService(null)}
                   className="px-4 py-2 border border-slate-250 bg-white hover:bg-slate-50 text-slate-700 rounded-lg text-xs font-semibold cursor-pointer"
                 >
-                  Discard
+                  Cancel
                 </button>
                 <button
                   id="srv-save-submit-btn"
@@ -230,7 +229,7 @@ export default function AdminServices({
                   disabled={loading}
                   className="bg-primary border border-primary text-white hover:bg-primary/95 rounded-lg px-4 py-2 text-xs font-bold transition shadow-md shadow-primary/10 cursor-pointer"
                 >
-                  {loading ? 'Saving to catalog...' : 'Apply Modifications'}
+                  {loading ? 'Saving Changes...' : 'Save Changes'}
                 </button>
               </div>
             </form>
@@ -250,7 +249,7 @@ export default function AdminServices({
               <div className="flex justify-between items-start gap-4">
                 <h5 className="font-display font-bold text-slate-900 text-sm truncate" title={srv.name}>{srv.name}</h5>
                 <span className="font-display font-bold text-primary text-sm shrink-0">
-                  {formatUSD(srv.price)}
+                  {formatMYR(srv.price)}
                 </span>
               </div>
               <p className={`text-[11px] leading-relaxed mt-2.5 h-12 line-clamp-3 font-medium ${srv.isActive ? 'text-slate-500' : 'text-slate-400'}`}>

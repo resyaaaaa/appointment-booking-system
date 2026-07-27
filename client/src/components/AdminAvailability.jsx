@@ -145,7 +145,7 @@ export default function AdminAvailability({
             disabled={loading}
             className="bg-primary border border-primary text-white hover:bg-primary/95 rounded-lg text-xs font-bold px-4 py-2.5 shadow-md shadow-primary/10 cursor-pointer transition-all"
           >
-            {loading ? 'Saving schedules...' : 'Sync Weekly Schedule'}
+            {loading ? 'Saving schedules...' : 'Sync Schedule'}
           </button>
         </div>
 
@@ -226,8 +226,8 @@ export default function AdminAvailability({
         {/* ADD CLOSURE FORM */}
         <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 space-y-4 h-fit">
           <div>
-            <h4 className="font-display font-bold text-slate-900 text-sm">Add Custom Block / Holiday</h4>
-            <p className="text-xs text-slate-400 mt-0.5">Temporarily prevent scheduling for holidays, breaks, or events.</p>
+            <h4 className="font-display font-bold text-slate-900 text-sm">Create New Custom Block / Holiday</h4>
+            <p className="text-xs text-slate-400 mt-0.5">Prevent scheduling for holidays, breaks, or events.</p>
           </div>
 
           <form onSubmit={handleAddCustomBlock} className="space-y-4 text-xs">

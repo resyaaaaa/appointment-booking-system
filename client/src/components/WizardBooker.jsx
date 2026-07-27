@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { Calendar, Clock, User, Phone, Mail, FileText, CheckCircle2, ChevronRight, ChevronLeft, Plus, Users, Award } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
-import { generateAvailableSlots, formatUSD, DAYS_OF_WEEK, getBlockedReason, formatDateStr, formatHumanDate } from '../utils';
+import { generateAvailableSlots, formatMYR, DAYS_OF_WEEK, getBlockedReason, formatDateStr, formatHumanDate } from '../utils';
 const API_URL = (import.meta.env.VITE_API_URL || '').replace(/\/$/, '');
 
 export default function WizardBooker({
@@ -292,7 +292,7 @@ export default function WizardBooker({
                       {srv.name}
                     </h4>
                     <span className="font-display font-extrabold text-slate-900 text-base shrink-0">
-                      {formatUSD(srv.price, settings.currency)}
+                      {formatMYR(srv.price, settings.currency)}
                     </span>
                   </div>
                   <p className="text-xs text-slate-500 mt-2 line-clamp-2 leading-relaxed font-semibold">
@@ -349,7 +349,7 @@ export default function WizardBooker({
                   }`}
               >
                 <span className="block text-xs font-extrabold text-slate-800">Any Stylist</span>
-                <span className="text-[9px] text-slate-450 font-normal mt-0.5 block">Fastest availability</span>
+                <span className="text-[9px] text-slate-450 font-normal mt-0.5 block">Any availability</span>
               </button>
 
               {staff.filter(s => s.active).map(s => (
@@ -665,7 +665,7 @@ export default function WizardBooker({
                       <div>
                         <span className="text-slate-400 font-bold text-[9px] uppercase tracking-wider block">Estimated Total</span>
                         <div className="text-slate-900 font-extrabold text-lg leading-none mt-1 font-display">
-                          {selectedService ? formatUSD(selectedService.price, settings.currency) : ''}
+                          {selectedService ? formatMYR(selectedService.price, settings.currency) : ''}
                         </div>
                       </div>
                       <button
@@ -741,7 +741,7 @@ export default function WizardBooker({
 
             <div className="flex justify-between items-center pt-2.5 border-t border-slate-200 font-bold text-sm">
               <span className="text-slate-700">Total Price Due</span>
-              <span className="text-emerald-600">{selectedService ? formatUSD(selectedService.price, settings.currency) : ''}</span>
+              <span className="text-emerald-600">{selectedService ? formatMYR(selectedService.price, settings.currency) : ''}</span>
             </div>
           </div>
 

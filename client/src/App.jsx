@@ -395,7 +395,7 @@ export default function App() {
                   : 'text-slate-700 hover:text-slate-900 hover:bg-[#D8E022]/15 font-bold'
                   }`}
               >
-                <span>Dashboard</span>
+                <span>Admin Dashboard</span>
                 {isAuthorized ? (
                   <Unlock className="w-3.5 h-3.5 text-emerald-800 animate-pulse" />
                 ) : (
@@ -572,9 +572,9 @@ export default function App() {
                     <div className="w-12 h-12 bg-primary/10 text-primary rounded-full flex items-center justify-center mx-auto border border-primary/20">
                       <Lock className="w-5 h-5" />
                     </div>
-                    <h3 className="font-display font-bold text-slate-900 text-lg tracking-tight">Staff Workspace Gate</h3>
+                    <h3 className="font-display font-bold text-slate-900 text-lg tracking-tight">Sign in to your account</h3>
                     <p className="text-xs text-slate-500 leading-relaxed max-w-sm mx-auto">
-                      Log in to your employee or administrator account to manage availability, customize service packages, and track logs.
+                    Access staff schedule, service packages, and system logs.
                     </p>
                   </div>
 
@@ -586,7 +586,7 @@ export default function App() {
                       className={`flex-1 text-center py-2.5 text-xs font-bold rounded-lg transition-all duration-150 ${authModalTab === 'login' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'
                         }`}
                     >
-                      Employee Sign-In
+                     Sign In
                     </button>
                     <button
                       type="button"
@@ -594,7 +594,7 @@ export default function App() {
                       className={`flex-1 text-center py-2.5 text-xs font-bold rounded-lg transition-all duration-150 ${authModalTab === 'register' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'
                         }`}
                     >
-                      Register Staff Profile
+                      Create Staff Account
                     </button>
                   </div>
 
@@ -614,7 +614,7 @@ export default function App() {
                             required
                             value={authName}
                             onChange={(e) => setAuthName(e.target.value)}
-                            placeholder="Sarah Connor"
+                            placeholder="Jane Smith"
                             className="w-full text-xs p-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:border-primary transition"
                           />
                         </div>
@@ -625,7 +625,7 @@ export default function App() {
                             type="tel"
                             value={authPhone}
                             onChange={(e) => setAuthPhone(e.target.value)}
-                            placeholder="012-3456789"
+                            placeholder="0123456789"
                             className="w-full text-xs p-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:border-primary transition"
                           />
                         </div>
@@ -639,7 +639,7 @@ export default function App() {
                         required
                         value={authEmail}
                         onChange={(e) => setAuthEmail(e.target.value)}
-                        placeholder="employee@salon.com"
+                        placeholder="name@example.com"
                         className="w-full text-xs p-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:border-primary transition"
                       />
                     </div>
@@ -659,28 +659,27 @@ export default function App() {
                     {authModalTab === 'register' && (
                       <div className="space-y-4 animate-fade-in">
                         <div className="space-y-1">
-                          <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Roster Rank / System Role</label>
+                          <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">System Role</label>
                           <select
                             value={authRole}
                             onChange={(e) => setAuthRole(e.target.value)}
                             className="w-full text-xs p-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:border-primary transition"
                           >
-                            <option value="staff">Staff Stylist / Technician</option>
-                            <option value="owner">Admin Salon Owner</option>
+                            <option value="staff">Admin/Staff</option>
+                            <option value="owner">Owner</option>
                           </select>
                         </div>
 
                         <div className="space-y-1 p-3 bg-slate-50 rounded-xl border border-slate-200">
-                          <label className="block text-[9.5px] font-bold text-[#3a4f99] uppercase tracking-wider">Staff Verification Passcode</label>
+                          <label className="block text-[9.5px] font-bold text-slate-400 uppercase tracking-wider">Staff Verification Passcode</label>
                           <input
                             type="password"
                             required
                             value={authSecretKey}
                             onChange={(e) => setAuthSecretKey(e.target.value)}
-                            placeholder="Passcode (default admin123)"
+                            placeholder="••••••••"
                             className="w-full text-xs p-2.5 bg-white border border-slate-150 rounded-lg focus:outline-none focus:border-[#3a4f99] transition mt-1"
                           />
-                          <span className="text-[9px] text-[#3a4f99]/85 mt-1 block font-medium">Please specify the general salon authorization passcode.</span>
                         </div>
                       </div>
                     )}
@@ -690,7 +689,7 @@ export default function App() {
                       disabled={authLoading}
                       className="w-full bg-primary hover:bg-primary/95 text-white py-3 rounded-xl font-bold text-xs transition shadow-md shadow-primary/10 mt-2"
                     >
-                      {authLoading ? 'Verifying identity, loading workspace...' : authModalTab === 'login' ? 'Authenticate Stylist Session' : 'Create Staff Profile'}
+                      {authLoading ? 'Verifying identity, loading workspace...' : authModalTab === 'login' ? 'Sign In' : 'Create Account'}
                     </button>
                   </form>
                 </div>

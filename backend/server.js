@@ -167,7 +167,7 @@ async function verifyPassword(password) {
 
 
     const [users] = await pool.query(
-      'SELECT passwordHash, role FROM users WHERE role IN ("owner", "staff")'
+      'SELECT passwordHash, role FROM users WHERE role IN ("owner", "staff admin")'
     );
 
 
@@ -290,7 +290,7 @@ app.post('/api/auth/register', publicLimiter, async (req, res) => {
     }
 
     const id = 'u' + Date.now();
-    const userRole = role || 'staff';
+    const userRole = role || 'staff admin';
     const passwordHash = hashPassword(password);
 
     const newUser = {
@@ -304,9 +304,9 @@ app.post('/api/auth/register', publicLimiter, async (req, res) => {
     };
     await db.createUser(newUser);
 
-    if (userRole === 'staff' || userRole === 'owner') {
+    if (userRole === 'staff admin' || userRole === 'owner') {
       const staffId = 'st' + id.replace(/[^a-zA-Z0-9]/g, '');
-      const staffRole = userRole === 'owner' ? 'Business Owner' : 'Staff';
+      const staffRole = userRole === 'owner' ? 'Business Owner' : 'Staff Admin';
       await db.upsertStaff({
         id: staffId,
         name: name,
@@ -400,7 +400,7 @@ app.post('/api/auth/update-profile', publicLimiter, async (req, res) => {
 
     await db.updateUser(updatedUser);
 
-    if (user.role === 'staff' || user.role === 'owner') {
+    if (user.role === 'staff admin' || user.role === 'owner') {
       const staffList = await db.getStaff();
       const matchedStaff = staffList.find(s => s.email.toLowerCase() === user.email.toLowerCase());
       if (matchedStaff) {
@@ -440,12 +440,12 @@ app.post('/api/auth/link-staff', publicLimiter, async (req, res) => {
       return res.status(404).json({ success: false, error: 'User account not found' });
     }
 
-    if (user.role !== 'staff' && user.role !== 'owner') {
-      return res.status(403).json({ success: false, error: 'User not allowed for staff mapping' });
+    if (user.role !== 'staff admin' && user.role !== 'owner') {
+      return res.status(403).json({ success: false, error: 'User not allowed for manage staff' });
     }
 
     const staffId = 'st' + user.id.replace(/[^a-zA-Z0-9]/g, '');
-    const staffRole = user.role === 'owner' ? 'Business Owner' : 'Staff';
+    const staffRole = user.role === 'owner' ? 'Business Owner' : 'Staff Admin';
 
     const newStaff = {
       id: staffId,
@@ -459,7 +459,7 @@ app.post('/api/auth/link-staff', publicLimiter, async (req, res) => {
     res.json({ success: true, member: newStaff });
   } catch (error) {
     console.error('Link staff error:', error);
-    res.status(500).json({ success: false, error: 'Internal staff mapping error' });
+    res.status(500).json({ success: false, error: 'Staff mapping error' });
   }
 });
 

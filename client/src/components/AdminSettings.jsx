@@ -74,10 +74,7 @@ export default function AdminSettings({
 
           <div>
             <label className="block text-slate-705 font-semibold mb-1 flex items-center gap-1">
-              <span>Local Currency</span>
-              <span className="text-[9px] text-slate-400 font-normal hover:text-slate-600" title="Supports e.g., $, €, £, AED, CHF, SGD etc.">
-                (e.g., $, €, £, USD, EUR)
-              </span>
+              <span>Currency</span>
             </label>
             <input
               type="text"
@@ -91,7 +88,7 @@ export default function AdminSettings({
         </div>
 
         <div>
-          <label className="block text-slate-705 font-semibold mb-1 col-span-2">Physical Location Address</label>
+          <label className="block text-slate-705 font-semibold mb-1 col-span-2">Address</label>
           <input
             type="text"
             value={address}
@@ -123,25 +120,23 @@ export default function AdminSettings({
           </div>
         </div>
 
-        <div className="pt-4 border-t border-slate-100 flex items-center justify-between flex-wrap gap-3">
-          {success ? (
-            <span className="bg-emerald-50 text-emerald-800 text-[10.5px] px-3 py-1.5 rounded-lg border border-emerald-150 flex items-center gap-1.5 animate-bounce">
-              <Check className="w-3.5 h-3.5 text-emerald-600" />
-              <span>Settings synchronized permanently!</span>
+        <div className="pt-4 border-t border-slate-100/80 flex items-center justify-between flex-wrap gap-3">
+          {success && (
+            <span className="bg-emerald-50 text-emerald-800 text-[11px] font-medium px-3 py-1.5 rounded-lg border border-emerald-200/60 flex items-center gap-1.5 animate-fade-in transition-all">
+              <Check className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+              <span>Settings saved successfully</span>
             </span>
-          ) : (
-            <span className="text-[10px] text-slate-400">All configurations synchronize automatically with our file store.</span>
           )}
-
-          <button
-            type="submit"
-            disabled={loading}
-            className="bg-primary hover:bg-primary/95 text-white font-bold px-5 py-2.5 rounded-lg transition text-xs shadow-sm flex items-center gap-1 shrink-0 ml-auto"
-          >
-            {loading ? 'Propagating settings...' : 'Save Settings'}
-          </button>
         </div>
-      </form>
-    </div>
+
+        <button
+          type="submit"
+          disabled={loading}
+          className="bg-primary hover:bg-primary/95 text-white font-bold px-5 py-2.5 rounded-lg transition text-xs shadow-sm flex items-center gap-1 shrink-0 ml-auto"
+        >
+          {loading ? 'Saving...' : 'Save Changes'}
+        </button>
+      </form >
+    </div >
   );
 }
