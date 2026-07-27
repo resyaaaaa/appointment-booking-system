@@ -225,11 +225,11 @@ export default function WizardBooker({
           <h3 className="font-display font-bold text-slate-900 text-lg flex items-center gap-2">
             {staffMode ? (
               <span className="bg-[#291100]/10 text-[#291100] text-[9px] uppercase font-bold tracking-widest px-2.5 py-1 rounded-full border border-[#291100]/20">
-                Core Admin Override
+                Book for Client
               </span>
             ) : (
               <span className="bg-secondary text-primary text-[9px] uppercase font-bold tracking-widest px-2.5 py-1 rounded-full border border-secondary">
-                Schedule Appointment
+                Schedule an Appointment
               </span>
             )}
           </h3>

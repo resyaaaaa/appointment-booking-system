@@ -704,13 +704,9 @@ export default function App() {
                       onClick={() => setStaffEntryMode(false)}
                       className="text-xs font-semibold text-slate-500 hover:text-slate-800 flex items-center gap-1 mb-2"
                     >
-                      ← Dismiss Booker Wizard &amp; Back to Active Logs
+                      ← Cancel &amp; Return
                     </button>
-
-                    <div className="bg-emerald-50 text-emerald-800 text-xs p-3 rounded-xl border border-emerald-100 flex items-center gap-2">
-                      <CalendarCheck className="w-4 h-4 text-emerald-600" />
-                    </div>
-
+                 
                     <WizardBooker
                       services={services}
                       appointments={appointments}
