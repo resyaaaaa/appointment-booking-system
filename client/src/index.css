@@ -19,19 +19,18 @@
   --font-mono: "JetBrains Mono", monospace;
 
  
-  --color-primary: #FFD166;       
-  --color-secondary: #210B2C;    
-  --color-accent-fern: #657733;    /* Fern (Deep natural forest green) */
-  --color-bg-linen: #ECF5E2;      /* Honeydew (Soft warm off-white cream background) */
-  --color-tea-green: #D7E3A4;     /* Tea Green (Muted fresh green accent) */
+  --color-primary: #FACC15;       
+  --color-secondary: #2DD4BF;    
+  --color-accent-fern: #657733;    
+  --color-bg-linen: #ECF5E2;     
+  --color-tea-green: #D7E3A4;     
 }
 
 @layer base {
   body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    /* Soft premium Honeydew cream canvas background */
-    background: #ECF5E2 !important;
+    background: linear-gradient(135deg, #061E19 0%, #082F28 100%) !important;
     min-height: 100vh;
   }
 }
