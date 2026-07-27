@@ -234,10 +234,10 @@ export default function WizardBooker({
             )}
           </h3>
           <p className="text-xs text-slate-500 mt-1 font-semibold">
-            {step === 1 && 'Step 1: Pick service from our catalog'}
-            {step === 2 && 'Step 2: Select available session day & hourly slot'}
-            {step === 3 && 'Step 3: Provide client details for automatic confirmations'}
-            {step === 4 && 'Complete: Success confirmation & automatic trigger feedback'}
+            {step === 1 && 'Step 1: Choose a service'}
+            {step === 2 && 'Step 2: Select date & time'}
+            {step === 3 && 'Step 3: Enter client details'}
+            {step === 4 && 'Complete: Booking Confirmed'}
           </p>
         </div>
 
@@ -701,12 +701,12 @@ export default function WizardBooker({
 
           <div>
             <h4 className="font-display text-xl font-bold text-slate-900 tracking-tight">Appointment Scheduled!</h4>
-            <p className="text-xs text-slate-500 mt-1">A professional confirmation email has been simulated and cataloged</p>
+            <p className="text-xs text-slate-500 mt-1">We've emailed your booking details. If you didn't request this appointment or need to cancel, please contact us.</p>
           </div>
 
           <div className="bg-slate-50/80 rounded-2xl p-5 border border-slate-200 max-w-md mx-auto text-left text-xs space-y-3 shadow-[0_1px_2px_rgba(0,0,0,0.02)]">
             <div className="flex justify-between items-center pb-2 border-b border-slate-200">
-              <span className="text-slate-400">Reservation Identifier</span>
+              <span className="text-slate-400">Book Id</span>
               <span className="font-mono font-bold text-slate-800 bg-white border border-slate-200 px-2 py-0.5 rounded">{bookingSuccess.id}</span>
             </div>
 
@@ -716,7 +716,7 @@ export default function WizardBooker({
             </div>
 
             <div className="flex justify-between items-center">
-              <span className="text-slate-400">Assigned Service</span>
+              <span className="text-slate-400">Selected Service</span>
               <span className="font-semibold text-slate-800">{selectedService?.name}</span>
             </div>
 
@@ -726,13 +726,13 @@ export default function WizardBooker({
             </div>
 
             <div className="flex justify-between items-center">
-              <span className="text-slate-400">Time Interval</span>
+              <span className="text-slate-400">Time Slot</span>
               <span className="font-semibold text-slate-800">{bookingSuccess.timeSlot}</span>
             </div>
 
             {bookingSuccess.staffId && (
               <div className="flex justify-between items-center">
-                <span className="text-slate-400">Assigned Specialist</span>
+                <span className="text-slate-400">Assigned Staff</span>
                 <span className="font-semibold text-slate-800">
                   {staff.find(s => s.id === bookingSuccess.staffId)?.name || 'Professional'}
                 </span>
@@ -740,7 +740,7 @@ export default function WizardBooker({
             )}
 
             <div className="flex justify-between items-center pt-2.5 border-t border-slate-200 font-bold text-sm">
-              <span className="text-slate-700">Total Price Due</span>
+              <span className="text-slate-700">Total Estimated Price</span>
               <span className="text-emerald-600">{selectedService ? formatMYR(selectedService.price, settings.currency) : ''}</span>
             </div>
           </div>
