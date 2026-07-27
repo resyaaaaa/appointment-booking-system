@@ -94,7 +94,7 @@ export default function App() {
       const saved = localStorage.getItem('biz_profile');
       if (saved) {
         const parsed = JSON.parse(saved);
-        return parsed && (parsed.role === 'owner' || parsed.role === 'staff');
+        return parsed && (parsed.role === 'owner' || parsed.role === 'staff admin');
       }
     } catch { }
     return false;
@@ -104,7 +104,7 @@ export default function App() {
 
   // Sync admin dashboard access if login as staff or owner
   useEffect(() => {
-    if (currentUser && (currentUser.role === 'owner' || currentUser.role === 'staff')) {
+    if (currentUser && (currentUser.role === 'owner' || currentUser.role === 'staff admin')) {
       setIsAuthorized(true);
       localStorage.setItem('biz_is_authorized', 'true');
     } else {
@@ -229,7 +229,7 @@ export default function App() {
     try {
       if (authModalTab === 'register') {
         // Validation for Staff / Owner roles
-        if (authRole === 'staff' || authRole === 'owner') {
+        if (authRole === 'staff admin' || authRole === 'owner') {
           if (authSecretKey !== 'admin123') {
             setAuthFormError('Invalid security authorization key for employee registrations.');
             setAuthLoading(false);
@@ -253,7 +253,7 @@ export default function App() {
         if (res.ok && data.success) {
           setCurrentUser(data.user);
           localStorage.setItem('biz_profile', JSON.stringify(data.user));
-          if (data.user.role === 'staff' || data.user.role === 'owner') {
+          if (data.user.role === 'staff admin' || data.user.role === 'owner') {
             setAdminPassword(authPassword);
             localStorage.setItem('biz_admin_passwd', authPassword);
           }
@@ -278,7 +278,7 @@ export default function App() {
         if (res.ok && data.success) {
           setCurrentUser(data.user);
           localStorage.setItem('biz_profile', JSON.stringify(data.user));
-          if (data.user.role === 'staff' || data.user.role === 'owner') {
+          if (data.user.role === 'staff admin' || data.user.role === 'owner') {
             setAdminPassword(authPassword);
             localStorage.setItem('biz_admin_passwd', authPassword);
           }
@@ -408,7 +408,7 @@ export default function App() {
                 <div className="flex items-center gap-2 pl-2 border-l border-[#D8E022] ml-1">
                   <div className="hidden sm:flex flex-col text-right select-none">
                     <span className="text-[11px] font-bold text-slate-950 leading-none truncate max-w-25">{currentUser.name}</span>
-                    <span className="text-[8px] font-extrabold text-slate-900 bg-[#D8E022] uppercase tracking-widest font-mono mt-0.5 px-1 rounded">{currentUser.role === 'owner' ? 'Owner' : 'Staff'}</span>
+                    <span className="text-[8px] font-extrabold text-slate-900 bg-[#D8E022] uppercase tracking-widest font-mono mt-0.5 px-1 rounded">{currentUser.role === 'owner' ? 'Owner' : 'Staff admin'}</span>
                   </div>
                   <button
                     onClick={handleLogout}
@@ -590,11 +590,11 @@ export default function App() {
                     </button>
                     <button
                       type="button"
-                      onClick={() => { setAuthModalTab('register'); setAuthFormError(''); setAuthRole('staff'); }}
+                      onClick={() => { setAuthModalTab('register'); setAuthFormError(''); setAuthRole('staff admin'); }}
                       className={`flex-1 text-center py-2.5 text-xs font-bold rounded-lg transition-all duration-150 ${authModalTab === 'register' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'
                         }`}
                     >
-                      Create Staff Account
+                      Create Account
                     </button>
                   </div>
 
@@ -671,7 +671,7 @@ export default function App() {
                         </div>
 
                         <div className="space-y-1 p-3 bg-slate-50 rounded-xl border border-slate-200">
-                          <label className="block text-[9.5px] font-bold text-slate-400 uppercase tracking-wider">Staff Verification Passcode</label>
+                          <label className="block text-[9.5px] font-bold text-slate-400 uppercase tracking-wider">Authorization Passcode</label>
                           <input
                             type="password"
                             required
@@ -689,7 +689,7 @@ export default function App() {
                       disabled={authLoading}
                       className="w-full bg-primary hover:bg-primary/95 text-white py-3 rounded-xl font-bold text-xs transition shadow-md shadow-primary/10 mt-2"
                     >
-                      {authLoading ? 'Verifying identity, loading workspace...' : authModalTab === 'login' ? 'Sign In' : 'Create Account'}
+                      {authLoading ? 'Loading dashboard...' : authModalTab === 'login' ? 'Sign In' : 'Create Account'}
                     </button>
                   </form>
                 </div>
@@ -709,7 +709,6 @@ export default function App() {
 
                     <div className="bg-emerald-50 text-emerald-800 text-xs p-3 rounded-xl border border-emerald-100 flex items-center gap-2">
                       <CalendarCheck className="w-4 h-4 text-emerald-600" />
-                      <span><strong>Administrative booking override:</strong> Staff are registering a customer directly on the live database.</span>
                     </div>
 
                     <WizardBooker
